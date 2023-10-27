@@ -75,11 +75,14 @@ public class BasicTeleOp extends LinearOpMode {
     private DcMotor backRDrive = null;
     private DcMotor winchMotor = null;
     private Servo hookArm = null;
+   // private Servo flyWheel1 = null;
+   // private Servo flyWheel2 = null;
+    private Servo launcher = null;
 
     static final double INCREMENT   = 0.02;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   50;     // period of each cycle
     static final double MAX_POS     =  0.5;     // Maximum rotational position
-    static final double MIN_POS     =  0.0;     // Minimum rotational position
+    static final double MIN_POS     =  0.0;
 
     double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
     boolean rampUp = true;
@@ -95,6 +98,9 @@ public class BasicTeleOp extends LinearOpMode {
         backRDrive = hardwareMap.get(DcMotor.class, "backR");
         winchMotor = hardwareMap.get(DcMotor.class, "winch");
         hookArm = hardwareMap.get(Servo.class, "arm");
+        //flyWheel1 = hardwareMap.get(Servo.class,"flyWheel1");
+        //flyWheel2 = hardwareMap.get(Servo.class, "flyWheel2");
+        launcher = hardwareMap.get(Servo.class, "launcher");
 
 
 
@@ -102,8 +108,10 @@ public class BasicTeleOp extends LinearOpMode {
         backLDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRDrive.setDirection(DcMotor.Direction.FORWARD);
         backRDrive.setDirection(DcMotor.Direction.FORWARD);
+        //flyWheel1.setDirection(Servo.Direction.REVERSE);
 
         hookArm.setPosition(MIN_POS);
+        launcher.setPosition(0);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -132,6 +140,9 @@ public class BasicTeleOp extends LinearOpMode {
             }
             else {
                 winchMotor.setPower(0);
+            }
+            if (gamepad1.y){
+                launcher.setPosition(.5);
             }
 
 
@@ -170,6 +181,7 @@ public class BasicTeleOp extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+            telemetry.addData("launcher",launcher.getPosition());
             telemetry.update();
         }
     }}
