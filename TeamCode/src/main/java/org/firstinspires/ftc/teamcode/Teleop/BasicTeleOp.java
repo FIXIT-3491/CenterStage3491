@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -35,39 +35,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-/*
- * This file contains an example of a Linear "OpMode".
- * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When a selection is made from the menu, the corresponding OpMode is executed.
- *
- * This particular OpMode illustrates driving a 4-motor Omni-Directional (or Holonomic) robot.
- * This code will work with either a Mecanum-Drive or an X-Drive train.
- * Both of these drives are illustrated at https://gm0.org/en/latest/docs/robot-design/drivetrains/holonomic.html
- * Note that a Mecanum drive must display an X roller-pattern when viewed from above.
- *
- * Also note that it is critical to set the correct rotation direction for each motor.  See details below.
- *
- * Holonomic drives provide the ability for the robot to move in three axes (directions) simultaneously.
- * Each motion axis is controlled by one Joystick axis.
- *
- * 1) Axial:    Driving forward and backward               Left-joystick Forward/Backward
- * 2) Lateral:  Strafing right and left                     Left-joystick Right and Left
- * 3) Yaw:      Rotating Clockwise and counter clockwise    Right-joystick Right and Left
- *
- * This code is written assuming that the right-side motors need to be reversed for the robot to drive forward.
- * When you first test your robot, if it moves backward when you push the left stick forward, then you must flip
- * the direction of all 4 motors (see code below).
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
-
-@TeleOp(name="Basic: Omni Linear OpMode", group="Linear OpMode")
+@TeleOp(name="Basic Tele-op", group="Linear OpMode")
 
 public class BasicTeleOp extends LinearOpMode {
 
-    // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor backLDrive = null;
     private DcMotor frontLDrive = null;
@@ -78,31 +49,23 @@ public class BasicTeleOp extends LinearOpMode {
    // private Servo flyWheel1 = null;
    // private Servo flyWheel2 = null;
     private Servo launcher = null;
-
-    static final double INCREMENT   = 0.02;     // amount to slew servo each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   50;     // period of each cycle
-    static final double MAX_POS     =  0.5;     // Maximum rotational position
+    static final double POS_1 =  0.35;     // Maximum rotational position
+    static final double POS_2 = 0.5;
     static final double MIN_POS     =  0.0;
-
-    double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
-    boolean rampUp = true;
+    double  position = (POS_2 - MIN_POS) / 2; // Start at halfway position
 
     @Override
     public void runOpMode() {
 
-        // Initialize the hardware variables. Note that the strings used here must correspond
-        // to the names assigned during the robot configuration step on the DS or RC devices.
         frontLDrive  = hardwareMap.get(DcMotor.class, "frontL");
         backLDrive  = hardwareMap.get(DcMotor.class, "backL");
         frontRDrive = hardwareMap.get(DcMotor.class, "frontR");
         backRDrive = hardwareMap.get(DcMotor.class, "backR");
         winchMotor = hardwareMap.get(DcMotor.class, "winch");
         hookArm = hardwareMap.get(Servo.class, "arm");
+        launcher = hardwareMap.get(Servo.class, "launcher");
         //flyWheel1 = hardwareMap.get(Servo.class,"flyWheel1");
         //flyWheel2 = hardwareMap.get(Servo.class, "flyWheel2");
-        launcher = hardwareMap.get(Servo.class, "launcher");
-
-
 
         frontLDrive.setDirection(DcMotor.Direction.REVERSE);
         backLDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -113,7 +76,6 @@ public class BasicTeleOp extends LinearOpMode {
         hookArm.setPosition(MIN_POS);
         launcher.setPosition(0);
 
-        // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -125,7 +87,11 @@ public class BasicTeleOp extends LinearOpMode {
             double max;
 
             if (gamepad1.a) {
-                position = MAX_POS;
+                position = POS_2;
+                hookArm.setPosition(position);
+            }
+            if (gamepad1.x) {
+                position = POS_1;
                 hookArm.setPosition(position);
             }
             if (gamepad1.b) {
