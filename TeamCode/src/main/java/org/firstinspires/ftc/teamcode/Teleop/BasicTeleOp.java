@@ -58,25 +58,25 @@ public class BasicTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
             double max;
 
-            if (gamepad1.b) {
+            if (gamepad2.x) {
                 ch.hookArm.setPosition(ch.POS_2);
             }
-            if (gamepad1.y) {
+            if (gamepad2.y) {
                 ch.hookArm.setPosition(ch.POS_1);
             }
-            if (gamepad1.x) {
+            if (gamepad2.b) {
                 ch.hookArm.setPosition(ch.MIN_POS);
             }
-            if (gamepad1.left_bumper){  //loose
+            if (gamepad2.left_bumper){
                 ch.winchMotor.setPower(ch.Loose);
             }
-            else if (gamepad1.right_bumper) {
+            else if (gamepad2.right_bumper) {
                 ch.winchMotor.setPower(ch.Tight);
             }
             else {
                 ch.winchMotor.setPower(0);
             }
-            if (gamepad1.a){
+            if (gamepad2.a){
                 ch.launcher.setPosition(ch.Fire);
             }
 

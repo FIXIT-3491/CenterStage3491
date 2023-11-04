@@ -78,7 +78,7 @@ public class Rotation extends LinearOpMode {
             backRDrive.setPower(0.5);
             frontLDrive.setPower(0.5);
             backLDrive.setPower(0.5);
-            sleep(1000);
+            sleep(3000);
             frontRDrive.setPower(0);
             frontLDrive.setPower(0);
             backRDrive.setPower(0);
