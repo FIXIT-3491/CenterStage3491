@@ -57,7 +57,12 @@ public class Rotation extends LinearOpMode {
         frontLDrive.setDirection(DcMotor.Direction.REVERSE);
         backLDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRDrive.setDirection(DcMotor.Direction.FORWARD);
-        backRDrive.setDirection(DcMotor.Direction.FORWARD);;
+        backRDrive.setDirection(DcMotor.Direction.FORWARD);
+
+        frontLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -71,8 +76,8 @@ public class Rotation extends LinearOpMode {
 
             frontRDrive.setPower(0.5);
             backRDrive.setPower(0.5);
-            frontLDrive.setPower(-0.5);
-            backLDrive.setPower(-0.5);
+            frontLDrive.setPower(0.5);
+            backLDrive.setPower(0.5);
             sleep(1000);
             frontRDrive.setPower(0);
             frontLDrive.setPower(0);
@@ -82,6 +87,7 @@ public class Rotation extends LinearOpMode {
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
+            break;
         }
     }
 }
