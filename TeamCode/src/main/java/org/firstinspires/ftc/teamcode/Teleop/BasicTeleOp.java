@@ -28,53 +28,25 @@
  */
 
 package org.firstinspires.ftc.teamcode.Teleop;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.CH;
+
 
 @TeleOp(name="Basic Tele-op", group="Linear OpMode")
 
 public class BasicTeleOp extends LinearOpMode {
 
+    private CH ch = null;
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor backLDrive = null;
-    private DcMotor frontLDrive = null;
-    private DcMotor frontRDrive = null;
-    private DcMotor backRDrive = null;
-    private DcMotor winchMotor = null;
-    private Servo hookArm = null;
-   // private Servo flyWheel1 = null;
-   // private Servo flyWheel2 = null;
-    private Servo launcher = null;
-    static final double POS_1 =  0.35;     // Maximum rotational position
-    static final double POS_2 = 0.5;
-    static final double MIN_POS     =  0.0;
-    double  position = (POS_2 - MIN_POS) / 2; // Start at halfway position
 
     @Override
     public void runOpMode() {
 
-        frontLDrive  = hardwareMap.get(DcMotor.class, "frontL");
-        backLDrive  = hardwareMap.get(DcMotor.class, "backL");
-        frontRDrive = hardwareMap.get(DcMotor.class, "frontR");
-        backRDrive = hardwareMap.get(DcMotor.class, "backR");
-        winchMotor = hardwareMap.get(DcMotor.class, "winch");
-        hookArm = hardwareMap.get(Servo.class, "arm");
-        launcher = hardwareMap.get(Servo.class, "launcher");
-        //flyWheel1 = hardwareMap.get(Servo.class,"flyWheel1");
-        //flyWheel2 = hardwareMap.get(Servo.class, "flyWheel2");
-
-        frontLDrive.setDirection(DcMotor.Direction.REVERSE);
-        backLDrive.setDirection(DcMotor.Direction.REVERSE);
-        frontRDrive.setDirection(DcMotor.Direction.FORWARD);
-        backRDrive.setDirection(DcMotor.Direction.FORWARD);
-        //flyWheel1.setDirection(Servo.Direction.REVERSE);
-
-        hookArm.setPosition(MIN_POS);
-        launcher.setPosition(0);
+        ch = new CH(hardwareMap);
+        ch.hookArm.setPosition(ch.MIN_POS);
+        ch.launcher.setPosition(0);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -87,28 +59,25 @@ public class BasicTeleOp extends LinearOpMode {
             double max;
 
             if (gamepad1.a) {
-                position = POS_2;
-                hookArm.setPosition(position);
+                ch.hookArm.setPosition(ch.POS_2);
             }
             if (gamepad1.x) {
-                position = POS_1;
-                hookArm.setPosition(position);
+                ch.hookArm.setPosition(ch.POS_1);
             }
             if (gamepad1.b) {
-                position = MIN_POS;
-                hookArm.setPosition(position);
+                ch.hookArm.setPosition(ch.MIN_POS);
             }
             if (gamepad1.left_bumper){
-                winchMotor.setPower(0.5);
+                ch.winchMotor.setPower(0.5);
             }
             else if (gamepad1.right_bumper) {
-                winchMotor.setPower(-0.5);
+                ch.winchMotor.setPower(-0.5);
             }
             else {
-                winchMotor.setPower(0);
+                ch.winchMotor.setPower(0);
             }
             if (gamepad1.y){
-                launcher.setPosition(.5);
+                ch.launcher.setPosition(.5);
             }
 
 
@@ -138,16 +107,16 @@ public class BasicTeleOp extends LinearOpMode {
             }
 
             // Send calculated power to wheels
-            frontLDrive.setPower(leftFrontPower);
-            frontRDrive.setPower(rightFrontPower);
-            backLDrive.setPower(leftBackPower);
-            backRDrive.setPower(rightBackPower);
+            ch.frontLDrive.setPower(leftFrontPower);
+            ch.frontRDrive.setPower(rightFrontPower);
+            ch.backLDrive.setPower(leftBackPower);
+            ch.backRDrive.setPower(rightBackPower);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-            telemetry.addData("launcher",launcher.getPosition());
+            telemetry.addData("launcher",ch.launcher.getPosition());
             telemetry.update();
         }
     }}
