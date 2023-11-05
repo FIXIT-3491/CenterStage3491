@@ -20,6 +20,10 @@ public class CH {
     public static final double Fire = 0.5;
     public static final double Tight = -0.7;
     public static final double Loose = 0.7;
+    public boolean Front = true;
+
+
+
 
    //private Servo flyWheel1 = null;
    //private Servo flyWheel2 = null;

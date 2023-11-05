@@ -34,37 +34,35 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.CH;
+
 
 @TeleOp(name="Rotation", group="Linear OpMode")
 
 public class Rotation extends LinearOpMode {
 
+    private CH ch = null;
+    private boolean gamepadPressed = false;
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor backLDrive = null;
-    private DcMotor frontLDrive = null;
-    private DcMotor frontRDrive = null;
-    private DcMotor backRDrive = null;
-
     @Override
     public void runOpMode() {
 
-        frontLDrive  = hardwareMap.get(DcMotor.class, "frontL");
-        backLDrive  = hardwareMap.get(DcMotor.class, "backL");
-        frontRDrive = hardwareMap.get(DcMotor.class, "frontR");
-        backRDrive = hardwareMap.get(DcMotor.class, "backR");
-
-
-        frontLDrive.setDirection(DcMotor.Direction.REVERSE);
-        backLDrive.setDirection(DcMotor.Direction.REVERSE);
-        frontRDrive.setDirection(DcMotor.Direction.FORWARD);
-        backRDrive.setDirection(DcMotor.Direction.FORWARD);
-
-        frontLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        ch = new CH(hardwareMap);
         telemetry.addData("Status", "Initialized");
+        telemetry.addData("Gamepad A is front Gamepad B is back", ch.Front);
+        telemetry.update();
+        while (gamepadPressed == false) {
+            if (gamepad1.a) {
+                ch.Front = true;
+                gamepadPressed = true;
+
+            }
+            if (gamepad1.b) {
+                ch.Front = false;
+                gamepadPressed = true;
+            }
+        }
+        telemetry.addData("Front =", ch.Front);
         telemetry.update();
 
         waitForStart();
@@ -73,21 +71,55 @@ public class Rotation extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
+            if (ch.Front == true) {
+                moveRobot(0.5, -0.3, 0);
+                sleep(1000);
+                moveRobot(0, 0, 0);
+                moveRobot(-0.5, 0, 0);
+                sleep(800);
+                moveRobot(0,0,0);
+            }
+            else {
+                moveRobot(0.55,0.2,0);
+                sleep(1000);
+                moveRobot(0,0,0);
+                sleep(100);
+                moveRobot(-0.5,0,0);
+                sleep(200);
+                moveRobot(0,0,-0.6);
+                sleep(500);
+                moveRobot(0,0,0);
+            }
 
-            frontRDrive.setPower(0.5);
-            backRDrive.setPower(0.5);
-            frontLDrive.setPower(0.5);
-            backLDrive.setPower(0.5);
-            sleep(3000);
-            frontRDrive.setPower(0);
-            frontLDrive.setPower(0);
-            backRDrive.setPower(0);
-            backLDrive.setPower(0);
-
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.update();
-            break;
+        // Show the elapsed game time and wheel power.
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.update();
+        break;
         }
+    }
+    public void moveRobot(double x, double y, double yaw) {
+        // Calculate wheel powers.
+        double leftFrontPower    =  x -y -yaw;
+        double rightFrontPower   =  x +y +yaw;
+        double leftBackPower     =  x +y -yaw;
+        double rightBackPower    =  x -y +yaw;
+
+        // Normalize wheel powers to be less than 1.0
+        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+
+        if (max > 1.0) {
+            leftFrontPower /= max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        // Send powers to the wheels.
+        ch.frontLDrive.setPower(leftFrontPower);
+        ch.frontRDrive.setPower(rightFrontPower);
+        ch.backLDrive.setPower(leftBackPower);
+        ch.backRDrive.setPower(rightBackPower);
     }
 }
