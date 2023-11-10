@@ -14,9 +14,9 @@ public class CH {
     public DcMotor winchMotor = null;
     public Servo hookArm = null;
     public Servo launcher = null;
-    public static final double POS_1 = 0.35;
-    public static final double POS_2 = 0.5;
-    public static final double MIN_POS = 0.0;
+    public static final double POS_1 = 0.46;
+    public static final double POS_2 = 0.7;
+    public static final double MIN_POS = 0.2;
     public static final double Fire = 0.5;
     public static final double Tight = -0.7;
     public static final double Loose = 0.7;
@@ -50,6 +50,32 @@ public class CH {
      backLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
      backRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+    }
+
+    public void moveRobot(double x, double y, double yaw) {
+        // Calculate wheel powers.
+        double leftFrontPower    =  x -y -yaw;
+        double rightFrontPower   =  x +y +yaw;
+        double leftBackPower     =  x +y -yaw;
+        double rightBackPower    =  x -y +yaw;
+
+        // Normalize wheel powers to be less than 1.0
+        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+
+        if (max > 1.0) {
+            leftFrontPower /= max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        // Send powers to the wheels.
+        frontLDrive.setPower(leftFrontPower);
+        frontRDrive.setPower(rightFrontPower);
+        backLDrive.setPower(leftBackPower);
+        backRDrive.setPower(rightBackPower);
     }
 }
 

@@ -46,7 +46,7 @@ public class BasicTeleOp extends LinearOpMode {
 
         ch = new CH(hardwareMap);
         ch.hookArm.setPosition(ch.MIN_POS);
-        ch.launcher.setPosition(0);
+        ch.launcher.setPosition(0.25);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
