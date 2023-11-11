@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.Auto;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -37,7 +38,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.CH;
 
 
-@TeleOp(name="autonomous", group="Linear OpMode")
+@Autonomous(name="autonomous", group="Linear OpMode")
 
 public class Rotation extends LinearOpMode {
 
@@ -94,6 +95,7 @@ public class Rotation extends LinearOpMode {
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
+        break;
         }
     }
 
