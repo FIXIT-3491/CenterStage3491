@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Teleop;
+package org.firstinspires.ftc.teamcode.Auto;
 
 import android.util.Size;
 
@@ -114,8 +114,7 @@ public class AprilTagDrive extends LinearOpMode
     private WebcamName webcam1, webcam2;
 
     private boolean targetNotReached = true;
-    @Override public void runOpMode()
-    {
+    @Override public void runOpMode() {
         boolean targetFound     = false;    // Set to true when an AprilTag target is detected
         double  drive           = 0;        // Desired forward power/speed (-1 to +1)
         double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
@@ -145,7 +144,7 @@ public class AprilTagDrive extends LinearOpMode
 
         while (opModeIsActive()) {
 
-            moveRobot(0.55, 0.2, 0);
+    /*        moveRobot(0.55, 0.2, 0);
             sleep(1000);
             moveRobot(0, 0, 0);
             sleep(100);
@@ -154,7 +153,7 @@ public class AprilTagDrive extends LinearOpMode
             moveRobot(0, 0, -0.6);
             sleep(500);
             moveRobot(0, 0, 0);
-
+*/
             targetFound = false;
             desiredTag = null;
             while (targetNotReached) {
