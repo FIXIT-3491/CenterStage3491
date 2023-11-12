@@ -123,9 +123,10 @@ public class frontbackAutoBlue extends LinearOpMode {
                 sleep(300);
                 ch.moveRobot(0,0,0);
 
-                targetFound = false;
+
                 desiredTag = null;
                 while (targetNotReached) {
+                    targetFound = false;
                     List<AprilTagDetection> currentDetections = vp.aprilTag.getDetections();
                     for (AprilTagDetection detection : currentDetections) {
                         if (detection.metadata != null) {
@@ -135,11 +136,13 @@ public class frontbackAutoBlue extends LinearOpMode {
                                 targetFound = true;
                                 desiredTag = detection;
                                 break;  // don't look any further.
-                            } else {
+                            }
+                            else {
                                 // This tag is in the library, but we do not want to track it right now.
                                 telemetry.addData("Skipping", "Tag ID %d is not desired", detection.id);
                             }
-                        } else {
+                        }
+                        else {
                             // This tag is NOT in the library, so we don't have enough information to track to it.
                             telemetry.addData("Unknown", "Tag ID %d is not in TagLibrary", detection.id);
                         }
@@ -147,7 +150,6 @@ public class frontbackAutoBlue extends LinearOpMode {
 
                     // Tell the driver what we see, and what to do.
                     if (targetFound) {
-                        telemetry.addData("\n>", "HOLD Left-Bumper to Drive to Target\n");
                         telemetry.addData("Found", "ID %d (%s)", desiredTag.id, desiredTag.metadata.name);
                         telemetry.addData("Range", "%5.1f inches", desiredTag.ftcPose.range);
                         telemetry.addData("Bearing", "%3.0f degrees", desiredTag.ftcPose.bearing);
@@ -162,8 +164,9 @@ public class frontbackAutoBlue extends LinearOpMode {
                             drive = 0;
                             turn = 0;
                             strafe = 0;
+                            targetNotReached = false;
                         } else {
-                            drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+                            drive = -Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
                             turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
                             strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
                             telemetry.addData("Auto", "Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
@@ -171,13 +174,17 @@ public class frontbackAutoBlue extends LinearOpMode {
                         telemetry.update();
 
                         // Apply desired axes motions to the drivetrain.
-                        ch.moveRobot(drive, strafe, turn);
-                        sleep(10);
-                        targetNotReached = false;
+
+
                     }
                     else {
+                        drive = 0;
+                        turn = 0;
+                        strafe = 0;
                         telemetry.addData("\n>", "Didnt work end of world");
                     }
+                    ch.moveRobot(drive, strafe, turn);
+                    sleep(10);
                 }
             }
 

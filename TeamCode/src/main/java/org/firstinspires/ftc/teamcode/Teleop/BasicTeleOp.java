@@ -79,6 +79,9 @@ public class BasicTeleOp extends LinearOpMode {
             if (gamepad2.a){
                 ch.launcher.setPosition(ch.Fire);
             }
+            if (gamepad2.dpad_up){
+                ch.winchMotor.setPower(-0.3);
+            }
 
 
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
