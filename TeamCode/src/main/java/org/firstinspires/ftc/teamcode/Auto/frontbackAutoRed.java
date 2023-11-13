@@ -98,27 +98,26 @@ public class frontbackAutoRed extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-
         while (vp.cupFound == false){
-        List<Recognition> currentRecognitions = vp.tfod.getRecognitions();
-        telemetry.addData("# Objects Detected", currentRecognitions.size());
+            List<Recognition> currentRecognitions = vp.tfod.getRecognitions();
+            telemetry.addData("# Objects Detected", currentRecognitions.size());
 
-        // Step through the list of recognitions and display info for each one.
-        for (Recognition recognition : currentRecognitions) {
-            vp.cupFound = true;
-            double x = (recognition.getLeft() + recognition.getRight()) / 2;
-            //double y = (recognition.getTop() + recognition.getBottom()) / 2;
+            // Step through the list of recognitions and display info for each one.
+            for (Recognition recognition : currentRecognitions) {
+                vp.cupFound = true;
+                double x = (recognition.getLeft() + recognition.getRight()) / 2;
+                //double y = (recognition.getTop() + recognition.getBottom()) / 2;
 
-            if(x<600){
-                CUP_POS = "left";
+                if(x<600){
+                    CUP_POS = "left";
+                }
+                else if (x>1300) {
+                    CUP_POS = "right";
+                }
+                else {
+                    CUP_POS = "middle";
+                }
             }
-            else if (x>1300) {
-                CUP_POS = "right";
-            }
-            else {
-                CUP_POS = "middle";
-            }
-        }
         }
 
             if (ch.Front == true) {
@@ -174,67 +173,61 @@ public class frontbackAutoRed extends LinearOpMode {
                     ch.moveRobot(0, 0, 0);
                 }
             }
-
             else {
-                    telemetry.addData("Position", CUP_POS);
-                    ch.moveRobot(0.6, 0.15, 0);
-                    sleep(700);
+                telemetry.addData("Position", CUP_POS);
+                ch.moveRobot(0.6, 0.15, 0);
+                sleep(700);
+                ch.moveRobot(0, 0, 0);
+                sleep(500);
+
+                if (CUP_POS == "right") {
+                    DESIRED_TAG_ID = 6;
+                    ch.moveRobot(0, 0, -0.5);
+                    sleep(350);
                     ch.moveRobot(0, 0, 0);
+                    sleep(300);
+                    ch.moveRobot(0.5, 0, 0);
+                    sleep(325);
+                    ch.moveRobot(0, 0, 0);
+                    sleep(200);
+                    ch.moveRobot(-0.5, 0, 0);
+                    sleep(200);
+                    ch.moveRobot(0, 0, 0.5);
+                    sleep(900);
+                    ch.moveRobot(0, 0, 0);
+                } else if (CUP_POS == "left") {
+                    DESIRED_TAG_ID = 4;
+                    ch.moveRobot(0, 0, 0.5);
+                    sleep(350);
+                    ch.moveRobot(0, 0, 0);
+                    sleep(300);
+                    ch.moveRobot(0.5, 0, 0);
+                    sleep(325);
+                    ch.moveRobot(0, 0, 0);
+                    sleep(200);
+                    ch.moveRobot(-0.5, 0, 0);
+                    sleep(200);
+                    ch.moveRobot(0, 0, 0.5);
+                    sleep(350);
+                    ch.moveRobot(0, 0, 0);
+
+
+                } else if (CUP_POS == "middle") {
+                    DESIRED_TAG_ID = 5;
+                    ch.moveRobot(0.5, 0, 0);
+                    sleep(250);
+                    ch.moveRobot(0, 0, 0);
+                    sleep(200);
+                    ch.moveRobot(-0.5, 0, 0);
+                    sleep(250);
+                    ch.moveRobot(0, 0, 0.5);
                     sleep(500);
-
-                    if (CUP_POS == "right") {
-                        DESIRED_TAG_ID = 6;
-                        ch.moveRobot(0, 0, -0.5);
-                        sleep(350);
-                        ch.moveRobot(0, 0, 0);
-                        sleep(300);
-                        ch.moveRobot(0.5, 0, 0);
-                        sleep(325);
-                        ch.moveRobot(0, 0, 0);
-                        sleep(200);
-                        ch.moveRobot(-0.5, 0, 0);
-                        sleep(200);
-                        ch.moveRobot(0, 0, 0.5);
-                        sleep(900);
-                        ch.moveRobot(0, 0, 0);
-                    } else if (CUP_POS == "left") {
-                        DESIRED_TAG_ID = 4;
-                        ch.moveRobot(0, 0, 0.5);
-                        sleep(350);
-                        ch.moveRobot(0, 0, 0);
-                        sleep(300);
-                        ch.moveRobot(0.5, 0, 0);
-                        sleep(325);
-                        ch.moveRobot(0, 0, 0);
-                        sleep(200);
-                        ch.moveRobot(-0.5, 0, 0);
-                        sleep(200);
-                        ch.moveRobot(0, 0, 0.5);
-                        sleep(350);
-                        ch.moveRobot(0, 0, 0);
-
-
-                    } else if (CUP_POS == "middle") {
-                        DESIRED_TAG_ID = 5;
-                        ch.moveRobot(0.5, 0, 0);
-                        sleep(250);
-                        ch.moveRobot(0, 0, 0);
-                        sleep(200);
-                        ch.moveRobot(-0.5, 0, 0);
-                        sleep(250);
-                        ch.moveRobot(0, 0, 0.5);
-                        sleep(500);
-                        ch.moveRobot(0, 0, 0);
-                    }
+                    ch.moveRobot(0, 0, 0);
                 }
-                vp.visionPortal.setActiveCamera(vp.webcam1);
-
-
-                 //   moveAprilTag();
-                telemetry.update();
-
-
-
+            }
+            vp.visionPortal.setActiveCamera(vp.webcam1);
+            //   moveAprilTag();
+        telemetry.update();
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
