@@ -34,8 +34,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.CH;
-import org.firstinspires.ftc.teamcode.VP;
+import org.firstinspires.ftc.teamcode.setup.CH;
+import org.firstinspires.ftc.teamcode.setup.VP;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
