@@ -282,6 +282,7 @@ public class frontbackAutoRed extends LinearOpMode {
                 drive = 0;
                 turn = 0;
                 strafe = 0;
+                targetNotReached = false;
             } else {
                 drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
                 turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
@@ -291,10 +292,9 @@ public class frontbackAutoRed extends LinearOpMode {
             telemetry.update();
 
             // Apply desired axes motions to the drivetrain.
-            sleep(1000);
             ch.moveRobot(-drive, strafe, turn);
             sleep(10);
-            targetNotReached = false;
+
         }
         else {
             telemetry.addData("\n>", "Not found");
