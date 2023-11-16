@@ -96,8 +96,8 @@ public class frontbackAutoBlue extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
-
-        while (vp.cupFound == false) {
+//         while(runtime.milliseconds()<7500)
+        while (vp.cupFound == false && runtime.milliseconds()<7500) {
             List<Recognition> currentRecognitions = vp.tfod.getRecognitions();
             telemetry.addData("# Objects Detected", currentRecognitions.size());
 
@@ -115,6 +115,9 @@ public class frontbackAutoBlue extends LinearOpMode {
                     CUP_POS = "middle";
                 }
             }
+        }
+        if (vp.cupFound == false) {
+            CUP_POS = "middle";
         }
 
         if (ch.Front == true) {
@@ -160,13 +163,13 @@ public class frontbackAutoBlue extends LinearOpMode {
             } else if (CUP_POS == "middle") {
                 DESIRED_TAG_ID = 1;
                 ch.moveRobot(0.5, 0, 0);
-                sleep(250);
+                sleep(300);
                 ch.moveRobot(0, 0, 0);
                 sleep(200);
                 ch.moveRobot(-0.5, 0, 0);
-                sleep(250);
+                sleep(300);
                 ch.moveRobot(0, 0, -0.5);
-                sleep(500);
+                sleep(600);
                 ch.moveRobot(0, 0, 0);
             }
         } else {
@@ -204,25 +207,27 @@ public class frontbackAutoBlue extends LinearOpMode {
                 ch.moveRobot(-0.5, 0, 0);
                 sleep(200);
                 ch.moveRobot(0, 0, -0.5);
-                sleep(350);
+                sleep(50);
                 ch.moveRobot(0, 0, 0);
 
 
             } else if (CUP_POS == "middle") {
                 DESIRED_TAG_ID = 2;
                 ch.moveRobot(0.5, 0, 0);
-                sleep(250);
+                sleep(325);
                 ch.moveRobot(0, 0, 0);
                 sleep(200);
                 ch.moveRobot(-0.5, 0, 0);
-                sleep(250);
+                sleep(325);
                 ch.moveRobot(0, 0, -0.5);
                 sleep(500);
                 ch.moveRobot(0, 0, 0);
             }
+            ch.moveRobot(-0.5,0,0);
+            sleep(1000);
         }
         vp.visionPortal.setActiveCamera(vp.webcam1);
-        //   moveAprilTag();
+  //      moveAprilTag();
         telemetry.update();
 
         // Show the elapsed game time and wheel power.

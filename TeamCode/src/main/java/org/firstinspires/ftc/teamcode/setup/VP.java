@@ -20,7 +20,7 @@ public class VP {
     public AprilTagProcessor aprilTag;
     public WebcamName webcam1, webcam2;
 
-    public static final String TFOD_MODEL_ASSET = "CupDetection.tflite";
+    public static final String TFOD_MODEL_ASSET = "CupDetection2.tflite";
     public static final String[] LABELS = {"blueCup", "redCup"};
     public TfodProcessor tfod;
     public boolean cupFound = false;
@@ -51,7 +51,7 @@ public class VP {
                 .setModelAssetName(TFOD_MODEL_ASSET)
                 .setModelLabels(LABELS)
                 .build();
-        tfod.setMinResultConfidence(0.25f);
+        tfod.setMinResultConfidence(0.50f);
 
         visionPortal = new VisionPortal.Builder()
                 .setCamera(switchableCamera)

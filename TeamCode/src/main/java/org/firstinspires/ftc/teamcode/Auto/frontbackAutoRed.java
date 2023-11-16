@@ -163,11 +163,11 @@ public class frontbackAutoRed extends LinearOpMode {
                 } else if (CUP_POS == "middle") {
                     DESIRED_TAG_ID = 5;
                     ch.moveRobot(0.5, 0, 0);
-                    sleep(250);
+                    sleep(325);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
                     ch.moveRobot(-0.5, 0, 0);
-                    sleep(250);
+                    sleep(325);
                     ch.moveRobot(0, 0, 0.5);
                     sleep(500);
                     ch.moveRobot(0, 0, 0);
@@ -193,7 +193,7 @@ public class frontbackAutoRed extends LinearOpMode {
                     ch.moveRobot(-0.5, 0, 0);
                     sleep(200);
                     ch.moveRobot(0, 0, 0.5);
-                    sleep(900);
+                    sleep(800);
                     ch.moveRobot(0, 0, 0);
                 } else if (CUP_POS == "left") {
                     DESIRED_TAG_ID = 4;
@@ -208,25 +208,27 @@ public class frontbackAutoRed extends LinearOpMode {
                     ch.moveRobot(-0.5, 0, 0);
                     sleep(200);
                     ch.moveRobot(0, 0, 0.5);
-                    sleep(350);
+                    sleep(100);
                     ch.moveRobot(0, 0, 0);
 
 
                 } else if (CUP_POS == "middle") {
                     DESIRED_TAG_ID = 5;
                     ch.moveRobot(0.5, 0, 0);
-                    sleep(250);
+                    sleep(325);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
                     ch.moveRobot(-0.5, 0, 0);
-                    sleep(250);
+                    sleep(325);
                     ch.moveRobot(0, 0, 0.5);
-                    sleep(500);
+                    sleep(450);
                     ch.moveRobot(0, 0, 0);
                 }
+                ch.moveRobot(-0.5,0,0);
+                sleep(1000);
             }
             vp.visionPortal.setActiveCamera(vp.webcam1);
-            //   moveAprilTag();
+          //  moveAprilTag();
         telemetry.update();
 
             // Show the elapsed game time and wheel power.
