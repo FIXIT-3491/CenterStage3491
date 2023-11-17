@@ -41,6 +41,7 @@ public class BasicTeleOp extends LinearOpMode {
     private CH ch = null;
     private ElapsedTime runtime = new ElapsedTime();
 
+
     @Override
     public void runOpMode() {
 
@@ -110,11 +111,18 @@ public class BasicTeleOp extends LinearOpMode {
             }
 
             // Send calculated power to wheels
-            ch.frontLDrive.setPower(leftFrontPower);
-            ch.frontRDrive.setPower(rightFrontPower);
-            ch.backLDrive.setPower(leftBackPower);
-            ch.backRDrive.setPower(rightBackPower);
-
+            if (gamepad1.left_bumper) {
+                ch.frontLDrive.setPower(0.3*leftFrontPower);
+                ch.frontRDrive.setPower(0.3*rightFrontPower);
+                ch.backLDrive.setPower(0.3*leftBackPower);
+                ch.backRDrive.setPower(0.3*rightBackPower);
+            }
+            else{
+                ch.frontLDrive.setPower(leftFrontPower);
+                ch.frontRDrive.setPower(rightFrontPower);
+                ch.backLDrive.setPower(leftBackPower);
+                ch.backRDrive.setPower(rightBackPower);
+            }
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
