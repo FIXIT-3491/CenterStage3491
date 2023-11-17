@@ -14,9 +14,9 @@ public class CH {
     public DcMotor winchMotor = null;
     public Servo hookArm = null;
     public Servo launcher = null;
-    public static final double POS_1 = 0.46;
+    public static final double POS_1 = 0.52;
     public static final double POS_2 = 0.7;
-    public static final double MIN_POS = 0.2;
+    public static final double MIN_POS = 0.22;
     public static final double Fire = 0.5;
     public static final double Tight = -0.7;
     public static final double Loose = 0.7;
