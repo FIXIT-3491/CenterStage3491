@@ -54,9 +54,9 @@ public class frontbackAutoBlue extends LinearOpMode {
     final double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
     final double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
 
-    final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
+    final double MAX_AUTO_SPEED = 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
+    final double MAX_AUTO_STRAFE= 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
+    final double MAX_AUTO_TURN  = 0.2;   //  Clip the turn speed to this max value (adjust for your robot)
     private AprilTagDetection desiredTag = null;
 
     private CH ch = null;
@@ -227,7 +227,8 @@ public class frontbackAutoBlue extends LinearOpMode {
             sleep(1000);
         }
         vp.visionPortal.setActiveCamera(vp.webcam1);
-  //      moveAprilTag();
+        moveAprilTag();
+
         telemetry.update();
 
         // Show the elapsed game time and wheel power.
@@ -245,9 +246,9 @@ public class frontbackAutoBlue extends LinearOpMode {
         double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
         double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
-        targetFound = false;
         desiredTag = null;
         while (targetNotReached) {
+            targetFound = false;
             List<AprilTagDetection> currentDetections = vp.aprilTag.getDetections();
             for (AprilTagDetection detection : currentDetections) {
                 if (detection.metadata != null) {
@@ -277,13 +278,14 @@ public class frontbackAutoBlue extends LinearOpMode {
 
 
                 double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
-                double headingError = desiredTag.ftcPose.bearing;
+                double headingError = -desiredTag.ftcPose.bearing;
                 double yawError = desiredTag.ftcPose.yaw;
 
                 if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {
                     drive = 0;
                     turn = 0;
                     strafe = 0;
+                    targetNotReached = false;
                 } else {
                     drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
                     turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
@@ -300,6 +302,7 @@ public class frontbackAutoBlue extends LinearOpMode {
             }
             else {
                 telemetry.addData("\n>", "Not found");
+                ch.moveRobot(0,0,0);
             }
         }    telemetry.update();
     }
