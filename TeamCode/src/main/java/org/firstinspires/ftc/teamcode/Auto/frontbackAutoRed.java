@@ -49,7 +49,7 @@ public class frontbackAutoRed extends LinearOpMode {
 
     private String CUP_POS = "Middle";
 
-    final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
+    final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
 
     final double SPEED_GAIN  =  0.02  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
     final double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
@@ -130,47 +130,51 @@ public class frontbackAutoRed extends LinearOpMode {
 
                 if (CUP_POS == "right") {
                     DESIRED_TAG_ID = 6;
-                    ch.moveRobot(0, 0, -0.5);
+                    ch.moveRobot(0, 0, -0.5); // turn spike mark
                     sleep(350);
                     ch.moveRobot(0, 0, 0);
                     sleep(300);
-                    ch.moveRobot(0.5, 0, 0);
+                    ch.moveRobot(0.5, 0, 0); // drive spike mark
                     sleep(315);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
-                    ch.moveRobot(-0.5, 0, 0);
+                    ch.moveRobot(-0.5, 0, 0); //drive away from spike mark
                     sleep(200);
-                    ch.moveRobot(0, 0, 0.5);
+                    ch.moveRobot(0, 0, 0.5); // turn to backdrop
                     sleep(900);
                     ch.moveRobot(0, 0, 0);
+
                 } else if (CUP_POS == "left") {
                     DESIRED_TAG_ID = 4;
-                    ch.moveRobot(0, 0, 0.5);
+                    ch.moveRobot(0, 0, 0.5); // turn to spike mark
                     sleep(350);
                     ch.moveRobot(0, 0, 0);
                     sleep(300);
-                    ch.moveRobot(0.5, 0, 0);
+                    ch.moveRobot(0.5, 0, 0); // drive to spike mark
                     sleep(350);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
-                    ch.moveRobot(-0.5, 0, 0);
+                    ch.moveRobot(-0.5, 0, 0);  // drive away from spike mark
                     sleep(200);
-                    ch.moveRobot(0, 0, 0.5);
+                    ch.moveRobot(0, 0, 0.5); // turn to backdrop
                     sleep(350);
                     ch.moveRobot(0, 0, 0);
 
 
                 } else if (CUP_POS == "middle") {
                     DESIRED_TAG_ID = 5;
-                    ch.moveRobot(0.5, 0, 0);
+                    ch.moveRobot(0.5, 0, 0); // turn to spike mark
                     sleep(325);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
-                    ch.moveRobot(-0.5, 0, 0);
+                    ch.moveRobot(-0.5, 0, 0); // drive away from spike mark
                     sleep(325);
-                    ch.moveRobot(0, 0, 0.5);
+                    ch.moveRobot(0,0,0);
+                    sleep(200);
+                    ch.moveRobot(0, 0, 0.5); // turn to backdrop
                     sleep(500);
                     ch.moveRobot(0, 0, 0);
+
                 }
             }
             else {
@@ -182,53 +186,61 @@ public class frontbackAutoRed extends LinearOpMode {
 
                 if (CUP_POS == "right") {
                     DESIRED_TAG_ID = 6;
-                    ch.moveRobot(0, 0, -0.5);
+                    ch.moveRobot(0, 0, -0.5); //turn to spike mark
                     sleep(350);
                     ch.moveRobot(0, 0, 0);
                     sleep(300);
-                    ch.moveRobot(0.5, 0, 0);
+                    ch.moveRobot(0.5, 0, 0); //drive to spike mark
                     sleep(315);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
-                    ch.moveRobot(-0.5, 0, 0);
+                    ch.moveRobot(-0.5, 0, 0);  //drive away from spike mark
                     sleep(200);
-                    ch.moveRobot(0, 0, 0.5);
-                    sleep(800);
+                    ch.moveRobot(0, 0, 0.5); // turn to backdrop
+                    sleep(900);
                     ch.moveRobot(0, 0, 0);
+
+
+
                 } else if (CUP_POS == "left") {
                     DESIRED_TAG_ID = 4;
-                    ch.moveRobot(0, 0, 0.5);
+                    ch.moveRobot(0, 0, 0.5); // turn to spike mark
                     sleep(350);
                     ch.moveRobot(0, 0, 0);
                     sleep(300);
-                    ch.moveRobot(0.5, 0, 0);
+                    ch.moveRobot(0.5, 0, 0); // drive to spike mark
                     sleep(375);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
-                    ch.moveRobot(-0.5, 0, 0);
+                    ch.moveRobot(-0.5, 0, 0); // drive away from spike mark
                     sleep(200);
-                    ch.moveRobot(0, 0, 0.5);
-                    sleep(100);
+                    ch.moveRobot(0, 0, 0.5); // turn to backdrop
+                    sleep(350);
                     ch.moveRobot(0, 0, 0);
+
 
 
                 } else if (CUP_POS == "middle") {
                     DESIRED_TAG_ID = 5;
-                    ch.moveRobot(0.5, 0, 0);
+                    ch.moveRobot(0.5, 0, 0); // drive to spike mark
                     sleep(325);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
-                    ch.moveRobot(-0.5, 0, 0);
-                    sleep(325);
-                    ch.moveRobot(0, 0, 0.5);
-                    sleep(450);
+                    ch.moveRobot(-0.5, 0, 0); // drive away from spike mark
+                    sleep(200);
+                    ch.moveRobot(0, 0, 0.5); // turn to backdrop
+                    sleep(500);
                     ch.moveRobot(0, 0, 0);
+
                 }
-                ch.moveRobot(-0.5,0,0);
-                sleep(1000);
+
             }
             vp.visionPortal.setActiveCamera(vp.webcam1);
             moveAprilTag();
+            sleep(1000);
+            ch.moveRobot(-0.25,0,0);
+            sleep(600);
+            ch.moveRobot(0,0,0);
 
         telemetry.update();
 
@@ -278,8 +290,8 @@ public class frontbackAutoRed extends LinearOpMode {
 
 
                 double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
-                double headingError = -desiredTag.ftcPose.bearing;
-                double yawError = desiredTag.ftcPose.yaw;
+                double headingError = desiredTag.ftcPose.bearing;
+                double yawError = -desiredTag.ftcPose.yaw;
 
                 if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {
                     drive = 0;
@@ -295,7 +307,6 @@ public class frontbackAutoRed extends LinearOpMode {
                 telemetry.update();
 
                 // Apply desired axes motions to the drivetrain.
-                sleep(1000);
                 ch.moveRobot(-drive, strafe, turn);
                 sleep(10);
             }

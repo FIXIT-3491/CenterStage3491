@@ -48,7 +48,7 @@ public class frontbackAutoBlue extends LinearOpMode {
 
     private String CUP_POS = "Middle";
 
-    final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
+    final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
 
     final double SPEED_GAIN  =  0.02  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
     final double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
@@ -228,6 +228,10 @@ public class frontbackAutoBlue extends LinearOpMode {
         }
         vp.visionPortal.setActiveCamera(vp.webcam1);
         moveAprilTag();
+        sleep(1000);
+        ch.moveRobot(-0.25,0,0);
+        sleep(300);
+        ch.moveRobot(0,0,0);
 
         telemetry.update();
 
@@ -278,8 +282,8 @@ public class frontbackAutoBlue extends LinearOpMode {
 
 
                 double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
-                double headingError = -desiredTag.ftcPose.bearing;
-                double yawError = desiredTag.ftcPose.yaw;
+                double headingError = desiredTag.ftcPose.bearing;
+                double yawError = -desiredTag.ftcPose.yaw;
 
                 if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {
                     drive = 0;
@@ -295,7 +299,6 @@ public class frontbackAutoBlue extends LinearOpMode {
                 telemetry.update();
 
                 // Apply desired axes motions to the drivetrain.
-                sleep(1000);
                 ch.moveRobot(-drive, strafe, turn);
                 sleep(10);
                 targetNotReached = false;
