@@ -144,9 +144,9 @@ public class AprilTagDrive extends LinearOpMode
 
         while (opModeIsActive()) {
 
-            targetFound = false;
             desiredTag = null;
             while (targetNotReached) {
+                targetFound = false;
                 List<AprilTagDetection> currentDetections = aprilTag.getDetections();
                 for (AprilTagDetection detection : currentDetections) {
                     if (detection.metadata != null) {
@@ -198,7 +198,9 @@ public class AprilTagDrive extends LinearOpMode
 
                 }
                 else {
-                    telemetry.addData("\n>", "Didnt work end of world");
+                    moveRobot(0,0,0);
+
+                    telemetry.addData("\n>", "not found");
                 }
             }
         }
