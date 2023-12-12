@@ -25,8 +25,9 @@
     Note: not all options/steps programmed, this only works if it finds the pixel on the left spike mark.
  */
 
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.disabled;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -61,7 +62,7 @@ import java.util.concurrent.TimeUnit;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-
+@Disabled
 @Autonomous(name="AutoPixelFront", group = "Demo")
 
 public class AutoPixelFront extends LinearOpMode

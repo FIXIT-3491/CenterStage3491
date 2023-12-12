@@ -135,7 +135,7 @@ public class frontbackAutoRed extends LinearOpMode {
                     ch.moveRobot(0, 0, 0);
                     sleep(300);
                     ch.moveRobot(0.5, 0, 0);
-                    sleep(325);
+                    sleep(315);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
                     ch.moveRobot(-0.5, 0, 0);
@@ -150,7 +150,7 @@ public class frontbackAutoRed extends LinearOpMode {
                     ch.moveRobot(0, 0, 0);
                     sleep(300);
                     ch.moveRobot(0.5, 0, 0);
-                    sleep(325);
+                    sleep(350);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
                     ch.moveRobot(-0.5, 0, 0);
@@ -187,7 +187,7 @@ public class frontbackAutoRed extends LinearOpMode {
                     ch.moveRobot(0, 0, 0);
                     sleep(300);
                     ch.moveRobot(0.5, 0, 0);
-                    sleep(325);
+                    sleep(315);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
                     ch.moveRobot(-0.5, 0, 0);
@@ -202,7 +202,7 @@ public class frontbackAutoRed extends LinearOpMode {
                     ch.moveRobot(0, 0, 0);
                     sleep(300);
                     ch.moveRobot(0.5, 0, 0);
-                    sleep(325);
+                    sleep(375);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
                     ch.moveRobot(-0.5, 0, 0);

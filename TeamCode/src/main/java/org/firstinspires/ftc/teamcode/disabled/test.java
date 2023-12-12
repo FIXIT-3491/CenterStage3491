@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.disabled;
 
 import android.util.Size;
 
@@ -87,8 +87,8 @@ import java.util.concurrent.TimeUnit;
  *
  */
 
-@Autonomous(name="AprilTagDrive", group = "LinearOpMode")
-public class AprilTagDrive extends LinearOpMode
+@Autonomous(name="test", group = "LinearOpMode")
+public class test extends LinearOpMode
 {
     // Adjust these numbers to suit your robot.
     final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
@@ -107,7 +107,7 @@ public class AprilTagDrive extends LinearOpMode
     private DcMotor rightBackDrive   = null;  //  Used to control the right back drive wheel
 
     private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
-    private static final int DESIRED_TAG_ID = 5;     // Choose the tag you want to approach or set to -1 for ANY tag.
+    private static final int DESIRED_TAG_ID = 2;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private VisionPortal visionPortal;               // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
@@ -133,8 +133,8 @@ public class AprilTagDrive extends LinearOpMode
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
-   //     if (USE_WEBCAM)
-      //      setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+        //     if (USE_WEBCAM)
+        //      setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
 
         // Wait for driver to press start
         telemetry.addData("Camera preview on/off", "3 dots, Camera Stream");
@@ -143,6 +143,7 @@ public class AprilTagDrive extends LinearOpMode
         waitForStart();
 
         while (opModeIsActive()) {
+
 
             targetFound = false;
             desiredTag = null;
@@ -183,6 +184,7 @@ public class AprilTagDrive extends LinearOpMode
                         drive = 0;
                         turn = 0;
                         strafe = 0;
+                        targetNotReached = false;
                     } else {
                         drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
                         turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
@@ -194,7 +196,7 @@ public class AprilTagDrive extends LinearOpMode
                     // Apply desired axes motions to the drivetrain.
                     moveRobot(drive, strafe, turn);
                     sleep(10);
-                    targetNotReached = false;
+
                 }
                 else {
                     telemetry.addData("\n>", "Didnt work end of world");
@@ -241,8 +243,8 @@ public class AprilTagDrive extends LinearOpMode
     private void initAprilTag() {
         // Create the AprilTag processor by using a builder.
         aprilTag = new AprilTagProcessor.Builder()
-        .setLensIntrinsics(1439.41944052, 1439.41944052, 970.51421863, 537.612825157)  //logitech c920
-        .build();
+                .setLensIntrinsics(1439.41944052, 1439.41944052, 970.51421863, 537.612825157)  //logitech c920
+                .build();
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam
         // Decimation = 1 ..  Detect 2" Tag from 10 feet away at 10 Frames per second
