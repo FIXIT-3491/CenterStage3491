@@ -97,9 +97,9 @@ public class AprilTagDrive extends LinearOpMode
     final double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
     final double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
 
-    final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
+    final double MAX_AUTO_SPEED = 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
+    final double MAX_AUTO_STRAFE= 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
+    final double MAX_AUTO_TURN  = 0.2;   //  Clip the turn speed to this max value (adjust for your robot)
 
     private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
     private DcMotor rightFrontDrive  = null;  //  Used to control the right front drive wheel
@@ -176,13 +176,14 @@ public class AprilTagDrive extends LinearOpMode
 
 
                     double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
-                    double headingError = desiredTag.ftcPose.bearing;
+                    double headingError = -desiredTag.ftcPose.bearing; //reversed because of back webcam
                     double yawError = desiredTag.ftcPose.yaw;
 
                     if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {
                         drive = 0;
                         turn = 0;
                         strafe = 0;
+                        targetNotReached = false;
                     } else {
                         drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
                         turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
@@ -194,7 +195,7 @@ public class AprilTagDrive extends LinearOpMode
                     // Apply desired axes motions to the drivetrain.
                     moveRobot(drive, strafe, turn);
                     sleep(10);
-                    targetNotReached = false;
+
                 }
                 else {
                     telemetry.addData("\n>", "Didnt work end of world");
