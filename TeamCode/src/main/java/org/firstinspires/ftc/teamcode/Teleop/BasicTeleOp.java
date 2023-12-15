@@ -44,11 +44,8 @@ public class BasicTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
         ch = new CH(hardwareMap);
-        ch.hookArm.setPosition(ch.MIN_POS);
-        ch.launcher.setPosition(0.25);
-
+        ch.hookArm.setPosition(ch.armMIN_POS);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -60,28 +57,32 @@ public class BasicTeleOp extends LinearOpMode {
             double max;
 
             if (gamepad2.b) {
-                ch.hookArm.setPosition(ch.POS_2);
+                ch.hookArm.setPosition(ch.armPOS_2);
             }
             if (gamepad2.y) {
-                ch.hookArm.setPosition(ch.POS_1);
+                ch.hookArm.setPosition(ch.armPOS_1);
             }
             if (gamepad2.x) {
-                ch.hookArm.setPosition(ch.MIN_POS);
+                ch.hookArm.setPosition(ch.armMIN_POS);
             }
             if (gamepad2.left_bumper){
-                ch.winchMotor.setPower(ch.Loose);
+                ch.winchMotor.setPower(ch.Loosen);
             }
             else if (gamepad2.right_bumper) {
-                ch.winchMotor.setPower(ch.Tight);
+                ch.winchMotor.setPower(ch.Tighten);
             }
             else {
                 ch.winchMotor.setPower(0);
             }
-            if (gamepad2.a){
-                ch.launcher.setPosition(ch.Fire);
-            }
+
             if (gamepad2.dpad_up){
                 ch.winchMotor.setPower(-0.3);
+            }
+            if (gamepad1.b){
+                ch.gate.setPosition(0);
+            }
+            if (gamepad1.x){
+                ch.gate.setPosition(0.5);
             }
 
 
@@ -127,7 +128,6 @@ public class BasicTeleOp extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-            telemetry.addData("launcher",ch.launcher.getPosition());
             telemetry.update();
         }
     }

@@ -94,12 +94,13 @@ public class frontbackAutoBlue extends LinearOpMode {
             }
         }
         setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+
         telemetry.addData("Front =", ch.Front);
         telemetry.update();
 
         waitForStart();
         runtime.reset();
-//         while(runtime.milliseconds()<7500)
+
         while (vp.cupFound == false && runtime.milliseconds()<7500) {
             List<Recognition> currentRecognitions = vp.tfod.getRecognitions();
             telemetry.addData("# Objects Detected", currentRecognitions.size());
@@ -146,6 +147,7 @@ public class frontbackAutoBlue extends LinearOpMode {
                 ch.moveRobot(0, 0, -0.5);
                 sleep(900);
                 ch.moveRobot(0, 0, 0);
+
             } else if (CUP_POS == "left") {
                 DESIRED_TAG_ID = 2;
                 ch.moveRobot(0, 0, -0.5);
@@ -182,7 +184,7 @@ public class frontbackAutoBlue extends LinearOpMode {
             ch.moveRobot(0, 0, 0);
             sleep(500);
 
-            if (CUP_POS == "right") {
+            if (CUP_POS == "right") { // left and right are reversed
                 DESIRED_TAG_ID = 3;
                 ch.moveRobot(0, 0, 0.5);
                 sleep(350);
@@ -195,10 +197,11 @@ public class frontbackAutoBlue extends LinearOpMode {
                 ch.moveRobot(-0.5, 0, 0);
                 sleep(200);
                 ch.moveRobot(0, 0, -0.5);
-                sleep(900);
+                sleep(350);
                 ch.moveRobot(0, 0, 0);
-            } else if (CUP_POS == "left") {
-                DESIRED_TAG_ID = 1;
+
+            } else if (CUP_POS == "left") { // left and right are reversed
+                DESIRED_TAG_ID = 2;
                 ch.moveRobot(0, 0, -0.5);
                 sleep(350);
                 ch.moveRobot(0, 0, 0);
@@ -210,12 +213,12 @@ public class frontbackAutoBlue extends LinearOpMode {
                 ch.moveRobot(-0.5, 0, 0);
                 sleep(200);
                 ch.moveRobot(0, 0, -0.5);
-                sleep(50);
+                sleep(350);
                 ch.moveRobot(0, 0, 0);
 
 
             } else if (CUP_POS == "middle") {
-                DESIRED_TAG_ID = 2;
+                DESIRED_TAG_ID = 1;
                 ch.moveRobot(0.5, 0, 0);
                 sleep(325);
                 ch.moveRobot(0, 0, 0);
@@ -226,15 +229,21 @@ public class frontbackAutoBlue extends LinearOpMode {
                 sleep(500);
                 ch.moveRobot(0, 0, 0);
             }
-            ch.moveRobot(-0.5,0,0);
-            sleep(1000);
         }
         vp.visionPortal.setActiveCamera(vp.webcam1);
         moveAprilTag();
-        sleep(1000);
-        ch.moveRobot(-0.25,0,0);
-        sleep(300);
+        sleep(2000);
+        ch.moveRobot(-0.25,0,0); // move to backdrop
+
+        sleep(600);
         ch.moveRobot(0,0,0);
+        sleep(300);
+        ch.hookArm.setPosition(ch.armPOS_2);
+        sleep(400);
+        ch.moveRobot(0,0,0);
+        sleep(300);
+        ch.hookArm.setPosition(ch.armMIN_POS);
+        sleep(300);
 
         telemetry.update();
 
@@ -283,7 +292,6 @@ public class frontbackAutoBlue extends LinearOpMode {
                 telemetry.addData("Bearing", "%3.0f degrees", desiredTag.ftcPose.bearing);
                 telemetry.addData("Yaw", "%3.0f degrees", desiredTag.ftcPose.yaw);
 
-
                 double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
                 double headingError = desiredTag.ftcPose.bearing;
                 double yawError = -desiredTag.ftcPose.yaw;
@@ -304,7 +312,6 @@ public class frontbackAutoBlue extends LinearOpMode {
                 // Apply desired axes motions to the drivetrain.
                 ch.moveRobot(-drive, strafe, turn);
                 sleep(10);
-                targetNotReached = false;
             }
             else {
                 telemetry.addData("\n>", "Not found");

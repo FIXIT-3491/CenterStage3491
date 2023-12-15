@@ -125,6 +125,7 @@ public class frontbackAutoRed extends LinearOpMode {
             }
         }
 
+
             if (ch.Front == true) {
 
                 telemetry.addData("Position", CUP_POS);
@@ -236,16 +237,22 @@ public class frontbackAutoRed extends LinearOpMode {
                     ch.moveRobot(0, 0, 0.5); // turn to backdrop
                     sleep(500);
                     ch.moveRobot(0, 0, 0);
-
                 }
-
             }
             vp.visionPortal.setActiveCamera(vp.webcam1);
             moveAprilTag();
             sleep(1000);
-            ch.moveRobot(-0.25,0,0);
+            ch.moveRobot(-0.25,0,0); // move to backdrop
+
             sleep(600);
             ch.moveRobot(0,0,0);
+            sleep(300);
+            ch.hookArm.setPosition(ch.armPOS_2);
+            sleep(400);
+            ch.moveRobot(0,0,0);
+            sleep(400);
+            ch.hookArm.setPosition(ch.armMIN_POS);
+            sleep(300);
 
         telemetry.update();
 
@@ -292,7 +299,6 @@ public class frontbackAutoRed extends LinearOpMode {
                 telemetry.addData("Range", "%5.1f inches", desiredTag.ftcPose.range);
                 telemetry.addData("Bearing", "%3.0f degrees", desiredTag.ftcPose.bearing);
                 telemetry.addData("Yaw", "%3.0f degrees", desiredTag.ftcPose.yaw);
-
 
                 double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
                 double headingError = desiredTag.ftcPose.bearing;

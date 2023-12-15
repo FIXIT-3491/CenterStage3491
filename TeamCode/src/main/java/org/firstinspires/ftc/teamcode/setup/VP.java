@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.setup;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -8,10 +10,13 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+
+import java.util.List;
 
 public class VP {
 
@@ -20,6 +25,7 @@ public class VP {
     public AprilTagProcessor aprilTag;
     public WebcamName webcam1, webcam2;
 
+    private String CUP_POS = "Middle";
     public static final String TFOD_MODEL_ASSET = "CupDetection2.tflite";
     public static final String[] LABELS = {"blueCup", "redCup"};
     public TfodProcessor tfod;
@@ -61,5 +67,7 @@ public class VP {
                 .build();
 
     }
+
+
 }
 
