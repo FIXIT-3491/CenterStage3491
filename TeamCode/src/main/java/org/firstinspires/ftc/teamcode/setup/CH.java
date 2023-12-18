@@ -15,6 +15,7 @@ public class CH {
     public DcMotor winchMotor = null;
     public Servo hookArm = null;
     public Servo gate = null;
+    public Servo launcher = null;
 
     public static final double armMIN_POS = 0.22;
     public static final double armPOS_1 = 0.52;
@@ -34,6 +35,8 @@ public class CH {
      winchMotor = hardwareMap.get(DcMotor.class, "winch");
      hookArm = hardwareMap.get(Servo.class, "arm");
      gate = hardwareMap.get(Servo.class, "gate");
+     launcher = hardwareMap.get(Servo.class, "launcher");
+
 
      frontLDrive.setDirection(DcMotor.Direction.REVERSE);
      backLDrive.setDirection(DcMotor.Direction.REVERSE);

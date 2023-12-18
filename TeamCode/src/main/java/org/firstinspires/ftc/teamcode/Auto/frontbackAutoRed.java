@@ -61,7 +61,7 @@ public class frontbackAutoRed extends LinearOpMode {
 
     final double MAX_AUTO_SPEED = 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_STRAFE= 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_TURN  = 0.2;   //  Clip the turn speed to this max value (adjust for your robot)
+    final double MAX_AUTO_TURN  = 0.15;   //  Clip the turn speed to this max value (adjust for your robot)
     private AprilTagDetection desiredTag = null;
 
     private CH ch = null;
@@ -215,7 +215,7 @@ public class frontbackAutoRed extends LinearOpMode {
                     ch.moveRobot(0, 0, 0);
                     sleep(300);
                     ch.moveRobot(0.5, 0, 0); // drive to spike mark
-                    sleep(375);
+                    sleep(400);
                     ch.moveRobot(0, 0, 0);
                     sleep(200);
                     ch.moveRobot(-0.5, 0, 0); // drive away from spike mark
@@ -240,8 +240,12 @@ public class frontbackAutoRed extends LinearOpMode {
                 }
             }
             vp.visionPortal.setActiveCamera(vp.webcam1);
+
             moveAprilTag();
-            sleep(1000);
+            ch.moveRobot(0,0.5,0);
+            sleep(300);
+            ch.moveRobot(0,0,0);
+            sleep(1300);
             ch.moveRobot(-0.25,0,0); // move to backdrop
 
             sleep(600);

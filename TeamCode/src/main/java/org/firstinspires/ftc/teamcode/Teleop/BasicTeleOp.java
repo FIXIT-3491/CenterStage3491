@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.setup.CH;
 
 
+
 @TeleOp(name="Basic Tele-op", group="Linear OpMode")
 
 public class BasicTeleOp extends LinearOpMode {
@@ -46,6 +47,8 @@ public class BasicTeleOp extends LinearOpMode {
     public void runOpMode() {
         ch = new CH(hardwareMap);
         ch.hookArm.setPosition(ch.armMIN_POS);
+        ch.launcher.setPosition(1);
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -66,17 +69,22 @@ public class BasicTeleOp extends LinearOpMode {
                 ch.hookArm.setPosition(ch.armMIN_POS);
             }
             if (gamepad2.left_bumper){
-                ch.winchMotor.setPower(ch.Loosen);
+                ch.winchMotor.setPower(ch.Tighten);
             }
             else if (gamepad2.right_bumper) {
-                ch.winchMotor.setPower(ch.Tighten);
+                ch.winchMotor.setPower(ch.Loosen);
             }
             else {
                 ch.winchMotor.setPower(0);
             }
-
             if (gamepad2.dpad_up){
                 ch.winchMotor.setPower(-0.3);
+            }
+            if (gamepad2.a){
+                ch.launcher.setPosition(0.7);
+            }
+            if (gamepad2.dpad_left){
+                ch.launcher.setPosition(0.19);
             }
             if (gamepad1.b){
                 ch.gate.setPosition(0);
@@ -128,6 +136,7 @@ public class BasicTeleOp extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+            telemetry.addData("position", ch.launcher.getPosition());
             telemetry.update();
         }
     }
