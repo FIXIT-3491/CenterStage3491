@@ -50,16 +50,7 @@ import java.util.concurrent.TimeUnit;
 public class frontbackAutoBlue extends LinearOpMode {
 
     private String CUP_POS = "Middle";
-
     final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
-
-    final double SPEED_GAIN  =  0.02  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
-    final double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
-    final double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
-
-    final double MAX_AUTO_SPEED = 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_STRAFE= 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_TURN  = 0.2;   //  Clip the turn speed to this max value (adjust for your robot)
     private AprilTagDetection desiredTag = null;
 
     private CH ch = null;
@@ -93,7 +84,7 @@ public class frontbackAutoBlue extends LinearOpMode {
                 gamepadPressed = true;
             }
         }
-        setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+
 
         telemetry.addData("Front =", ch.Front);
         telemetry.update();
@@ -120,6 +111,7 @@ public class frontbackAutoBlue extends LinearOpMode {
                 }
             }
         }
+        setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
         if (vp.cupFound == false) {
             CUP_POS = "middle";
         }
@@ -302,9 +294,9 @@ public class frontbackAutoBlue extends LinearOpMode {
                     strafe = 0;
                     targetNotReached = false;
                 } else {
-                    drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
-                    turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
-                    strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+                    drive = Range.clip(rangeError * ch.SPEED_GAIN, -ch.MAX_AUTO_SPEED, ch.MAX_AUTO_SPEED);
+                    turn = Range.clip(headingError * ch.TURN_GAIN, -ch.MAX_AUTO_TURN, ch.MAX_AUTO_TURN);
+                    strafe = Range.clip(-yawError * ch.STRAFE_GAIN, -ch.MAX_AUTO_STRAFE, ch.MAX_AUTO_STRAFE);
                     telemetry.addData("Auto", "Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
                 }
                 telemetry.update();
