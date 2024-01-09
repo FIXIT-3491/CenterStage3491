@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
@@ -23,12 +22,16 @@ public class NewAuto extends LinearOpMode {
     private CH ch = null;
     private VP vp = null;
     private static int DESIRED_TAG_ID = 5;
-    private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime stepTimer = new ElapsedTime();
     private boolean targetNotReached = true;
 
     private enum Step { //creating enum step stuff
-    TENSOR_DETECT,
-    STEP_2
+        TENSOR_DETECT,
+        TENSOR_MOVE_1,
+        TENSOR_MOVE_2,
+        TENSOR_MOVE_RIGHT,
+        TENSOR_MOVE_MIDDLE,
+        TENSOR_MOVE_LEFT,
     }
     Step currentStep = Step.TENSOR_DETECT;
 
@@ -40,13 +43,13 @@ public class NewAuto extends LinearOpMode {
         vp.initAprilTag();
 
         waitForStart();
-        runtime.reset();
+        stepTimer.reset();
         while (opModeIsActive()) {
 
             switch(currentStep) {
                 case TENSOR_DETECT:
 
-                    if (runtime.milliseconds() < 7000) {
+                    if (stepTimer.milliseconds() < 7000) {
                         List<Recognition> currentRecognitions = vp.tfod.getRecognitions();
 
                         // Step through the list of recognitions and display info for each one.
@@ -63,20 +66,66 @@ public class NewAuto extends LinearOpMode {
                             }
                         }
                         if (vp.cupFound){
-                            currentStep = Step.STEP_2;
+                            currentStep = Step.TENSOR_MOVE_1;
                         }
-
 
                     } else{ // if not detected
                         CUP_POS = "middle";
-                     currentStep = Step.STEP_2;
+                     currentStep = Step.TENSOR_MOVE_1;
+                    }
+                    stepTimer.reset();
+                    break;
+
+                case TENSOR_MOVE_1:
+                    if (stepTimer.milliseconds() < 500) {
+                        ch.moveRobot(0.5,0, 0);
+                    }
+                    stepTimer.reset();
+                    currentStep = Step.TENSOR_MOVE_2;
+                    break;
+
+
+                case TENSOR_MOVE_2:
+
+                    if (stepTimer.milliseconds() < 250) {
+                        ch.moveRobot(0,0.5, 0);
+                    }
+
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        sleep(200);
+
+                        if (CUP_POS == "right"){
+                            currentStep = Step.TENSOR_MOVE_RIGHT;
+                        }
+                        else if (CUP_POS == "left"){
+                            currentStep = Step.TENSOR_MOVE_LEFT;
+                        }
+                        else {
+                            currentStep = Step.TENSOR_MOVE_MIDDLE;
+                        }
+                    }
+
+                    stepTimer.reset();
+                    break;
+
+                case TENSOR_MOVE_MIDDLE:
+                    if (stepTimer.milliseconds() < 225) {
+                        ch.imuMove(0.5,0, 0);
+                    }
+
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.TENSOR_MOVE_MIDDLE;
+                        stepTimer.reset();
                     }
                     break;
 
-                case STEP_2:
+                case TENSOR_MOVE_RIGHT:
+                    if (stepTimer.milliseconds() < 225) {
+                        ch.imuMove(0,-70, 0);
+                    }
                     break;
-
-
 
             } // switch
             telemetry.addData("Step", currentStep);
