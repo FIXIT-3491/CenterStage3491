@@ -78,7 +78,7 @@ public class BasicTeleOp extends LinearOpMode {
                 ch.winchMotor.setPower(0);
             }
             if (gamepad2.dpad_up){
-                ch.winchMotor.setPower(-0.3);
+                ch.winchMotor.setPower(0.3);
             }
             if (gamepad2.a){
                 ch.launcher.setPosition(0.7);
