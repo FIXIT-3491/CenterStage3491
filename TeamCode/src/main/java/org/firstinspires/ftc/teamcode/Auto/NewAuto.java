@@ -30,8 +30,19 @@ public class NewAuto extends LinearOpMode {
         TENSOR_MOVE_1,
         TENSOR_MOVE_2,
         TENSOR_MOVE_RIGHT,
+        TENSOR_MOVE_RIGHT_2,
+        TENSOR_MOVE_RIGHT_3,
         TENSOR_MOVE_MIDDLE,
+        TENSOR_MOVE_MIDDLE_2,
         TENSOR_MOVE_LEFT,
+        TENSOR_MOVE_LEFT_2,
+        TENSOR_MOVE_LEFT_3,
+        BREAK,
+        DECLARE_TFOD,
+        BREAK2,
+        BREAK3,
+        BREAK4,
+        DEAD,
     }
     Step currentStep = Step.TENSOR_DETECT;
 
@@ -56,11 +67,10 @@ public class NewAuto extends LinearOpMode {
                         for (Recognition recognition : currentRecognitions) {
                             vp.cupFound = true;
                             double x = (recognition.getLeft() + recognition.getRight()) / 2;
-
-                            if (x < 600) {
-                                CUP_POS = "right";
-                            } else if (x > 1300) {
+                            if (x < 200) {
                                 CUP_POS = "left";
+                            } else if (x > 430) {
+                                CUP_POS = "right";
                             } else {
                                 CUP_POS = "middle";
                             }
@@ -69,7 +79,7 @@ public class NewAuto extends LinearOpMode {
                             currentStep = Step.TENSOR_MOVE_1;
                         }
 
-                    } else{ // if not detected
+                    } else{ //  not detected
                         CUP_POS = "middle";
                      currentStep = Step.TENSOR_MOVE_1;
                     }
@@ -77,55 +87,196 @@ public class NewAuto extends LinearOpMode {
                     break;
 
                 case TENSOR_MOVE_1:
-                    if (stepTimer.milliseconds() < 500) {
-                        ch.moveRobot(0.5,0, 0);
+                    if (stepTimer.milliseconds() < 750) {
+                        ch.moveRobot(0.5,0,0);
                     }
-                    stepTimer.reset();
-                    currentStep = Step.TENSOR_MOVE_2;
+                    else {
+                        ch.moveRobot(0,0,0);
+                        currentStep = Step.BREAK;
+                        stepTimer.reset();
+                    }
+
                     break;
 
+                case BREAK:
+                    if (stepTimer.milliseconds() < 500) {
+                        sleep(100);
+                    }
+                    else {
+                        currentStep = Step.TENSOR_MOVE_2;
+                        stepTimer.reset();
+                    }
+                    break;
 
                 case TENSOR_MOVE_2:
 
                     if (stepTimer.milliseconds() < 250) {
                         ch.moveRobot(0,0.5, 0);
                     }
-
                     else {
                         ch.moveRobot(0, 0, 0);
-                        sleep(200);
+                        currentStep = Step.DECLARE_TFOD;
+                        stepTimer.reset();
+                    }
+                    break;
 
+                case DECLARE_TFOD:
+                    if (stepTimer.milliseconds() < 500) {
+                        sleep(100);
+                    }
+                    else {
+                        ch.moveRobot(0, 0, 0);
                         if (CUP_POS == "right"){
                             currentStep = Step.TENSOR_MOVE_RIGHT;
                         }
                         else if (CUP_POS == "left"){
                             currentStep = Step.TENSOR_MOVE_LEFT;
                         }
-                        else {
+                        else if(CUP_POS == "middle") {
                             currentStep = Step.TENSOR_MOVE_MIDDLE;
                         }
-                    }
-
-                    stepTimer.reset();
-                    break;
-
-                case TENSOR_MOVE_MIDDLE:
-                    if (stepTimer.milliseconds() < 225) {
-                        ch.imuMove(0.5,0, 0);
-                    }
-
-                    else {
-                        ch.moveRobot(0, 0, 0);
-                        currentStep = Step.TENSOR_MOVE_MIDDLE;
                         stepTimer.reset();
                     }
                     break;
 
-                case TENSOR_MOVE_RIGHT:
-                    if (stepTimer.milliseconds() < 225) {
-                        ch.imuMove(0,-70, 0);
+
+                case TENSOR_MOVE_MIDDLE:
+                    if (stepTimer.milliseconds() < 550) {
+                        ch.moveRobot(0.5,0,0);
+                    }
+
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.BREAK4;
+                        stepTimer.reset();
                     }
                     break;
+
+                case BREAK4:
+                    if (stepTimer.milliseconds() < 500) {
+                        sleep(1);
+                    }
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.TENSOR_MOVE_MIDDLE_2;
+                        stepTimer.reset();
+                    }
+                    break;
+
+                case TENSOR_MOVE_MIDDLE_2:
+                    if (stepTimer.milliseconds() < 300) {
+                        ch.moveRobot(-0.5,0,0);
+                    }
+
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.DEAD;
+                        stepTimer.reset();
+                    }
+                    break;
+
+
+                case TENSOR_MOVE_RIGHT:
+                    if (stepTimer.milliseconds() < 2000) {
+                        ch.imuMove(0,-40);
+                    }
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.TENSOR_MOVE_RIGHT_2;
+                        stepTimer.reset();
+                    }
+                    break;
+
+                case TENSOR_MOVE_RIGHT_2:
+                    if (stepTimer.milliseconds() < 500) {
+                        ch.moveRobot(0.5,0,0);
+                    }
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.BREAK3;
+                        stepTimer.reset();
+                    }
+                    break;
+
+                case BREAK3:
+                    if (stepTimer.milliseconds() < 500) {
+                        sleep(1);
+                    }
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.TENSOR_MOVE_RIGHT_3;
+                        stepTimer.reset();
+                    }
+                    break;
+
+                case TENSOR_MOVE_RIGHT_3:
+                    if (stepTimer.milliseconds() < 500) {
+                        ch.moveRobot(-0.5,0,0);
+                    }
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.DEAD;
+                        stepTimer.reset();
+                    }
+                    break;
+
+
+                case TENSOR_MOVE_LEFT:
+                    if (stepTimer.milliseconds() < 2000) {
+                        ch.imuMove(0,47);
+                    }
+                    else {
+                        currentStep = Step.TENSOR_MOVE_LEFT_2;
+                        stepTimer.reset();
+                    }
+                    break;
+
+                case TENSOR_MOVE_LEFT_2:
+                    if (stepTimer.milliseconds() < 500) {
+                        ch.moveRobot(0.5,0,0);
+                    }
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.BREAK2;
+                        stepTimer.reset();
+                    }
+                    break;
+
+                case BREAK2:
+                    if (stepTimer.milliseconds() < 500) {
+                        sleep(1);
+                    }
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.TENSOR_MOVE_LEFT_3;
+                        stepTimer.reset();
+                    }
+                    break;
+
+                case TENSOR_MOVE_LEFT_3:
+                        if (stepTimer.milliseconds() < 300) {
+                        ch.moveRobot(-0.5,0,0);
+                    }
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.DEAD;
+                        stepTimer.reset();
+                    }
+                    break;
+
+
+
+                case DEAD:
+                    if (stepTimer.milliseconds() < 100000) {
+                        sleep(100);
+                    }
+                    else {
+                        currentStep = Step.TENSOR_MOVE_2;
+                        stepTimer.reset();
+                    }
+                    break;
+
+
 
             } // switch
             telemetry.addData("Step", currentStep);
@@ -201,4 +352,5 @@ public class NewAuto extends LinearOpMode {
             }
         }    telemetry.update();
     }
+
 }

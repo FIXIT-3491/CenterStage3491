@@ -100,7 +100,7 @@ public class CH {
         backLDrive.setPower(leftBackPower);
         backRDrive.setPower(rightBackPower);
     }
-    public void imuMove(double powerLevel, double heading, double strafe) { //heading positive left
+    public void imuMove(double powerLevel, double heading) { //heading positive left
         YawPitchRollAngles orientation;
         double turn, headingError;
 
@@ -110,7 +110,7 @@ public class CH {
         if (powerLevel < 0) {
             turn = turn * -1;  // reverse turn if going backwards
         }
-        moveRobot(powerLevel, strafe, turn);  // Added 'strafe' as a parameter
+        moveRobot(powerLevel,0, turn);  // Added 'strafe' as a parameter
     }
 
 
