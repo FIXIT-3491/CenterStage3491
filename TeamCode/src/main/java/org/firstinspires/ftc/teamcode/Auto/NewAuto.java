@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
@@ -29,20 +30,20 @@ public class NewAuto extends LinearOpMode {
         TENSOR_DETECT,
         TENSOR_MOVE_1,
         TENSOR_MOVE_2,
-        TENSOR_MOVE_RIGHT,
-        TENSOR_MOVE_RIGHT_2,
-        TENSOR_MOVE_RIGHT_3,
+        TENSOR_TURN_RIGHT,
         TENSOR_MOVE_MIDDLE,
-        TENSOR_MOVE_MIDDLE_2,
-        TENSOR_MOVE_LEFT,
-        TENSOR_MOVE_LEFT_2,
-        TENSOR_MOVE_LEFT_3,
-        BREAK,
+        TENSOR_TURN_LEFT,
+        TENSOR_SCORE_PIXEL,
+        TENSOR_BACK_UP,
         DECLARE_TFOD,
+        ALIGN_APRIL_TAG,
+        MOVE_APRIL_TAG,
+        SCORE_YELLOW_PIXEL,
+        BREAK,
         BREAK2,
         BREAK3,
         BREAK4,
-        DEAD,
+        EMPTY,
     }
     Step currentStep = Step.TENSOR_DETECT;
 
@@ -56,10 +57,9 @@ public class NewAuto extends LinearOpMode {
         waitForStart();
         stepTimer.reset();
         while (opModeIsActive()) {
-
+            telemetry.addData("IMU Angle", "%.1f", ch.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             switch(currentStep) {
                 case TENSOR_DETECT:
-
                     if (stepTimer.milliseconds() < 7000) {
                         List<Recognition> currentRecognitions = vp.tfod.getRecognitions();
 
@@ -81,11 +81,12 @@ public class NewAuto extends LinearOpMode {
 
                     } else{ //  not detected
                         CUP_POS = "middle";
-                     currentStep = Step.TENSOR_MOVE_1;
+                        currentStep = Step.TENSOR_MOVE_1;
                     }
                     stepTimer.reset();
                     break;
 
+                // Goes Forward
                 case TENSOR_MOVE_1:
                     if (stepTimer.milliseconds() < 750) {
                         ch.moveRobot(0.5,0,0);
@@ -99,7 +100,7 @@ public class NewAuto extends LinearOpMode {
                     break;
 
                 case BREAK:
-                    if (stepTimer.milliseconds() < 500) {
+                    if (stepTimer.milliseconds() < 1000) {
                         sleep(100);
                     }
                     else {
@@ -108,7 +109,7 @@ public class NewAuto extends LinearOpMode {
                     }
                     break;
 
-                case TENSOR_MOVE_2:
+                case TENSOR_MOVE_2: // center robot
 
                     if (stepTimer.milliseconds() < 250) {
                         ch.moveRobot(0,0.5, 0);
@@ -122,15 +123,15 @@ public class NewAuto extends LinearOpMode {
 
                 case DECLARE_TFOD:
                     if (stepTimer.milliseconds() < 500) {
-                        sleep(100);
+                        sleep(1);
                     }
                     else {
                         ch.moveRobot(0, 0, 0);
                         if (CUP_POS == "right"){
-                            currentStep = Step.TENSOR_MOVE_RIGHT;
+                            currentStep = Step.TENSOR_TURN_RIGHT;
                         }
                         else if (CUP_POS == "left"){
-                            currentStep = Step.TENSOR_MOVE_LEFT;
+                            currentStep = Step.TENSOR_TURN_LEFT;
                         }
                         else if(CUP_POS == "middle") {
                             currentStep = Step.TENSOR_MOVE_MIDDLE;
@@ -147,47 +148,45 @@ public class NewAuto extends LinearOpMode {
 
                     else {
                         ch.moveRobot(0, 0, 0);
-                        currentStep = Step.BREAK4;
+                        currentStep = Step.BREAK3;
                         stepTimer.reset();
                     }
                     break;
 
-                case BREAK4:
-                    if (stepTimer.milliseconds() < 500) {
-                        sleep(1);
-                    }
-                    else {
-                        ch.moveRobot(0, 0, 0);
-                        currentStep = Step.TENSOR_MOVE_MIDDLE_2;
-                        stepTimer.reset();
-                    }
-                    break;
-
-                case TENSOR_MOVE_MIDDLE_2:
-                    if (stepTimer.milliseconds() < 300) {
-                        ch.moveRobot(-0.5,0,0);
-                    }
-
-                    else {
-                        ch.moveRobot(0, 0, 0);
-                        currentStep = Step.DEAD;
-                        stepTimer.reset();
-                    }
-                    break;
-
-
-                case TENSOR_MOVE_RIGHT:
+                case TENSOR_TURN_RIGHT:
                     if (stepTimer.milliseconds() < 2000) {
                         ch.imuMove(0,-40);
                     }
                     else {
                         ch.moveRobot(0, 0, 0);
-                        currentStep = Step.TENSOR_MOVE_RIGHT_2;
+                        currentStep = Step.BREAK2;
                         stepTimer.reset();
                     }
                     break;
 
-                case TENSOR_MOVE_RIGHT_2:
+                case TENSOR_TURN_LEFT: //turn to tag
+                    if (stepTimer.milliseconds() < 2000) {
+                        ch.imuMove(0,47);
+                    }
+                    else {
+                        currentStep = Step.BREAK2;
+                        stepTimer.reset();
+                    }
+                    break;
+
+
+                case BREAK2:
+                    if (stepTimer.milliseconds() < 1000) {
+                        sleep(1);
+                    }
+                    else {
+                        ch.moveRobot(0, 0, 0);
+                        currentStep = Step.TENSOR_SCORE_PIXEL;
+                        stepTimer.reset();
+                    }
+                    break;
+
+                case TENSOR_SCORE_PIXEL: // score pixel
                     if (stepTimer.milliseconds() < 500) {
                         ch.moveRobot(0.5,0,0);
                     }
@@ -199,87 +198,70 @@ public class NewAuto extends LinearOpMode {
                     break;
 
                 case BREAK3:
-                    if (stepTimer.milliseconds() < 500) {
+                    if (stepTimer.milliseconds() < 1000) {
                         sleep(1);
                     }
                     else {
                         ch.moveRobot(0, 0, 0);
-                        currentStep = Step.TENSOR_MOVE_RIGHT_3;
+                        currentStep = Step.TENSOR_BACK_UP;
                         stepTimer.reset();
                     }
                     break;
 
-                case TENSOR_MOVE_RIGHT_3:
-                    if (stepTimer.milliseconds() < 500) {
+                case TENSOR_BACK_UP:
+                    if (stepTimer.milliseconds() < 400) {
                         ch.moveRobot(-0.5,0,0);
                     }
                     else {
                         ch.moveRobot(0, 0, 0);
-                        currentStep = Step.DEAD;
+                        currentStep = Step.BREAK4;
                         stepTimer.reset();
                     }
                     break;
 
-
-                case TENSOR_MOVE_LEFT:
-                    if (stepTimer.milliseconds() < 2000) {
-                        ch.imuMove(0,47);
-                    }
-                    else {
-                        currentStep = Step.TENSOR_MOVE_LEFT_2;
-                        stepTimer.reset();
-                    }
-                    break;
-
-                case TENSOR_MOVE_LEFT_2:
-                    if (stepTimer.milliseconds() < 500) {
-                        ch.moveRobot(0.5,0,0);
-                    }
-                    else {
-                        ch.moveRobot(0, 0, 0);
-                        currentStep = Step.BREAK2;
-                        stepTimer.reset();
-                    }
-                    break;
-
-                case BREAK2:
-                    if (stepTimer.milliseconds() < 500) {
+                case BREAK4:
+                    if (stepTimer.milliseconds() < 1000) {
                         sleep(1);
                     }
                     else {
-                        ch.moveRobot(0, 0, 0);
-                        currentStep = Step.TENSOR_MOVE_LEFT_3;
+                        currentStep = Step.ALIGN_APRIL_TAG;
                         stepTimer.reset();
                     }
                     break;
 
-                case TENSOR_MOVE_LEFT_3:
-                        if (stepTimer.milliseconds() < 300) {
-                        ch.moveRobot(-0.5,0,0);
+                case ALIGN_APRIL_TAG:
+                    telemetry.addData("In align: ", currentStep);
+
+                    if (stepTimer.milliseconds() < 3500) {
+                        ch.imuMove(0,100);
                     }
                     else {
-                        ch.moveRobot(0, 0, 0);
-                        currentStep = Step.DEAD;
+                        telemetry.addData("Move to Move: ", currentStep);
+                        currentStep = Step.MOVE_APRIL_TAG;
                         stepTimer.reset();
                     }
                     break;
 
+                case MOVE_APRIL_TAG:
+                    telemetry.addData("Happy :D:", currentStep);
 
-
-                case DEAD:
-                    if (stepTimer.milliseconds() < 100000) {
-                        sleep(100);
+                    if (stepTimer.milliseconds() < 7000) {
+                        moveAprilTag();
                     }
                     else {
-                        currentStep = Step.TENSOR_MOVE_2;
+                        currentStep = Step.EMPTY;
                         stepTimer.reset();
                     }
                     break;
 
+                case EMPTY:
+
+                    break;
 
 
             } // switch
             telemetry.addData("Step", currentStep);
+            telemetry.addData("Timer", stepTimer);
             telemetry.update();
 
 
@@ -324,6 +306,7 @@ public class NewAuto extends LinearOpMode {
                 telemetry.addData("Range", "%5.1f inches", desiredTag.ftcPose.range);
                 telemetry.addData("Bearing", "%3.0f degrees", desiredTag.ftcPose.bearing);
                 telemetry.addData("Yaw", "%3.0f degrees", desiredTag.ftcPose.yaw);
+
 
                 double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
                 double headingError = desiredTag.ftcPose.bearing;

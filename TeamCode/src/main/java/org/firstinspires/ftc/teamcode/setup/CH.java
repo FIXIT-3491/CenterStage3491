@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.setup;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -67,7 +68,12 @@ public class CH {
      RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
      RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
-     imu.initialize(new IMU.Parameters(orientationOnRobot));
+     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+     parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample OpMode
+
+
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
     public void imuInit(){
@@ -101,10 +107,9 @@ public class CH {
         backRDrive.setPower(rightBackPower);
     }
     public void imuMove(double powerLevel, double heading) { //heading positive left
-        YawPitchRollAngles orientation;
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         double turn, headingError;
 
-        orientation = imu.getRobotYawPitchRollAngles();
         headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
         turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
         if (powerLevel < 0) {
