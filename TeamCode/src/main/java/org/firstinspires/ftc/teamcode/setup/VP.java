@@ -63,7 +63,7 @@ public class VP {
                 .setModelAssetName(TFOD_MODEL_ASSET)
                 .setModelLabels(LABELS)
                 .build();
-        tfod.setMinResultConfidence(0.70f);
+        tfod.setMinResultConfidence(0.80f);
 
         visionPortal = new VisionPortal.Builder()
                 .setCamera(switchableCamera)

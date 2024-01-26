@@ -9,14 +9,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
-
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
-@Autonomous(name="newAuto", group="Linear OpMode")
+@Autonomous(name="CompAutoRed", group="Linear OpMode")
 
-public class NewAuto extends LinearOpMode {
+public class CompAutoBlue extends LinearOpMode {
     final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
     private String CUP_POS = "Middle";
     private AprilTagDetection desiredTag = null;
@@ -68,9 +67,9 @@ public class NewAuto extends LinearOpMode {
                             vp.cupFound = true;
                             double x = (recognition.getLeft() + recognition.getRight()) / 2;
                             if (x < 200) {
-                                CUP_POS = "left";
-                            } else if (x > 430) {
                                 CUP_POS = "right";
+                            } else if (x > 430) {
+                                CUP_POS = "left";
                             } else {
                                 CUP_POS = "middle";
                             }
