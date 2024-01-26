@@ -32,9 +32,9 @@ public class CH {
     public Servo gate = null;
     public Servo launcher = null;
 
-    public static final double armMIN_POS = 0.22;
+    public static final double armMIN_POS = 0.25;
     public static final double armPOS_1 = 0.52;
-    public static final double armPOS_2 = 0.73;
+    public static final double armPOS_2 = 0.65;
 
     public static final double Tighten = -0.7;
     public static final double Loosen = 0.7;
@@ -117,6 +117,7 @@ public class CH {
         }
         moveRobot(powerLevel,0, turn);  // Added 'strafe' as a parameter
     }
+
 
 
 }
