@@ -81,7 +81,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *
  */
 @Autonomous(name="TFOD_BlueFrontAprilTag", group = "CENTERSTAGE")
-
+@Disabled
 public class mikeAuto extends LinearOpMode
 {
     // Adjust these numbers to suit your robot.

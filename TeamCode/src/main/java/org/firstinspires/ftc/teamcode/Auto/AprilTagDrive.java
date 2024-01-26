@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.Auto;
 import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
@@ -88,6 +89,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @Autonomous(name="AprilTagDrive", group = "LinearOpMode")
+@Disabled
 public class AprilTagDrive extends LinearOpMode
 {
     // Adjust these numbers to suit your robot.

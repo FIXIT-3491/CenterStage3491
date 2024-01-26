@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -46,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @Autonomous(name="frontbackAutoBlue", group="Linear OpMode")
-
+@Disabled
 public class frontbackAutoBlue extends LinearOpMode {
 
     private String CUP_POS = "Middle";

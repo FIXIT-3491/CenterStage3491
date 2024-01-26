@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -48,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @Autonomous(name="frontbackAutoRed", group="Linear OpMode")
-
+@Disabled
 public class frontbackAutoRed extends LinearOpMode {
 
     final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)

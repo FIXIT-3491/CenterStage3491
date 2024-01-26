@@ -9,14 +9,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
-
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
-@Autonomous(name="CompAutoRed", group="Linear OpMode")
+@Autonomous(name="CompAutoRedFront", group="Linear OpMode")
 
-public class CompAutoRed extends LinearOpMode {
+public class CompAutoRedFront extends LinearOpMode {
     final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
     private String CUP_POS = "Middle";
     private AprilTagDetection desiredTag = null;
@@ -53,6 +52,8 @@ public class CompAutoRed extends LinearOpMode {
         vp = new VP(hardwareMap);
 
         vp.initAprilTag();
+        telemetry.addData("IMU Angle", "%.1f", ch.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+        telemetry.update();
 
         waitForStart();
         stepTimer.reset();
@@ -111,7 +112,7 @@ public class CompAutoRed extends LinearOpMode {
 
                 case TENSOR_MOVE_2: // center robot
 
-                    if (stepTimer.milliseconds() < 250) {
+                    if (stepTimer.milliseconds() < 125) {
                         ch.moveRobot(0,0.5, 0);
                     }
                     else {

@@ -13,9 +13,9 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
-@Autonomous(name="CompAutoRed", group="Linear OpMode")
+@Autonomous(name="CompAutoBlueFront", group="Linear OpMode")
 
-public class CompAutoBlue extends LinearOpMode {
+public class CompAutoBlueFront extends LinearOpMode {
     final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
     private String CUP_POS = "Middle";
     private AprilTagDetection desiredTag = null;
@@ -154,7 +154,7 @@ public class CompAutoBlue extends LinearOpMode {
 
                 case TENSOR_TURN_RIGHT:
                     if (stepTimer.milliseconds() < 2000) {
-                        ch.imuMove(0,-40);
+                        ch.imuMove(0,40);
                     }
                     else {
                         ch.moveRobot(0, 0, 0);
@@ -165,7 +165,7 @@ public class CompAutoBlue extends LinearOpMode {
 
                 case TENSOR_TURN_LEFT: //turn to tag
                     if (stepTimer.milliseconds() < 2000) {
-                        ch.imuMove(0,47);
+                        ch.imuMove(0,-47);
                     }
                     else {
                         currentStep = Step.BREAK2;
@@ -232,7 +232,7 @@ public class CompAutoBlue extends LinearOpMode {
                     telemetry.addData("In align: ", currentStep);
 
                     if (stepTimer.milliseconds() < 3500) {
-                        ch.imuMove(0,100);
+                        ch.imuMove(0,-100);
                     }
                     else {
                         telemetry.addData("Move to Move: ", currentStep);
