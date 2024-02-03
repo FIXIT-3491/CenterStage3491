@@ -51,7 +51,7 @@ public class CompAutoRedFront extends LinearOpMode {
         ch = new CH(hardwareMap);
         vp = new VP(hardwareMap);
 
-        vp.initAprilTag();
+        vp.initCompVision();
         telemetry.addData("IMU Angle", "%.1f", ch.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.update();
 
@@ -78,13 +78,14 @@ public class CompAutoRedFront extends LinearOpMode {
                         }
                         if (vp.cupFound){
                             currentStep = Step.TENSOR_MOVE_1;
+                            stepTimer.reset();
                         }
 
                     } else{ //  not detected
                         CUP_POS = "middle";
                         currentStep = Step.TENSOR_MOVE_1;
+                        stepTimer.reset();
                     }
-                    stepTimer.reset();
                     break;
 
                 // Goes Forward
@@ -231,9 +232,8 @@ public class CompAutoRedFront extends LinearOpMode {
                     break;
 
                 case ALIGN_APRIL_TAG:
-                    telemetry.addData("In align: ", currentStep);
-
                     if (stepTimer.milliseconds() < 3500) {
+                        telemetry.addData("In align: ", currentStep);
                         ch.imuMove(0,100);
                     }
                     else {
@@ -244,7 +244,6 @@ public class CompAutoRedFront extends LinearOpMode {
                     break;
 
                 case MOVE_APRIL_TAG:
-                    telemetry.addData("Happy :D:", currentStep);
 
                     if (stepTimer.milliseconds() < 7000) {
                         moveAprilTag();
@@ -255,9 +254,6 @@ public class CompAutoRedFront extends LinearOpMode {
                     }
                     break;
 
-                case EMPTY:
-
-                    break;
 
 
             } // switch
@@ -283,7 +279,6 @@ public class CompAutoRedFront extends LinearOpMode {
         double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
         desiredTag = null;
-        while (targetNotReached) {
             targetFound = false;
             List<AprilTagDetection> currentDetections = vp.aprilTag.getDetections();
             for (AprilTagDetection detection : currentDetections) {
@@ -334,7 +329,7 @@ public class CompAutoRedFront extends LinearOpMode {
                 telemetry.addData("\n>", "Not found");
                 ch.moveRobot(0,0,0);
             }
-        }    telemetry.update();
+            telemetry.update();
     }
 
 }

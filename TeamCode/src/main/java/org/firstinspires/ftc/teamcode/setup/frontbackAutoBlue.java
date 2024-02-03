@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.setup;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -68,7 +68,7 @@ public class frontbackAutoBlue extends LinearOpMode {
         ch = new CH(hardwareMap);
         vp = new VP(hardwareMap);
 
-        vp.initAprilTag();
+        vp.initCompVision();
 
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Gamepad A is front Gamepad B is back", ch.Front);

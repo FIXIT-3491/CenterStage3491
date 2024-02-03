@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.setup;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -35,17 +35,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
-import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
-import java.util.Currency;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 @Autonomous(name="frontbackAutoRed", group="Linear OpMode")
@@ -70,7 +65,7 @@ public class frontbackAutoRed extends LinearOpMode {
         ch = new CH(hardwareMap);
         vp = new VP(hardwareMap);
 
-        vp.initAprilTag();
+        vp.initCompVision();
 
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Gamepad A is front Gamepad B is back", ch.Front);
