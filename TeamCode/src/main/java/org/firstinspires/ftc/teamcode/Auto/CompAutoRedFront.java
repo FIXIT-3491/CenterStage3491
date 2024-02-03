@@ -51,7 +51,7 @@ public class CompAutoRedFront extends LinearOpMode {
         ch = new CH(hardwareMap);
         vp = new VP(hardwareMap);
 
-        vp.initAprilTag();
+        vp.initCompVision();
         telemetry.addData("IMU Angle", "%.1f", ch.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.update();
 
