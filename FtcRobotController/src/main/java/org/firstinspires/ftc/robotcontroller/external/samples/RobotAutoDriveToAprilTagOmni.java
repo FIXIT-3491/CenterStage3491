@@ -84,7 +84,6 @@ import java.util.concurrent.TimeUnit;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  *
  */
-@Disabled
 @TeleOp(name="Omni Drive To AprilTag", group = "Concept")
 
 public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
@@ -195,9 +194,9 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
                 double  yawError        = desiredTag.ftcPose.yaw;
 
                 // Use the speed and turn "gains" to calculate how we want the robot to move.
-                drive  = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+                drive  = -Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
                 turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
-                strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+                strafe = -Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
 
                 telemetry.addData("Auto","Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
             } else {

@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @Autonomous(name="frontbackAutoRed", group="Linear OpMode")
-@Disabled
+
 public class frontbackAutoRed extends LinearOpMode {
 
     final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)

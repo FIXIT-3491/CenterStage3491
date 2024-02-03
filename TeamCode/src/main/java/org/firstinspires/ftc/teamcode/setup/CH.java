@@ -41,6 +41,7 @@ public class CH {
     public IMU imu;
     public boolean Front = true;
 
+
     public CH(HardwareMap hardwareMap){
 
      frontLDrive = hardwareMap.get(DcMotor.class, "frontL");
@@ -71,7 +72,7 @@ public class CH {
      BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
      parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample OpMode
-
+        imu.resetYaw();
 
         imu.initialize(new IMU.Parameters(orientationOnRobot));
     }

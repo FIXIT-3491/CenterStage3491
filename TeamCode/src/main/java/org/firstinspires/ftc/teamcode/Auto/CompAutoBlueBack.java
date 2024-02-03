@@ -76,13 +76,14 @@ public class CompAutoBlueBack extends LinearOpMode {
                         }
                         if (vp.cupFound){
                             currentStep = Step.TENSOR_MOVE_1;
+                            stepTimer.reset();
                         }
 
                     } else{ //  not detected
                         CUP_POS = "middle";
                         currentStep = Step.TENSOR_MOVE_1;
+                        stepTimer.reset();
                     }
-                    stepTimer.reset();
                     break;
 
                 // Goes Forward
@@ -232,7 +233,7 @@ public class CompAutoBlueBack extends LinearOpMode {
                     telemetry.addData("In align: ", currentStep);
 
                     if (stepTimer.milliseconds() < 3500) {
-                        ch.imuMove(0,-100);
+                        ch.imuMove(0,-130);
                     }
                     else {
                         telemetry.addData("Move to Move: ", currentStep);

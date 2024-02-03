@@ -70,21 +70,25 @@ public class CompAutoRedFront extends LinearOpMode {
                             double x = (recognition.getLeft() + recognition.getRight()) / 2;
                             if (x < 200) {
                                 CUP_POS = "left";
+                                DESIRED_TAG_ID = 4;
                             } else if (x > 430) {
                                 CUP_POS = "right";
+                                DESIRED_TAG_ID = 6;
                             } else {
                                 CUP_POS = "middle";
+                                DESIRED_TAG_ID =5;
                             }
                         }
                         if (vp.cupFound){
                             currentStep = Step.TENSOR_MOVE_1;
+                            stepTimer.reset();
                         }
 
                     } else{ //  not detected
                         CUP_POS = "middle";
                         currentStep = Step.TENSOR_MOVE_1;
+                        stepTimer.reset();
                     }
-                    stepTimer.reset();
                     break;
 
                 // Goes Forward
@@ -231,26 +235,22 @@ public class CompAutoRedFront extends LinearOpMode {
                     break;
 
                 case ALIGN_APRIL_TAG:
-                    telemetry.addData("In align: ", currentStep);
-
                     if (stepTimer.milliseconds() < 3500) {
                         ch.imuMove(0,100);
                     }
                     else {
-                        telemetry.addData("Move to Move: ", currentStep);
                         currentStep = Step.MOVE_APRIL_TAG;
+                        vp.visionPortal.setActiveCamera(vp.webcam1);
                         stepTimer.reset();
                     }
                     break;
 
                 case MOVE_APRIL_TAG:
-                    telemetry.addData("Happy :D:", currentStep);
-
-                    if (stepTimer.milliseconds() < 7000) {
+                    if (stepTimer.milliseconds() < 15000) {
                         moveAprilTag();
                     }
                     else {
-                        currentStep = Step.EMPTY;
+                        currentStep = Step.MOVE_APRIL_TAG;
                         stepTimer.reset();
                     }
                     break;
@@ -283,7 +283,6 @@ public class CompAutoRedFront extends LinearOpMode {
         double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
         desiredTag = null;
-        while (targetNotReached) {
             targetFound = false;
             List<AprilTagDetection> currentDetections = vp.aprilTag.getDetections();
             for (AprilTagDetection detection : currentDetections) {
@@ -302,7 +301,6 @@ public class CompAutoRedFront extends LinearOpMode {
 
             // Tell the driver what we see, and what to do.
             if (targetFound) {
-                telemetry.addData("\n>", "HOLD Left-Bumper to Drive to Target\n");
                 telemetry.addData("Found", "ID %d (%s)", desiredTag.id, desiredTag.metadata.name);
                 telemetry.addData("Range", "%5.1f inches", desiredTag.ftcPose.range);
                 telemetry.addData("Bearing", "%3.0f degrees", desiredTag.ftcPose.bearing);
@@ -319,22 +317,22 @@ public class CompAutoRedFront extends LinearOpMode {
                     strafe = 0;
                     targetNotReached = false;
                 } else {
-                    drive = Range.clip(rangeError * ch.SPEED_GAIN, -ch.MAX_AUTO_SPEED, ch.MAX_AUTO_SPEED);
+                    drive = -Range.clip(rangeError * ch.SPEED_GAIN, -ch.MAX_AUTO_SPEED, ch.MAX_AUTO_SPEED);
                     turn = Range.clip(headingError * ch.TURN_GAIN, -ch.MAX_AUTO_TURN, ch.MAX_AUTO_TURN);
-                    strafe = Range.clip(-yawError * ch.STRAFE_GAIN, -ch.MAX_AUTO_STRAFE, ch.MAX_AUTO_STRAFE);
+                    strafe = -Range.clip(-yawError * ch.STRAFE_GAIN, -ch.MAX_AUTO_STRAFE, ch.MAX_AUTO_STRAFE);
                     telemetry.addData("Auto", "Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
                 }
                 telemetry.update();
 
                 // Apply desired axes motions to the drivetrain.
-                ch.moveRobot(-drive, strafe, turn);
-                sleep(10);
+                ch.moveRobot(drive, strafe, turn);
+                sleep(100);
             }
             else {
                 telemetry.addData("\n>", "Not found");
                 ch.moveRobot(0,0,0);
             }
-        }    telemetry.update();
+            telemetry.update();
     }
 
 }
