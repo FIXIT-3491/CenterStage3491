@@ -64,6 +64,10 @@ public class CH {
      backLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
      backRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+     backRDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+     backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
      imu = hardwareMap.get(IMU.class, "imu");
      RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
      RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
