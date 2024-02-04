@@ -41,6 +41,11 @@ public class CH {
     public IMU imu;
     public boolean Front = true;
 
+    public static final double E_INCREMENT = 0.01;     // amount to ramp motor each CYCLE_MS cycle
+    public static final int    E_CYCLE_MS = 25;     // period of each cycle
+    public static final double E_MAX_POWER = 0.4;     // Maximum FWD power applied to motor
+    public static final double E_MIN_POWER = 0.1;     // Maximum REV power applied to motor
+
 
     public CH(HardwareMap hardwareMap){
 
