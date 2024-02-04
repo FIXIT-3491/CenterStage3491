@@ -40,7 +40,7 @@ public class VP {
     public void initCompVision() {
         // Create the AprilTag processor by using a builder.
         aprilTag = new AprilTagProcessor.Builder()
-                .setLensIntrinsics(1439.41944052, 1439.41944052, 970.51421863, 537.612825157)  //logitech c920
+          //      .setLensIntrinsics(1439.41944052, 1439.41944052, 970.51421863, 537.612825157)  //logitech c920
                 .build();
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam

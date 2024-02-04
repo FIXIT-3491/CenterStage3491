@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.setup;
+package org.firstinspires.ftc.teamcode.disabled;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -35,26 +35,29 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
+import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
-@Autonomous(name="frontbackAutoRed", group="Linear OpMode")
+@Autonomous(name="frontbackAutoBlue", group="Linear OpMode")
+@Disabled
+public class frontbackAutoBlue extends LinearOpMode {
 
-public class frontbackAutoRed extends LinearOpMode {
-
-    final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
     private String CUP_POS = "Middle";
+    final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
     private AprilTagDetection desiredTag = null;
 
     private CH ch = null;
     private VP vp = null;
     private boolean gamepadPressed = false;
-    private static int DESIRED_TAG_ID = 5;
+    private static int DESIRED_TAG_ID = 2;
     private ElapsedTime runtime = new ElapsedTime();
 
     private boolean targetNotReached = true;
@@ -90,7 +93,7 @@ public class frontbackAutoRed extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        while (vp.cupFound == false) {
+        while (vp.cupFound == false && runtime.milliseconds()<7500) {
             List<Recognition> currentRecognitions = vp.tfod.getRecognitions();
             telemetry.addData("# Objects Detected", currentRecognitions.size());
 
@@ -101,142 +104,137 @@ public class frontbackAutoRed extends LinearOpMode {
                 //double y = (recognition.getTop() + recognition.getBottom()) / 2;
 
                 if (x < 600) {
-                    CUP_POS = "left";
-                } else if (x > 1300) {
                     CUP_POS = "right";
+                } else if (x > 1300) {
+                    CUP_POS = "left";
                 } else {
                     CUP_POS = "middle";
                 }
             }
         }
-        vp.setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+        setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+        if (vp.cupFound == false) {
+            CUP_POS = "middle";
+        }
 
         if (ch.Front == true) {
 
             telemetry.addData("Position", CUP_POS);
-            ch.moveRobot(0.6, 0.15, 0);
+            ch.moveRobot(0.6, 0.2, 0);
             sleep(700);
             ch.moveRobot(0, 0, 0);
             sleep(500);
 
             if (CUP_POS == "right") {
-                DESIRED_TAG_ID = 6;
-                ch.moveRobot(0, 0, -0.5); // turn spike mark
+                DESIRED_TAG_ID = 3;
+                ch.moveRobot(0, 0, 0.5);
                 sleep(350);
                 ch.moveRobot(0, 0, 0);
                 sleep(300);
-                ch.moveRobot(0.5, 0, 0); // drive spike mark
-                sleep(315);
-                ch.moveRobot(0, 0, 0);
+                ch.moveRobot(0.5, 0, 0);
+                sleep(350);
+                ch.moveRobot(0, 0, 0);  
                 sleep(200);
-                ch.moveRobot(-0.5, 0, 0); //drive away from spike mark
+                ch.moveRobot(-0.5, 0, 0);
                 sleep(200);
-                ch.moveRobot(0, 0, 0.5); // turn to backdrop
+                ch.moveRobot(0, 0, -0.5);
                 sleep(900);
                 ch.moveRobot(0, 0, 0);
 
             } else if (CUP_POS == "left") {
-                DESIRED_TAG_ID = 4;
-                ch.moveRobot(0, 0, 0.5); // turn to spike mark
+                DESIRED_TAG_ID = 2;
+                ch.moveRobot(0, 0, -0.5);
                 sleep(350);
                 ch.moveRobot(0, 0, 0);
                 sleep(300);
-                ch.moveRobot(0.5, 0, 0); // drive to spike mark
+                ch.moveRobot(0.5, 0, 0);
                 sleep(350);
                 ch.moveRobot(0, 0, 0);
                 sleep(200);
-                ch.moveRobot(-0.5, 0, 0);  // drive away from spike mark
+                ch.moveRobot(-0.5, 0, 0);
                 sleep(200);
-                ch.moveRobot(0, 0, 0.5); // turn to backdrop
+                ch.moveRobot(0, 0, -0.5);
                 sleep(350);
                 ch.moveRobot(0, 0, 0);
 
 
             } else if (CUP_POS == "middle") {
-                DESIRED_TAG_ID = 5;
-                ch.moveRobot(0.5, 0, 0); // turn to spike mark
-                sleep(325);
+                DESIRED_TAG_ID = 1;
+                ch.moveRobot(0.5, 0, 0);
+                sleep(300);
                 ch.moveRobot(0, 0, 0);
                 sleep(200);
-                ch.moveRobot(-0.5, 0, 0); // drive away from spike mark
-                sleep(325);
+                ch.moveRobot(-0.5, 0, 0);
+                sleep(300);
+                ch.moveRobot(0, 0, -0.5);
+                sleep(600);
                 ch.moveRobot(0, 0, 0);
-                sleep(200);
-                ch.moveRobot(0, 0, 0.5); // turn to backdrop
-                sleep(500);
-                ch.moveRobot(0, 0, 0);
-
             }
         } else {
             telemetry.addData("Position", CUP_POS);
-            ch.moveRobot(0.6, 0.15, 0);
+            ch.moveRobot(0.6, 0.2, 0);
             sleep(700);
             ch.moveRobot(0, 0, 0);
             sleep(500);
 
-            if (CUP_POS == "right") {
-                DESIRED_TAG_ID = 6;
-                ch.moveRobot(0, 0, -0.5); //turn to spike mark
+            if (CUP_POS == "right") { // left and right are reversed
+                DESIRED_TAG_ID = 3;
+                ch.moveRobot(0, 0, 0.5);
+                sleep(350);
+                ch.moveRobot(0, 0, -0);
+                sleep(300);
+                ch.moveRobot(0.5, 0, 0);
+                sleep(350);
+                ch.moveRobot(0, 0, 0);
+                sleep(200);
+                ch.moveRobot(-0.5, 0, 0);
+                sleep(200);
+                ch.moveRobot(0, 0, -0.5);
+                sleep(350);
+                ch.moveRobot(0, 0, 0);
+
+            } else if (CUP_POS == "left") { // left and right are reversed
+                DESIRED_TAG_ID = 2;
+                ch.moveRobot(0, 0, -0.5);
                 sleep(350);
                 ch.moveRobot(0, 0, 0);
                 sleep(300);
-                ch.moveRobot(0.5, 0, 0); //drive to spike mark
-                sleep(315);
-                ch.moveRobot(0, 0, 0);
-                sleep(200);
-                ch.moveRobot(-0.5, 0, 0);  //drive away from spike mark
-                sleep(200);
-                ch.moveRobot(0, 0, 0.5); // turn to backdrop
-                sleep(900);
-                ch.moveRobot(0, 0, 0);
-
-
-            } else if (CUP_POS == "left") {
-                DESIRED_TAG_ID = 4;
-                ch.moveRobot(0, 0, 0.5); // turn to spike mark
+                ch.moveRobot(0.5, 0, 0);
                 sleep(350);
                 ch.moveRobot(0, 0, 0);
-                sleep(300);
-                ch.moveRobot(0.5, 0, 0); // drive to spike mark
-                sleep(400);
-                ch.moveRobot(0, 0, 0);
                 sleep(200);
-                ch.moveRobot(-0.5, 0, 0); // drive away from spike mark
+                ch.moveRobot(-0.5, 0, 0);
                 sleep(200);
-                ch.moveRobot(0, 0, 0.5); // turn to backdrop
+                ch.moveRobot(0, 0, -0.5);
                 sleep(350);
                 ch.moveRobot(0, 0, 0);
 
 
             } else if (CUP_POS == "middle") {
-                DESIRED_TAG_ID = 5;
-                ch.moveRobot(0.5, 0, 0); // drive to spike mark
+                DESIRED_TAG_ID = 1;
+                ch.moveRobot(0.5, 0, 0);
                 sleep(325);
                 ch.moveRobot(0, 0, 0);
                 sleep(200);
-                ch.moveRobot(-0.5, 0, 0); // drive away from spike mark
-                sleep(200);
-                ch.moveRobot(0, 0, 0.5); // turn to backdrop
+                ch.moveRobot(-0.5, 0, 0);
+                sleep(325);
+                ch.moveRobot(0, 0, -0.5);
                 sleep(500);
                 ch.moveRobot(0, 0, 0);
             }
         }
         vp.visionPortal.setActiveCamera(vp.webcam1);
-
         moveAprilTag();
-        ch.moveRobot(0, 0.5, 0);
-        sleep(300);
-        ch.moveRobot(0, 0, 0);
-        sleep(1300);
-        ch.moveRobot(-0.25, 0, 0); // move to backdrop
+        sleep(2000);
+        ch.moveRobot(-0.25,0,0); // move to backdrop
 
         sleep(600);
-        ch.moveRobot(0, 0, 0);
+        ch.moveRobot(0,0,0);
         sleep(300);
         ch.hookArm.setPosition(ch.armPOS_2);
         sleep(400);
-        ch.moveRobot(0, 0, 0);
-        sleep(400);
+        ch.moveRobot(0,0,0);
+        sleep(300);
         ch.hookArm.setPosition(ch.armMIN_POS);
         sleep(300);
 
@@ -247,14 +245,15 @@ public class frontbackAutoRed extends LinearOpMode {
         telemetry.update();
 
         //  }
+
     }
 
-    public void moveAprilTag() {
+    public void moveAprilTag(){
 
-        boolean targetFound = false;    // Set to true when an AprilTag target is detected
-        double drive = 0;        // Desired forward power/speed (-1 to +1)
-        double strafe = 0;        // Desired strafe power/speed (-1 to +1)
-        double turn = 0;        // Desired turning power/speed (-1 to +1)
+        boolean targetFound     = false;    // Set to true when an AprilTag target is detected
+        double  drive           = 0;        // Desired forward power/speed (-1 to +1)
+        double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
+        double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
         desiredTag = null;
         while (targetNotReached) {
@@ -306,11 +305,44 @@ public class frontbackAutoRed extends LinearOpMode {
                 // Apply desired axes motions to the drivetrain.
                 ch.moveRobot(-drive, strafe, turn);
                 sleep(10);
-            } else {
-                telemetry.addData("\n>", "Not found");
-                ch.moveRobot(0, 0, 0);
             }
+            else {
+                telemetry.addData("\n>", "Not found");
+                ch.moveRobot(0,0,0);
+            }
+        }    telemetry.update();
+    }
+    private void    setManualExposure(int exposureMS, int gain) {
+        // Wait for the camera to be open, then use the controls
+
+        if (vp.visionPortal == null) {
+            return;
         }
-        telemetry.update();
+
+        // Make sure camera is streaming before we try to set the exposure controls
+        if (vp.visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+            telemetry.addData("Camera", "Waiting");
+            telemetry.update();
+            while (!isStopRequested() && (vp.visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
+                sleep(20);
+            }
+            telemetry.addData("Camera", "Ready");
+            telemetry.update();
+        }
+
+        // Set camera controls unless we are stopping.
+        if (!isStopRequested())
+        {
+            ExposureControl exposureControl = vp.visionPortal.getCameraControl(ExposureControl.class);
+            if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
+                exposureControl.setMode(ExposureControl.Mode.Manual);
+                sleep(50);
+            }
+            exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
+            sleep(20);
+            //GainControl gainControl = vp.visionPortal.getCameraControl(GainControl.class);
+            //gainControl.setGain(gain);
+            sleep(20);
+        }
     }
 }

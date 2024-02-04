@@ -24,7 +24,7 @@
     Note: not all options/steps programmed, this only works if it finds the pixel on the left spike mark.
  */
 
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.disabled;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Servo;
