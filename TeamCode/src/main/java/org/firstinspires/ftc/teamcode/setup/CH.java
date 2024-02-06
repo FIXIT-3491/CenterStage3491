@@ -119,7 +119,6 @@ public class CH {
     public void imuMove(double powerLevel, double heading) { //heading positive left
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         double turn, headingError;
-
         headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
         turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
         if (powerLevel < 0) {

@@ -18,9 +18,6 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.concurrent.TimeUnit;
 
 public class VP {
-
-
-
     public VisionPortal visionPortal;
 
     public AprilTagProcessor aprilTag;
