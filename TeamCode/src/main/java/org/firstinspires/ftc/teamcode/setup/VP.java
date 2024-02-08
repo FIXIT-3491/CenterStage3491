@@ -5,16 +5,20 @@ import static android.os.SystemClock.sleep;
 import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class VP {
@@ -22,8 +26,12 @@ public class VP {
 
     public AprilTagProcessor aprilTag;
     public WebcamName webcam1, webcam2;
+    private static int DESIRED_TAG_ID = 5;
 
-    private String CUP_POS = "Middle";
+    public String CUP_POS = "Middle";
+    private ElapsedTime stepTimer = new ElapsedTime();
+
+
     public static final String TFOD_MODEL_ASSET = "rookDetection.tflite";
     public static final String[] LABELS = {"rook"};
     public TfodProcessor tfod;
@@ -79,7 +87,30 @@ public class VP {
             //gainControl.setGain(gain);
         }
 
+    public void TensorDetect(){
+        stepTimer.reset();
+        while (stepTimer.milliseconds() < 7000 && !cupFound) {
+            List<Recognition> currentRecognitions = tfod.getRecognitions();
 
+            // Step through the list of recognitions and display info for each one.
+            for (Recognition recognition : currentRecognitions) {
+                cupFound = true;
+                double x = (recognition.getLeft() + recognition.getRight()) / 2;
+                if (x < 200) {
+                    CUP_POS = "left";
+                    DESIRED_TAG_ID = 4;
+                } else if (x > 430) {
+                    CUP_POS = "right";
+                    DESIRED_TAG_ID = 6;
+                } else {
+                    CUP_POS = "middle";
+                    DESIRED_TAG_ID = 5;
+                }
+            }
+        }
+        if(!cupFound) { //  not detected
+            CUP_POS = "middle";
+        }
+    }
 
 }
-

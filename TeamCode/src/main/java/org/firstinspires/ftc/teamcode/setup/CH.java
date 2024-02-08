@@ -42,6 +42,7 @@ public class CH {
 
     public static final double Tighten = -0.7;
     public static final double Loosen = 0.7;
+
     public IMU imu;
     public boolean Front = true;
 
@@ -49,6 +50,9 @@ public class CH {
     public static final int    E_CYCLE_MS = 25;     // period of each cycle
     public static final double E_MAX_POWER = 0.4;     // Maximum FWD power applied to motor
     public static final double E_MIN_POWER = 0.1;     // Maximum REV power applied to motor
+
+    public static final int SPIKE_LEFT_RIGHT = 500;
+    public static final int SPIKE_LEFT_CENTER = 800;
 
 
     public CH(HardwareMap hardwareMap){
@@ -124,7 +128,6 @@ public class CH {
     public void imuMove(double powerLevel, double heading) { //heading positive left
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         double turn, headingError;
-
         headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
         turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
         if (powerLevel < 0) {
@@ -139,7 +142,10 @@ public class CH {
 
         orientation = imu.getRobotYawPitchRollAngles();
         headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
+
         while(Math.abs(headingError) > 20) {  // just guessing that heading error of 3 is close enough
+            orientation = imu.getRobotYawPitchRollAngles();
+            headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
             turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
             moveRobot(0, 0, turn);
             sleep(10);
