@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.setup;
 
+import static android.os.SystemClock.sleep;
+
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -86,8 +90,9 @@ public class CH {
         imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
-    public void imuInit(){
-
+    public void imuReset(){
+        backRDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -127,6 +132,56 @@ public class CH {
         moveRobot(powerLevel,0, turn);  // Added 'strafe' as a parameter
     }
 
+    public void imuTurn(double heading) {
+        YawPitchRollAngles orientation;
+        double turn, headingError;
 
+        orientation = imu.getRobotYawPitchRollAngles();
+        headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
+        while(Math.abs(headingError) > 20) {  // just guessing that heading error of 3 is close enough
+            turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
+            moveRobot(0, 0, turn);
+            sleep(10);
+
+        }
+        moveRobot(0, 0, 0);  // stop motors when turn done
+    }
+
+    public void EncoderMove(int targetPosition) {
+
+        double  power   = 0.1;
+        boolean rampUp  = true;
+
+        imuReset();
+
+        while (backRDrive.getCurrentPosition() < targetPosition){
+
+            if (backRDrive.getCurrentPosition() > targetPosition*0.5 && rampUp) {
+                rampUp = !rampUp;   // Switch ramp direction
+            }
+
+            if (rampUp) {
+                // Keep stepping up until we hit the max value.
+                power += E_INCREMENT;
+                if (power >= E_MAX_POWER) {
+                    power = E_MAX_POWER;
+                }
+            }
+            else {
+                // Keep stepping down until we hit the min value.
+                power -= E_INCREMENT;
+                if (power <= E_MIN_POWER) {
+                    power = E_MIN_POWER;
+                    // rampUp = !rampUp;  // Switch ramp direction
+                }
+            }
+
+            moveRobot(power,0,0);
+
+            sleep(E_CYCLE_MS);
+
+        } // while
+        moveRobot(0,0,0);
+    }//public void
 
 }

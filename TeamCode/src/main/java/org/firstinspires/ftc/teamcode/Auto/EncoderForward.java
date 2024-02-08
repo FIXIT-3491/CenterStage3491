@@ -23,8 +23,8 @@ public class EncoderForward extends LinearOpMode {
     private VP vp = null;
     private ElapsedTime stepTimer = new ElapsedTime();
 
-    double  power   = 0.1;
-    boolean rampUp  = true;
+    double power = 0.1;
+    boolean rampUp = true;
 
 
     @Override
@@ -35,127 +35,54 @@ public class EncoderForward extends LinearOpMode {
 
         vp.initCompVision();
 
-        telemetry.addData("Status","initialized ");
+        telemetry.addData("Status", "initialized ");
         telemetry.update();
 
 
         waitForStart();
 
-        if (opModeIsActive()){
-            if (stepTimer.milliseconds() < 7000 && vp.cupFound == false) {
-                List<Recognition> currentRecognitions = vp.tfod.getRecognitions();
+        if (opModeIsActive()) {
+                if (stepTimer.milliseconds() < 7000 && vp.cupFound == false) {
+                    List<Recognition> currentRecognitions = vp.tfod.getRecognitions();
 
-                // Step through the list of recognitions and display info for each one.
-                for (Recognition recognition : currentRecognitions) {
-                    vp.cupFound = true;
-                    double x = (recognition.getLeft() + recognition.getRight()) / 2;
-                    if (x < 200) {
-                        CUP_POS = "left";
-                        DESIRED_TAG_ID = 4;
-                    } else if (x > 430) {
-                        CUP_POS = "right";
-                        DESIRED_TAG_ID = 6;
-                    } else {
-                        CUP_POS = "middle";
-                        DESIRED_TAG_ID =5;
+                    // Step through the list of recognitions and display info for each one.
+                    for (Recognition recognition : currentRecognitions) {
+                        vp.cupFound = true;
+                        double x = (recognition.getLeft() + recognition.getRight()) / 2;
+                        if (x < 200) {
+                            CUP_POS = "left";
+                            DESIRED_TAG_ID = 4;
+                        } else if (x > 430) {
+                            CUP_POS = "right";
+                            DESIRED_TAG_ID = 6;
+                        } else {
+                            CUP_POS = "middle";
+                            DESIRED_TAG_ID = 5;
+                        }
                     }
-                }
-            } else{ //  not detected
-                CUP_POS = "middle";
-            }
-
-            EncoderMove(750);
-
-
-            stepTimer.reset();
-            while (stepTimer.milliseconds() < 1000) {
-                if (CUP_POS == "left") {
-                    ch.imuMove(0, -57);
-                    EncoderMove(500);
-                }
-                else if (CUP_POS == "right") {
-                        ch.imuMove(0, 50);
-                    EncoderMove(500);
-                }
-                else {
-                    EncoderMove(800);
-                }
-            }
-
-            ch.moveRobot(-0.4,0,0);
-            sleep(500);
-            stepTimer.reset();
-            while (stepTimer.milliseconds() < 2000) {
-                ch.imuMove(0,100
-                );
-            }
-        } // if active
-    } // run op mode
-
-    public void TensorDetections(){
-        if (stepTimer.milliseconds() < 7000) {
-            List<Recognition> currentRecognitions = vp.tfod.getRecognitions();
-
-            // Step through the list of recognitions and display info for each one.
-            for (Recognition recognition : currentRecognitions) {
-                vp.cupFound = true;
-                double x = (recognition.getLeft() + recognition.getRight()) / 2;
-                if (x < 200) {
-                    CUP_POS = "left";
-                    DESIRED_TAG_ID = 4;
-                } else if (x > 430) {
-                    CUP_POS = "right";
-                    DESIRED_TAG_ID = 6;
-                } else {
+                } else { //  not detected
                     CUP_POS = "middle";
-                    DESIRED_TAG_ID =5;
                 }
-            }
-            if (vp.cupFound){
-            }
 
-        } else{ //  not detected
-            CUP_POS = "middle";
-        }
+                ch.EncoderMove(750);
 
-    }
-    public void EncoderMove(int targetPosition) {
-
-        ch.backRDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ch.backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        while (ch.backRDrive.getCurrentPosition() < targetPosition){
-
-            if (ch.backRDrive.getCurrentPosition() > targetPosition*0.5 && rampUp) {
-                rampUp = !rampUp;   // Switch ramp direction
-            }
-
-            if (rampUp) {
-                // Keep stepping up until we hit the max value.
-                power += ch.E_INCREMENT;
-                if (power >= ch.E_MAX_POWER) {
-                    power = ch.E_MAX_POWER;
+                if (CUP_POS == "left") {
+                    ch.imuTurn(-57);
+                    ch.EncoderMove(500);
+                } else if (CUP_POS == "right") {
+                    ch.imuTurn(50);
+                    ch.EncoderMove(500);
+                } else {
+                    ch.EncoderMove(800);
                 }
-            }
-            else {
-                // Keep stepping down until we hit the min value.
-                power -= ch.E_INCREMENT;
-                if (power <= ch.E_MIN_POWER) {
-                    power = ch.E_MIN_POWER;
-                    // rampUp = !rampUp;  // Switch ramp direction
-                }
-            }
 
-            ch.moveRobot(power,0,0);
+                ch.moveRobot(-0.4, 0, 0);
+                sleep(500);
 
-            telemetry.addData("Encoder poz",ch.backRDrive.getCurrentPosition() );
-            telemetry.addData("motor power",power);
-            telemetry.update();
 
-            sleep(ch.E_CYCLE_MS);
+                    ch.imuTurn(100);
 
-        } // while
-        ch.moveRobot(0,0,0);
-    }//public void
+            } // if active
+        } // run op mode
 
-} //linear op mode
+    } //linear op mode
