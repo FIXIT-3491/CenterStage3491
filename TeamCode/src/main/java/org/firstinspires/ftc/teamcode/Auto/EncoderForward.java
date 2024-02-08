@@ -42,7 +42,8 @@ public class EncoderForward extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-                if (stepTimer.milliseconds() < 7000 && vp.cupFound == false) {
+            stepTimer.reset();
+                while (stepTimer.milliseconds() < 7000 && !vp.cupFound) {
                     List<Recognition> currentRecognitions = vp.tfod.getRecognitions();
 
                     // Step through the list of recognitions and display info for each one.
@@ -60,10 +61,13 @@ public class EncoderForward extends LinearOpMode {
                             DESIRED_TAG_ID = 5;
                         }
                     }
-                } else { //  not detected
+                }
+                if(!vp.cupFound) { //  not detected
                     CUP_POS = "middle";
                 }
 
+                telemetry.addData("cup poz", CUP_POS);
+                telemetry.update();
                 ch.EncoderMove(750);
 
                 if (CUP_POS == "left") {
