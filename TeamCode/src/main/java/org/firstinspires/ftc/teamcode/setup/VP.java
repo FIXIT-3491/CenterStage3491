@@ -2,10 +2,13 @@ package org.firstinspires.ftc.teamcode.setup;
 
 import static android.os.SystemClock.sleep;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -26,7 +29,10 @@ public class VP {
 
     public AprilTagProcessor aprilTag;
     public WebcamName webcam1, webcam2;
+
+
     private static int DESIRED_TAG_ID = 5;
+
 
     public String CUP_POS = "Middle";
     private ElapsedTime stepTimer = new ElapsedTime();
@@ -36,6 +42,7 @@ public class VP {
     public static final String[] LABELS = {"rook"};
     public TfodProcessor tfod;
     public boolean cupFound = false;
+    public CH ch = null;
 
     public VP(HardwareMap hardwareMap) {
         webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
@@ -112,5 +119,61 @@ public class VP {
             CUP_POS = "middle";
         }
     }
+    public void moveAprilTag(){
 
+        final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
+        boolean targetNotReached = true;
+        AprilTagDetection desiredTag = null;
+
+        boolean targetFound     = false;    // Set to true when an AprilTag target is detected
+        double  drive           = 0;        // Desired forward power/speed (-1 to +1)
+        double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
+        double  turn            = 0;        // Desired turning power/speed (-1 to +1)
+
+        desiredTag = null;
+        while (targetNotReached) {
+            targetFound = false;
+            List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+            for (AprilTagDetection detection : currentDetections) {
+                if (detection.metadata != null) {
+                    if ((DESIRED_TAG_ID < 0) || (detection.id == DESIRED_TAG_ID)) {                     //  Check to see if we want to track towards this tag.
+                        targetFound = true;                         // Yes, we want to use this tag.
+                        desiredTag = detection;
+                        break;  // don't look any further.
+                    } else {
+                        // This tag is in the library, but we do not want to track it right now.
+                    }
+                } else {
+                    // This tag is NOT in the library, so we don't have enough information to track to it.
+                }
+            }
+
+            // Tell the driver what we see, and what to do.
+            if (targetFound) {
+
+                double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
+                double headingError = desiredTag.ftcPose.bearing;
+                double yawError = -desiredTag.ftcPose.yaw;
+
+                if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {
+                    drive = 0;
+                    turn = 0;
+                    strafe = 0;
+                    targetNotReached = false;
+                } else {
+                    drive = Range.clip(rangeError * ch.SPEED_GAIN, -ch.MAX_AUTO_SPEED, ch.MAX_AUTO_SPEED);
+                    turn = Range.clip(headingError * ch.TURN_GAIN, -ch.MAX_AUTO_TURN, ch.MAX_AUTO_TURN);
+                    strafe = Range.clip(-yawError * ch.STRAFE_GAIN, -ch.MAX_AUTO_STRAFE, ch.MAX_AUTO_STRAFE);
+
+                }
+
+                // Apply desired axes motions to the drivetrain.
+                ch.moveRobot(-drive, strafe, turn);
+                sleep(10);
+            }
+            else {
+                ch.moveRobot(0,0,0);
+            }
+        }
+    }
 }

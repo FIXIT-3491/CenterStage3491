@@ -14,16 +14,9 @@ import java.util.List;
 @Autonomous(name="EncoderForward", group="Linear OpMode")
 
 public class PurplePixelAutoRed extends LinearOpMode {
-    private static int DESIRED_TAG_ID = 5;
-    private AprilTagDetection desiredTag = null;
-    private boolean targetNotReached = true;
     public CH ch = null;
     private VP vp = null;
     private ElapsedTime stepTimer = new ElapsedTime();
-
-    double power = 0.1;
-    boolean rampUp = true;
-
 
     @Override
     public void runOpMode() {
@@ -36,17 +29,15 @@ public class PurplePixelAutoRed extends LinearOpMode {
         telemetry.addData("Status", "initialized ");
         telemetry.update();
 
-
         waitForStart();
+
         stepTimer.reset();
         if (opModeIsActive())
         {
 
             vp.TensorDetect();
-
 //            telemetry.addData("cup poz", vp.CUP_POS);
 //            telemetry.update();
-
             ch.EncoderMove(750);
 
             if (vp.CUP_POS == "left") {
@@ -61,8 +52,6 @@ public class PurplePixelAutoRed extends LinearOpMode {
             ch.moveRobot(-0.4, 0, 0);
             sleep(500);
             ch.moveRobot(0, 0, 0);
-
-            //ch.imuTurn(100);
         } // if active
     } // run op mode
 } //linear op mode

@@ -22,9 +22,8 @@ public class CompAutoBlueBack extends LinearOpMode {
     private CH ch = null;
     private VP vp = null;
     private static int DESIRED_TAG_ID = 5;
-    private ElapsedTime stepTimer = new ElapsedTime();
     private boolean targetNotReached = true;
-
+    private ElapsedTime stepTimer = new ElapsedTime();
     private enum Step { //creating enum step stuff
         TENSOR_DETECT,
         TENSOR_MOVE_1,

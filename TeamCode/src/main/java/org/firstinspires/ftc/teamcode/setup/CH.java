@@ -14,6 +14,9 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
+import java.util.List;
 
 
 public class CH {
@@ -143,7 +146,7 @@ public class CH {
         orientation = imu.getRobotYawPitchRollAngles();
         headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
 
-        while(Math.abs(headingError) > 20) {  // just guessing that heading error of 3 is close enough
+        while(Math.abs(headingError) > 5) {  // just guessing that heading error of 3 is close enough
             orientation = imu.getRobotYawPitchRollAngles();
             headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
             turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
