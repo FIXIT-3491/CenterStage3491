@@ -44,7 +44,7 @@ public class PurplePixelAutoRed extends LinearOpMode {
                 ch.imuTurn(57);
                 ch.EncoderMove(ch.SPIKE_LEFT_RIGHT);
             } else if (vp.CUP_POS == "right") {
-                ch.imuTurn(-57);
+                ch.imuTurn(-50);
                 ch.EncoderMove(ch.SPIKE_LEFT_RIGHT);
             } else {
                 ch.EncoderMove(ch.SPIKE_LEFT_CENTER);
