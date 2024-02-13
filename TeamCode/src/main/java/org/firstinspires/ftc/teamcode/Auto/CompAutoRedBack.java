@@ -39,9 +39,9 @@ public class CompAutoRedBack extends LinearOpMode {
         stepTimer.reset();
         if (opModeIsActive())
         {
-            vp.TensorDetect();
             Location = vp.TensorDetect();
 
+            vp.visionPortal.setProcessorEnabled(vp.tfod,false); // turn off tesnor flow (tesnor is on purpose because tensor makes me wanna snore)
             ch.EncoderMove(750);
 
             if (Location == "left") {
@@ -56,6 +56,13 @@ public class CompAutoRedBack extends LinearOpMode {
             ch.moveRobot(-0.4, 0, 0);
             sleep(500);
             ch.moveRobot(0, 0, 0);
+
+            ch.imuTurn(100);
+
+            vp.visionPortal.setActiveCamera(vp.webcam1);
+            vp.setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+            ch.moveAprilTag(vp);
+
         } // if active
     } // run op mode
 } //linear op mode

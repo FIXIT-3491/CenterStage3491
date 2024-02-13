@@ -38,7 +38,6 @@ public class CompAutoBlueBack extends LinearOpMode {
         stepTimer.reset();
         if (opModeIsActive())
         {
-            vp.TensorDetect();
             Location = vp.TensorDetect();
 
             ch.EncoderMove(750);
@@ -55,6 +54,11 @@ public class CompAutoBlueBack extends LinearOpMode {
             ch.moveRobot(-0.4, 0, 0);
             sleep(500);
             ch.moveRobot(0, 0, 0);
+
+            ch.imuTurn(100);
+            vp.visionPortal.setActiveCamera(vp.webcam1);
+            ch.moveAprilTag(vp);
+
         } // if active
     } // run op mode
 } //linear op mode

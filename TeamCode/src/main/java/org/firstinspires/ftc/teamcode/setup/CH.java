@@ -12,6 +12,9 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
+import java.util.List;
 
 
 public class CH {
@@ -120,6 +123,7 @@ public class CH {
         backLDrive.setPower(leftBackPower);
         backRDrive.setPower(rightBackPower);
     }
+
     public void imuMove(double powerLevel, double heading) { //heading positive left
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         double turn, headingError;
@@ -186,5 +190,63 @@ public class CH {
         } // while
         moveRobot(0,0,0);
     }//public void
+
+    public void moveAprilTag(VP vp){
+
+        final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
+        boolean targetNotReached = true;
+        AprilTagDetection desiredTag = null;
+
+        boolean targetFound     = false;    // Set to true when an AprilTag target is detected
+        double  drive           = 0;        // Desired forward power/speed (-1 to +1)
+        double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
+        double  turn            = 0;        // Desired turning power/speed (-1 to +1)
+
+        desiredTag = null;
+        while (targetNotReached && opMode_ref.opModeIsActive()) {
+            targetFound = false;
+            List<AprilTagDetection> currentDetections = vp.aprilTag.getDetections();
+            for (AprilTagDetection detection : currentDetections) {
+                if (detection.metadata != null) {
+                    if ((vp.DESIRED_TAG_ID < 0) || (detection.id == vp.DESIRED_TAG_ID)) {                     //  Check to see if we want to track towards this tag.
+                        targetFound = true;                         // Yes, we want to use this tag.
+                        desiredTag = detection;
+                        break;  // don't look any further.
+                    } else {
+                        // This tag is in the library, but we do not want to track it right now.
+                    }
+                } else {
+                    // This tag is NOT in the library, so we don't have enough information to track to it.
+                }
+            }
+
+            // Tell the driver what we see, and what to do.
+            if (targetFound) {
+
+                double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
+                double headingError = desiredTag.ftcPose.bearing;
+                double yawError = -desiredTag.ftcPose.yaw;
+
+                if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {
+                    drive = 0;
+                    turn = 0;
+                    strafe = 0;
+                    targetNotReached = false;
+                } else {
+                    drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+                    turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
+                    strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+
+                }
+
+                // Apply desired axes motions to the drivetrain.
+                moveRobot(-drive, strafe, turn);
+                opMode_ref.sleep(10);
+            }
+            else {
+                moveRobot(0,0,0);
+            }
+        }
+    }
 
 }

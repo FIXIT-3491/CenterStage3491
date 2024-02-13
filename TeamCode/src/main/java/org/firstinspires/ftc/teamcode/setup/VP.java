@@ -89,27 +89,32 @@ public class VP {
 
     public void setManualExposure(int exposureMS, int gain) {
 
+//        if(visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING){
+//            while (!opMode_ref.isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)){
+//                opMode_ref.sleep(20);
+//            }
+//        }
         ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
         if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
             exposureControl.setMode(ExposureControl.Mode.Manual);
             opMode_ref.sleep(50);
         }
         exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
+//        GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
+//        gainControl.setGain(gain);
         opMode_ref.sleep(20);
-        GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
-        gainControl.setGain(gain);
         }
 
     public String TensorDetect(){
         boolean cupFound = false;
         ElapsedTime TensorTimer = new ElapsedTime();
-        String PropLocation = "middle";
-
         TensorTimer.reset();
+        String PropLocation = "middle";
 
         while (TensorTimer.milliseconds() < 7000 && !cupFound && opMode_ref.opModeIsActive()) {
             List<Recognition> currentRecognitions = tfod.getRecognitions();
-
+            opMode_ref.telemetry.addData("Time", TensorTimer.milliseconds());
+            opMode_ref.telemetry.update();
             // Step through the list of recognitions and display info for each one.
             for (Recognition recognition : currentRecognitions) {
                 cupFound = true;
@@ -129,61 +134,5 @@ public class VP {
         return PropLocation;
     }
 
-//    public void moveAprilTag(){
-//        ch = new CH(hardwareMap, this);
-//        final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
-//        boolean targetNotReached = true;
-//        AprilTagDetection desiredTag = null;
-//
-//        boolean targetFound     = false;    // Set to true when an AprilTag target is detected
-//        double  drive           = 0;        // Desired forward power/speed (-1 to +1)
-//        double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
-//        double  turn            = 0;        // Desired turning power/speed (-1 to +1)
-//
-//        desiredTag = null;
-//        while (targetNotReached) {
-//            targetFound = false;
-//            List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-//            for (AprilTagDetection detection : currentDetections) {
-//                if (detection.metadata != null) {
-//                    if ((DESIRED_TAG_ID < 0) || (detection.id == DESIRED_TAG_ID)) {                     //  Check to see if we want to track towards this tag.
-//                        targetFound = true;                         // Yes, we want to use this tag.
-//                        desiredTag = detection;
-//                        break;  // don't look any further.
-//                    } else {
-//                        // This tag is in the library, but we do not want to track it right now.
-//                    }
-//                } else {
-//                    // This tag is NOT in the library, so we don't have enough information to track to it.
-//                }
-//            }
-//
-//            // Tell the driver what we see, and what to do.
-//            if (targetFound) {
-//
-//                double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
-//                double headingError = desiredTag.ftcPose.bearing;
-//                double yawError = -desiredTag.ftcPose.yaw;
-//
-//                if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {
-//                    drive = 0;
-//                    turn = 0;
-//                    strafe = 0;
-//                    targetNotReached = false;
-//                } else {
-//                    drive = Range.clip(rangeError * ch.SPEED_GAIN, -ch.MAX_AUTO_SPEED, ch.MAX_AUTO_SPEED);
-//                    turn = Range.clip(headingError * ch.TURN_GAIN, -ch.MAX_AUTO_TURN, ch.MAX_AUTO_TURN);
-//                    strafe = Range.clip(-yawError * ch.STRAFE_GAIN, -ch.MAX_AUTO_STRAFE, ch.MAX_AUTO_STRAFE);
-//
-//                }
-//
-//                // Apply desired axes motions to the drivetrain.
-//                ch.moveRobot(-drive, strafe, turn);
-//                sleep(10);
-//            }
-//            else {
-//                ch.moveRobot(0,0,0);
-//            }
-//        }
-//    }
+
 }
