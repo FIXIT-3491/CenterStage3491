@@ -11,18 +11,20 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
-@Autonomous(name="EncoderForward", group="Linear OpMode")
+@Autonomous(name="PurplePixelAutoRed", group="Linear OpMode")
 
 public class PurplePixelAutoRed extends LinearOpMode {
     public CH ch = null;
     private VP vp = null;
     private ElapsedTime stepTimer = new ElapsedTime();
+    private String Location;
 
     @Override
     public void runOpMode() {
-// hi!!!! -JAKE, NOT ON FIX IT
-        ch = new CH(hardwareMap);
-        vp = new VP(hardwareMap);
+        telemetry.update();
+
+        ch = new CH(hardwareMap, this);
+        vp = new VP(hardwareMap, this);
 
         vp.initCompVision();
 
@@ -34,16 +36,16 @@ public class PurplePixelAutoRed extends LinearOpMode {
         stepTimer.reset();
         if (opModeIsActive())
         {
-
             vp.TensorDetect();
-//            telemetry.addData("cup poz", vp.CUP_POS);
-//            telemetry.update();
-            ch.EncoderMove(750);
+            Location = vp.TensorDetect();
 
-            if (vp.CUP_POS == "left") {
+            ch.EncoderMove(750);
+            sleep(100);
+
+            if (Location == "left") {
                 ch.imuTurn(57);
                 ch.EncoderMove(ch.SPIKE_LEFT_RIGHT);
-            } else if (vp.CUP_POS == "right") {
+            } else if (Location == "right") {
                 ch.imuTurn(-50);
                 ch.EncoderMove(ch.SPIKE_LEFT_RIGHT);
             } else {

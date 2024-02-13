@@ -45,8 +45,8 @@ public class BasicTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        ch = new CH(hardwareMap);
-        ch.hookArm.setPosition(ch.armMIN_POS);
+        ch = new CH(hardwareMap, this);
+       // ch.hookArm.setPosition(ch.armMIN_POS);
         ch.launcher.setPosition(1);
 
         telemetry.addData("Status", "Initialized");
@@ -59,15 +59,15 @@ public class BasicTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
             double max;
 
-            if (gamepad2.b) {
-                ch.hookArm.setPosition(ch.armPOS_2);
-            }
-            if (gamepad2.y) {
-                ch.hookArm.setPosition(ch.armPOS_1);
-            }
-            if (gamepad2.x) {
-                ch.hookArm.setPosition(ch.armMIN_POS);
-            }
+//            if (gamepad2.b) {
+//                ch.hookArm.setPosition(ch.armPOS_2);
+//            }
+//            if (gamepad2.y) {
+//                ch.hookArm.setPosition(ch.armPOS_1);
+//            }
+//            if (gamepad2.x) {
+//                ch.hookArm.setPosition(ch.armMIN_POS);
+//            }
             if (gamepad2.left_bumper){
                 ch.winchMotor.setPower(ch.Tighten);
             }
@@ -92,6 +92,7 @@ public class BasicTeleOp extends LinearOpMode {
             if (gamepad1.x){
                 ch.gate.setPosition(0.5);
             }
+
 
 
 

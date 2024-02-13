@@ -1,19 +1,17 @@
 package org.firstinspires.ftc.teamcode.setup;
-import static android.os.SystemClock.sleep;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import android.util.Size;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -32,30 +30,32 @@ public class VP {
     public AprilTagProcessor aprilTag;
     public WebcamName webcam1, webcam2;
 
-
     public static int DESIRED_TAG_ID = 5;
 
-
-    public String CUP_POS = "Middle";
-
-    private ElapsedTime stepTimer = new ElapsedTime();
-    public final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
-    public boolean targetNotReached = true;
     public AprilTagDetection desiredTag = null;
 
 
     public static final String TFOD_MODEL_ASSET = "rookDetection.tflite";
     public static final String[] LABELS = {"rook"};
     public TfodProcessor tfod;
-    public boolean cupFound = false;
 
 
-    public VP(HardwareMap hardwareMap) {
+    public final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
+    public boolean targetNotReached = true;
+
+    private LinearOpMode opMode_ref = null;
+
+
+
+    public VP(HardwareMap hardwareMap, LinearOpMode op) {
+        opMode_ref = op;
         webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
         webcam2 = hardwareMap.get(WebcamName.class, "Webcam 2");
     }
 
     public void initCompVision() {
+
+
         // Create the AprilTag processor by using a builder.
         aprilTag = new AprilTagProcessor.Builder()
           //      .setLensIntrinsics(1439.41944052, 1439.41944052, 970.51421863, 537.612825157)  //logitech c920
@@ -89,20 +89,25 @@ public class VP {
 
     public void setManualExposure(int exposureMS, int gain) {
 
-            ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-            if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
-                exposureControl.setMode(ExposureControl.Mode.Manual);
-                sleep(50);
-            }
-            exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
-            sleep(20);
-            //GainControl gainControl = vp.visionPortal.getCameraControl(GainControl.class);
-            //gainControl.setGain(gain);
+        ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
+            exposureControl.setMode(ExposureControl.Mode.Manual);
+            opMode_ref.sleep(50);
+        }
+        exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
+        opMode_ref.sleep(20);
+        GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
+        gainControl.setGain(gain);
         }
 
-    public void TensorDetect(){
-        stepTimer.reset();
-        while (stepTimer.milliseconds() < 7000 && !cupFound) {
+    public String TensorDetect(){
+        boolean cupFound = false;
+        ElapsedTime TensorTimer = new ElapsedTime();
+        String PropLocation = "middle";
+
+        TensorTimer.reset();
+
+        while (TensorTimer.milliseconds() < 7000 && !cupFound && opMode_ref.opModeIsActive()) {
             List<Recognition> currentRecognitions = tfod.getRecognitions();
 
             // Step through the list of recognitions and display info for each one.
@@ -110,24 +115,22 @@ public class VP {
                 cupFound = true;
                 double x = (recognition.getLeft() + recognition.getRight()) / 2;
                 if (x < 200) {
-                    CUP_POS = "left";
-                    DESIRED_TAG_ID = 4;
+                    PropLocation = "left";
+                    break;
                 } else if (x > 430) {
-                    CUP_POS = "right";
-                    DESIRED_TAG_ID = 6;
+                    PropLocation = "right";
+                    break;
                 } else {
-                    CUP_POS = "middle";
-                    DESIRED_TAG_ID = 5;
+                    PropLocation = "middle";
+                    break;
                 }
             }
         }
-        if(!cupFound) { //  not detected
-            CUP_POS = "middle";
-        }
+        return PropLocation;
     }
 
 //    public void moveAprilTag(){
-//
+//        ch = new CH(hardwareMap, this);
 //        final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
 //        boolean targetNotReached = true;
 //        AprilTagDetection desiredTag = null;

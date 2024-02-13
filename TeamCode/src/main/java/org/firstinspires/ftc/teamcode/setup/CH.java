@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.setup;
 
-import static android.os.SystemClock.sleep;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -14,9 +12,6 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-
-import java.util.List;
 
 
 public class CH {
@@ -35,7 +30,6 @@ public class CH {
     public DcMotor backRDrive = null;
 
     public DcMotor winchMotor = null;
-    public Servo hookArm = null;
     public Servo gate = null;
     public Servo launcher = null;
 
@@ -58,46 +52,44 @@ public class CH {
     public static final int SPIKE_LEFT_CENTER = 800;
 
 
-    public CH(HardwareMap hardwareMap){
+    private LinearOpMode opMode_ref = null;
 
-     frontLDrive = hardwareMap.get(DcMotor.class, "frontL");
-     backLDrive = hardwareMap.get(DcMotor.class, "backL");
-     frontRDrive = hardwareMap.get(DcMotor.class, "frontR");
-     backRDrive = hardwareMap.get(DcMotor.class, "backR");
-     winchMotor = hardwareMap.get(DcMotor.class, "winch");
-     hookArm = hardwareMap.get(Servo.class, "arm");
-     gate = hardwareMap.get(Servo.class, "gate");
-     launcher = hardwareMap.get(Servo.class, "launcher");
+    public CH(HardwareMap hardwareMap, LinearOpMode op){
+        opMode_ref = op;
+        frontLDrive = hardwareMap.get(DcMotor.class, "frontL");
+        backLDrive = hardwareMap.get(DcMotor.class, "backL");
+        frontRDrive = hardwareMap.get(DcMotor.class, "frontR");
+        backRDrive = hardwareMap.get(DcMotor.class, "backR");
+        winchMotor = hardwareMap.get(DcMotor.class, "winch");
+        gate = hardwareMap.get(Servo.class, "gate");
+        launcher = hardwareMap.get(Servo.class, "launcher");
 
 
-     frontLDrive.setDirection(DcMotor.Direction.REVERSE);
-     backLDrive.setDirection(DcMotor.Direction.REVERSE);
-     frontRDrive.setDirection(DcMotor.Direction.FORWARD);
-     backRDrive.setDirection(DcMotor.Direction.FORWARD);
+        frontLDrive.setDirection(DcMotor.Direction.REVERSE);
+        backLDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontRDrive.setDirection(DcMotor.Direction.FORWARD);
+        backRDrive.setDirection(DcMotor.Direction.FORWARD);
 
-     frontLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-     frontRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-     backLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-     backRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-     backRDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-     backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        imu = hardwareMap.get(IMU.class, "imu");
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
-     imu = hardwareMap.get(IMU.class, "imu");
-     RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
-     RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
-     RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-
-     parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample OpMode
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample OpMode
         imu.resetYaw();
-
         imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
-    public void imuReset(){
+    public void encoderReset(){
         backRDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -146,12 +138,13 @@ public class CH {
         orientation = imu.getRobotYawPitchRollAngles();
         headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
 
-        while(Math.abs(headingError) > 5) {  // just guessing that heading error of 3 is close enough
+        while(Math.abs(headingError) > 5 && opMode_ref.opModeIsActive()) {  // just guessing that heading error of 3 is close enough
+
             orientation = imu.getRobotYawPitchRollAngles();
             headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
             turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
             moveRobot(0, 0, turn);
-            sleep(10);
+            opMode_ref.sleep(10);
 
         }
         moveRobot(0, 0, 0);  // stop motors when turn done
@@ -162,9 +155,9 @@ public class CH {
         double  power   = 0.1;
         boolean rampUp  = true;
 
-        imuReset();
+        encoderReset();
 
-        while (backRDrive.getCurrentPosition() < targetPosition){
+        while (backRDrive.getCurrentPosition() < targetPosition && opMode_ref.opModeIsActive()){
 
             if (backRDrive.getCurrentPosition() > targetPosition*0.5 && rampUp) {
                 rampUp = !rampUp;   // Switch ramp direction
@@ -188,7 +181,7 @@ public class CH {
 
             moveRobot(power,0,0);
 
-            sleep(E_CYCLE_MS);
+            opMode_ref.sleep(E_CYCLE_MS);
 
         } // while
         moveRobot(0,0,0);
