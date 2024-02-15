@@ -1,23 +1,50 @@
+/* Copyright (c) 2017 FIRST. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package org.firstinspires.ftc.teamcode.Teleop;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
-@Disabled
-@TeleOp
+
+
+@TeleOp(name = "BennyClawTest", group = "Linear OpMode")
 public class BennyClawTest extends LinearOpMode {
 
+    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
+    static final int    CYCLE_MS    =   20;     // period of each cycle
+    static final double MAX_POS     =  0.9;     // Maximum rotational position
+    static final double MIN_POS     =  0.5;     // Minimum rotational position
 
     // Define class members
-    Servo servoRight;
     Servo servoLeft;
-    double position = 1;
-    static final double INCREMENT = 0.001;     // amount to slew servo each CYCLE_MS cycle
-    static final int CYCLE_MS = 20;     // period of each cycle
-    static final double MAX_POS = 0.9;     // Maximum rotational position
-    static final double MIN_POS = 0.5;     // Minimum rotational position
-
+    double  position = 0.5;
     boolean rampUp = true;
 
 
@@ -25,48 +52,45 @@ public class BennyClawTest extends LinearOpMode {
     public void runOpMode() {
 
         servoLeft = hardwareMap.get(Servo.class, "leftHand");
-        servoRight = hardwareMap.get(Servo.class, "rightHand");
-        // Wait for the start button
-        telemetry.addData(">", "Press Start to scan Servo.");
+        servoLeft.setPosition(position);
+
+        telemetry.addData(">", "Press Start to scan Servo." );
         telemetry.update();
-
-
-        servoLeft.setPosition(0.6);
         waitForStart();
 
-        while (opModeIsActive()) {
-
-
-            if (gamepad1.b) {
-
-                // Keep stepping up until we hit the max value.
-
-                servoLeft.setPosition(0.5);
-
-                // rampUp = !rampUp;   // Switch ramp direction
+        while(opModeIsActive()){
+            if (rampUp) {
+                if (position >= (MAX_POS-0.05 )) {
+                    if (gamepad2.b == true) {
+                        rampUp = !rampUp;
+                    }
+                }
+                else {
+                    position += INCREMENT;
+                }
+            }
+            else {
+                position -= INCREMENT ;
+                if (position <= (MIN_POS + 0.05)) {
+                    if (gamepad2.a == true) {
+                        rampUp = !rampUp;
+                    }
+                }
+                else {
+                    position += INCREMENT;
+                }
             }
 
+            // Display the current value
+            telemetry.addData("Servo Position", "%5.2f", position);
+            telemetry.addData(">", "Press Stop to end test." );
+            telemetry.update();
 
-            if (gamepad1.a) {
-                // Keep stepping down until we hit the min value.
-
-                servoLeft.setPosition(0.9);
-                //rampUp = !rampUp;  // Switch ramp direction
-            }
-
+            // Set the servo to the new position and pause;
+            servoLeft.setPosition(position);
+            sleep(CYCLE_MS);
+            idle();
         }
-        // Display the current value
-        telemetry.addData("Servo Position", "%5.2f", position);
-        telemetry.addData(">", "Press Stop to end test.");
-        telemetry.update();
-
-        // Set the servo to the new position and pause;
-
-        //     sleep(CYCLE_MS);
-        //   idle();
-
-        // Set the servo to the new position and pause;
-
 
         // Signal done;
         telemetry.addData(">", "Done");

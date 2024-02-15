@@ -104,7 +104,7 @@ public class CH {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         double turn, headingError;
         headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
-        turn   = Range.clip(headingError * RT.A_TURN_GAIN, -RT.MAX_AUTO_TURN, RT.MAX_AUTO_TURN) ;
+        turn   = Range.clip(headingError * RT.A_TURN_GAIN, -RT.A_MAX_AUTO_TURN, RT.A_MAX_AUTO_TURN) ;
         if (powerLevel < 0) {
             turn = turn * -1;  // reverse turn if going backwards
         }
@@ -122,7 +122,7 @@ public class CH {
 
             orientation = imu.getRobotYawPitchRollAngles();
             headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
-            turn   = Range.clip(headingError * RT.A_TURN_GAIN, -RT.MAX_AUTO_TURN, RT.MAX_AUTO_TURN) ;
+            turn   = Range.clip(headingError * RT.A_TURN_GAIN, -RT.A_MAX_AUTO_TURN, RT.A_MAX_AUTO_TURN) ;
             moveRobot(0, 0, turn);
             opMode_ref.sleep(10);
 
@@ -169,7 +169,6 @@ public class CH {
 
     public void moveAprilTag(VP vp){
 
-        final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
         boolean targetNotReached = true;
         AprilTagDetection desiredTag = null;
 
@@ -199,7 +198,7 @@ public class CH {
             // Tell the driver what we see, and what to do.
             if (targetFound) {
 
-                double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
+                double rangeError = (desiredTag.ftcPose.range - RT.A_DESIRED_DISTANCE);
                 double headingError = desiredTag.ftcPose.bearing;
                 double yawError = -desiredTag.ftcPose.yaw;
 
@@ -209,9 +208,9 @@ public class CH {
                     strafe = 0;
                     targetNotReached = false;
                 } else {
-                    drive = Range.clip(rangeError * RT.A_SPEED_GAIN, -RT.MAX_AUTO_SPEED, RT.MAX_AUTO_SPEED);
-                    turn = Range.clip(headingError * RT.A_TURN_GAIN, -RT.MAX_AUTO_TURN, RT.MAX_AUTO_TURN);
-                    strafe = Range.clip(-yawError * RT.A_STRAFE_GAIN, -RT.MAX_AUTO_STRAFE, RT.MAX_AUTO_STRAFE);
+                    drive = Range.clip(rangeError * RT.A_SPEED_GAIN, -RT.A_MAX_AUTO_SPEED, RT.A_MAX_AUTO_SPEED);
+                    turn = Range.clip(headingError * RT.A_TURN_GAIN, -RT.A_MAX_AUTO_TURN, RT.A_MAX_AUTO_TURN);
+                    strafe = Range.clip(-yawError * RT.A_STRAFE_GAIN, -RT.A_MAX_AUTO_STRAFE, RT.A_MAX_AUTO_STRAFE);
 
                 }
 
