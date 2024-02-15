@@ -26,21 +26,18 @@ import java.util.concurrent.TimeUnit;
 public class VP {
     public VisionPortal visionPortal;
     public CompAutoRedFront ch;
-
     public AprilTagProcessor aprilTag;
     public WebcamName webcam1, webcam2;
-
     public static int DESIRED_TAG_ID = 5;
 
     public AprilTagDetection desiredTag = null;
-
 
     public static final String TFOD_MODEL_ASSET = "rookDetection.tflite";
     public static final String[] LABELS = {"rook"};
     public TfodProcessor tfod;
 
 
-    public final double DESIRED_DISTANCE = 11.0; //  this is how close the camera should get to the target (inches)
+
     public boolean targetNotReached = true;
 
     private LinearOpMode opMode_ref = null;
@@ -133,6 +130,4 @@ public class VP {
         }
         return PropLocation;
     }
-
-
 }

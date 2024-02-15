@@ -33,6 +33,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.setup.CH;
 
+import org.firstinspires.ftc.teamcode.CS.RT;
+
 
 
 @TeleOp(name="Basic Tele-op", group="Linear OpMode")
@@ -47,7 +49,7 @@ public class BasicTeleOp extends LinearOpMode {
     public void runOpMode() {
         ch = new CH(hardwareMap, this);
        // ch.hookArm.setPosition(ch.armMIN_POS);
-        ch.launcher.setPosition(1);
+//        ch.launcher.setPosition(1);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -69,10 +71,10 @@ public class BasicTeleOp extends LinearOpMode {
 //                ch.hookArm.setPosition(ch.armMIN_POS);
 //            }
             if (gamepad2.left_bumper){
-                ch.winchMotor.setPower(ch.Tighten);
+                ch.winchMotor.setPower(RT.W_TIGHTEN);
             }
             else if (gamepad2.right_bumper) {
-                ch.winchMotor.setPower(ch.Loosen);
+                ch.winchMotor.setPower(RT.W_LOOSEN);
             }
             else {
                 ch.winchMotor.setPower(0);
@@ -86,12 +88,12 @@ public class BasicTeleOp extends LinearOpMode {
             if (gamepad2.dpad_left){
                 ch.launcher.setPosition(0.19);
             }
-            if (gamepad1.b){
-                ch.gate.setPosition(0);
-            }
-            if (gamepad1.x){
-                ch.gate.setPosition(0.5);
-            }
+//            if (gamepad1.b){
+//                ch.gate.setPosition(0);
+//            }
+//            if (gamepad1.x){
+//                ch.gate.setPosition(0.5);
+//            }
 
 
 
