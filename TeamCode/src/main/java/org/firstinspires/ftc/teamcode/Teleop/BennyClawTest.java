@@ -37,58 +37,38 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "BennyClawTest", group = "Linear OpMode")
 public class BennyClawTest extends LinearOpMode {
 
-    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   20;     // period of each cycle
-    static final double MAX_POS     =  0.9;     // Maximum rotational position
-    static final double MIN_POS     =  0.5;     // Minimum rotational position
+
 
     // Define class members
-    Servo servoLeft;
-    double  position = 0.5;
-    boolean rampUp = true;
+    public Servo servoLeft;
+
 
 
     @Override
     public void runOpMode() {
 
-        servoLeft = hardwareMap.get(Servo.class, "leftHand");
-        servoLeft.setPosition(position);
+        servoLeft = hardwareMap.get(Servo.class, "leftPincer");
 
         telemetry.addData(">", "Press Start to scan Servo." );
         telemetry.update();
         waitForStart();
 
         while(opModeIsActive()){
-            if (rampUp) {
-                if (position >= (MAX_POS-0.05 )) {
-                    if (gamepad2.b == true) {
-                        rampUp = !rampUp;
-                    }
-                }
-                else {
-                    position += INCREMENT;
-                }
-            }
-            else {
-                position -= INCREMENT ;
-                if (position <= (MIN_POS + 0.05)) {
-                    if (gamepad2.a == true) {
-                        rampUp = !rampUp;
-                    }
-                }
-                else {
-                    position += INCREMENT;
-                }
-            }
+        if (gamepad1.b)
+        {
+            servoLeft.setPosition(0.3);
+        }
+        if (gamepad1.a){
+            servoLeft.setPosition(0.5);
+        }
 
             // Display the current value
-            telemetry.addData("Servo Position", "%5.2f", position);
+            telemetry.addData("Servo Position", "%5.2f", servoLeft.getPosition());
             telemetry.addData(">", "Press Stop to end test." );
             telemetry.update();
 
             // Set the servo to the new position and pause;
-            servoLeft.setPosition(position);
-            sleep(CYCLE_MS);
+
             idle();
         }
 

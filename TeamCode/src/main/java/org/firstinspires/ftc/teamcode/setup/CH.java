@@ -7,6 +7,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -25,9 +26,13 @@ public class CH {
     public DcMotor frontRDrive = null;
     public DcMotor backRDrive = null;
     public DcMotor winchMotor = null;
+    public DcMotor arm = null;
 
-    //public Servo gate = null;
-    public Servo launcher = null;
+    public Servo wrist = null;
+    public Servo leftPincer;
+    public Servo rightPincer;
+
+    public Servo launcher;
     public IMU imu;
     public boolean Front = true;
 
@@ -41,9 +46,11 @@ public class CH {
         frontRDrive = hardwareMap.get(DcMotor.class, "frontR");
         backRDrive = hardwareMap.get(DcMotor.class, "backR");
         winchMotor = hardwareMap.get(DcMotor.class, "winch");
-        //gate = hardwareMap.get(Servo.class, "gate");
         launcher = hardwareMap.get(Servo.class, "launcher");
-
+        leftPincer = hardwareMap.get(Servo.class, "leftPincer");
+        rightPincer = hardwareMap.get(Servo.class, "rightPincer");
+        arm =hardwareMap.get(DcMotor.class, "arm");
+        wrist = hardwareMap.get(Servo.class, "wrist");
 
         frontLDrive.setDirection(DcMotor.Direction.REVERSE);
         backLDrive.setDirection(DcMotor.Direction.REVERSE);

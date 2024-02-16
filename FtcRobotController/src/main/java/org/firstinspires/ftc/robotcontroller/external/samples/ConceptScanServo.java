@@ -68,7 +68,7 @@ public class ConceptScanServo extends LinearOpMode {
 
         // Connect to servo (Assume Robot Left Hand)
         // Change the text in quotes to match any servo name on your robot.
-        servo = hardwareMap.get(Servo.class, "left_hand");
+        servo = hardwareMap.get(Servo.class, "leftPincer");
 
         // Wait for the start button
         telemetry.addData(">", "Press Start to scan Servo." );
@@ -104,6 +104,7 @@ public class ConceptScanServo extends LinearOpMode {
 
             // Set the servo to the new position and pause;
             servo.setPosition(position);
+
             sleep(CYCLE_MS);
             idle();
         }

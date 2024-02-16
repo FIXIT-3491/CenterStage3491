@@ -37,7 +37,7 @@ import org.firstinspires.ftc.teamcode.CS.RT;
 
 
 
-@TeleOp(name="Basic Tele-op", group="Linear OpMode")
+@TeleOp(name="Basic TeleOp", group="Linear OpMode")
 
 public class BasicTeleOp extends LinearOpMode {
 
@@ -50,6 +50,7 @@ public class BasicTeleOp extends LinearOpMode {
         ch = new CH(hardwareMap, this);
        // ch.hookArm.setPosition(ch.armMIN_POS);
 //        ch.launcher.setPosition(1);
+        ch.launcher.setPosition(0.19);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -57,10 +58,50 @@ public class BasicTeleOp extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             double max;
+            if (gamepad2.dpad_up){ // tighten
+                ch.winchMotor.setPower(RT.W_TIGHTEN);
+            }
+            else if (gamepad2.dpad_down) { // loosen winch
+                ch.winchMotor.setPower(RT.W_LOOSEN);
+            }
+            else if (gamepad2.dpad_left || gamepad2.dpad_right){ // hold winch
+                ch.winchMotor.setPower(0.3);
+            }
+            else {
+                ch.winchMotor.setPower(0);
+            }
 
+            if (gamepad2.a){ // launch
+                ch.launcher.setPosition(0.7);
+            }
+            if (gamepad2.left_bumper){ // open
+                ch.leftPincer.setPosition(0.2);
+            }
+            else { // close
+                ch.leftPincer.setPosition(0.5);
+            }
+            if (gamepad2.right_bumper){ // open
+                ch.rightPincer.setPosition(0.85);
+            }
+            else { // close
+                ch.rightPincer.setPosition(0.55
+                );
+            }
+
+
+//            if (gamepad2.dpad_left){
+//                ch.launcher.setPosition(0.19);
+//            }
+
+
+//            if (gamepad1.b){
+//                ch.gate.setPosition(0);
+//            }
+//            if (gamepad1.x){
+//                ch.gate.setPosition(0.5);
+//            }
 //            if (gamepad2.b) {
 //                ch.hookArm.setPosition(ch.armPOS_2);
 //            }
@@ -70,35 +111,9 @@ public class BasicTeleOp extends LinearOpMode {
 //            if (gamepad2.x) {
 //                ch.hookArm.setPosition(ch.armMIN_POS);
 //            }
-            if (gamepad2.left_bumper){
-                ch.winchMotor.setPower(RT.W_TIGHTEN);
-            }
-            else if (gamepad2.right_bumper) {
-                ch.winchMotor.setPower(RT.W_LOOSEN);
-            }
-            else {
-                ch.winchMotor.setPower(0);
-            }
-            if (gamepad2.dpad_up){
-                ch.winchMotor.setPower(0.3);
-            }
-            if (gamepad2.a){
-                ch.launcher.setPosition(0.7);
-            }
-            if (gamepad2.dpad_left){
-                ch.launcher.setPosition(0.19);
-            }
-//            if (gamepad1.b){
-//                ch.gate.setPosition(0);
-//            }
-//            if (gamepad1.x){
-//                ch.gate.setPosition(0.5);
-//            }
 
+            double armMotion   = -gamepad2.left_stick_y;
 
-
-
-            // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
             double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
             double lateral =  gamepad1.left_stick_x;
             double yaw     =  gamepad1.right_stick_x;
@@ -122,6 +137,8 @@ public class BasicTeleOp extends LinearOpMode {
                 leftBackPower   /= max;
                 rightBackPower  /= max;
             }
+
+            ch.arm.setPower(armMotion *0.3);
 
             // Send calculated power to wheels
             if (gamepad1.left_bumper) {
