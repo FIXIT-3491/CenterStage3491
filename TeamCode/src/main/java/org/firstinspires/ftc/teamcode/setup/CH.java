@@ -7,7 +7,6 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -45,8 +44,10 @@ public class CH {
         backLDrive = hardwareMap.get(DcMotor.class, "backL");
         frontRDrive = hardwareMap.get(DcMotor.class, "frontR");
         backRDrive = hardwareMap.get(DcMotor.class, "backR");
+
         winchMotor = hardwareMap.get(DcMotor.class, "winch");
         launcher = hardwareMap.get(Servo.class, "launcher");
+
         leftPincer = hardwareMap.get(Servo.class, "leftPincer");
         rightPincer = hardwareMap.get(Servo.class, "rightPincer");
         arm =hardwareMap.get(DcMotor.class, "arm");
@@ -63,6 +64,7 @@ public class CH {
         backRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
@@ -76,9 +78,13 @@ public class CH {
         imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
-    public void encoderReset(){
+    public void driveEncoderReset(){
         backRDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    public void armEncoderReset(){
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void moveRobot(double x, double y, double yaw) {
@@ -137,12 +143,21 @@ public class CH {
         moveRobot(0, 0, 0);  // stop motors when turn done
     }
 
+    public void Arm(int targetPosition) {
+
+        double power = 0.5;
+        while (arm.getCurrentPosition() < targetPosition && opMode_ref.opModeIsActive()) {
+
+            arm.setPower(power);
+        }
+        arm.setPower(0);
+    }
     public void EncoderMove(int targetPosition) {
 
         double  power   = 0.1;
         boolean rampUp  = true;
 
-        encoderReset();
+        driveEncoderReset();
 
         while (backRDrive.getCurrentPosition() < targetPosition && opMode_ref.opModeIsActive()){
 
