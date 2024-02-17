@@ -51,7 +51,7 @@ public class BasicTeleOp extends LinearOpMode {
        // ch.hookArm.setPosition(ch.armMIN_POS);
 //        ch.launcher.setPosition(1);
         ch.launcher.setPosition(0.19);
-        ch.wrist.setPosition(0.2);
+        ch.wrist.setPosition(0.35);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
