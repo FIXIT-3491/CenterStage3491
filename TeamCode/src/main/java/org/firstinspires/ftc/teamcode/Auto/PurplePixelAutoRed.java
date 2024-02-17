@@ -25,6 +25,8 @@ public class PurplePixelAutoRed extends LinearOpMode {
 
         vp.initCompVision();
 
+        ch.rightPincer.setPosition(0.57);
+
         telemetry.addData("Status", "initialized ");
         telemetry.update();
 
@@ -33,24 +35,44 @@ public class PurplePixelAutoRed extends LinearOpMode {
         stepTimer.reset();
         if (opModeIsActive())
         {
-            vp.TensorDetect();
+            TelemetryStep("TensorDetect");
             Location = vp.TensorDetect();
-
+            TelemetryStep("Move forward");
             ch.EncoderMove(750);
-            sleep(100);
 
             if (Location == "left") {
-                ch.imuTurn(57);
+                vp.DESIRED_TAG_ID = 4;
+                TelemetryStep("Turn to left");
+                ch.imuTurn(55);
+                TelemetryStep("Move to left");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
+
             } else if (Location == "right") {
-                ch.imuTurn(-50);
+                vp.DESIRED_TAG_ID = 6;
+                TelemetryStep("Turn to right");
+                ch.imuTurn(-35);
+                TelemetryStep("Move to right");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
             } else {
+                vp.DESIRED_TAG_ID = 5;
+                TelemetryStep("Move to Center");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_CENTER);
             }
+
+            TelemetryStep("Back from spike mark");
             ch.moveRobot(-0.4, 0, 0);
             sleep(500);
             ch.moveRobot(0, 0, 0);
+
+            TelemetryStep("Move to backdrop");
+            ch.imuTurn(100);
+
+
         } // if active
     } // run op mode
+    private void TelemetryStep(String step) {
+        telemetry.addData("Step", step);
+        telemetry.addData("prop location", Location);
+        telemetry.update();
+    }
 } //linear op mode

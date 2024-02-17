@@ -25,6 +25,8 @@ public class CompAutoRedBack extends LinearOpMode {
 
         vp.initCompVision();
 
+        ch.rightPincer.setPosition(0.57);
+
         telemetry.addData("Status", "initialized ");
         telemetry.update();
 
@@ -33,30 +35,60 @@ public class CompAutoRedBack extends LinearOpMode {
         stepTimer.reset();
         if (opModeIsActive())
         {
+            TelemetryStep("TensorDetect");
             Location = vp.TensorDetect();
-
-            vp.visionPortal.setProcessorEnabled(vp.tfod,false); // turn off tesnor flow (tesnor is on purpose because tensor makes me wanna snore)
+            TelemetryStep("Move forward");
             ch.EncoderMove(750);
 
             if (Location == "left") {
+                vp.DESIRED_TAG_ID = 4;
+                TelemetryStep("Turn to left");
                 ch.imuTurn(57);
+                TelemetryStep("Move to left");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
+
             } else if (Location == "right") {
+                vp.DESIRED_TAG_ID = 6;
+                TelemetryStep("Turn to right");
                 ch.imuTurn(-50);
+                TelemetryStep("Move to right");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
             } else {
+                vp.DESIRED_TAG_ID = 5;
+                TelemetryStep("Move to Center");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_CENTER);
             }
+
+            TelemetryStep("Back from spike mark");
             ch.moveRobot(-0.4, 0, 0);
             sleep(500);
             ch.moveRobot(0, 0, 0);
 
+            TelemetryStep("Move to backdrop");
             ch.imuTurn(100);
 
             vp.visionPortal.setActiveCamera(vp.webcam1);
-            vp.setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+            stepTimer.reset();
+
+            TelemetryStep("Move april tag");
             ch.moveAprilTag(vp);
+
+            TelemetryStep("Move to backdrop");
+            ch.moveRobot(-0.4,0,0);
+            sleep(1000);
+            ch.moveRobot(0,0,0);
+
+            TelemetryStep("Move arm up");
+            ch.armMove(2000);
+            TelemetryStep("Drop on backdrop ");
+            ch.rightPincer.setPosition(0.85);
+            sleep(2000);
 
         } // if active
     } // run op mode
+    private void TelemetryStep(String step) {
+        telemetry.addData("Step", step);
+        telemetry.addData("prop location", Location);
+        telemetry.update();
+    }
 } //linear op mode

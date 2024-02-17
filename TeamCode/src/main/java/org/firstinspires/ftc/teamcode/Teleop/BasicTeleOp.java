@@ -43,7 +43,7 @@ public class BasicTeleOp extends LinearOpMode {
 
     private CH ch = null;
     private ElapsedTime runtime = new ElapsedTime();
-
+    public double wristPos = 0;
 
     @Override
     public void runOpMode() {
@@ -51,7 +51,7 @@ public class BasicTeleOp extends LinearOpMode {
        // ch.hookArm.setPosition(ch.armMIN_POS);
 //        ch.launcher.setPosition(1);
         ch.launcher.setPosition(0.19);
-
+        ch.wrist.setPosition(0.2);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -86,9 +86,9 @@ public class BasicTeleOp extends LinearOpMode {
                 ch.rightPincer.setPosition(0.85);
             }
             else { // close
-                ch.rightPincer.setPosition(0.55
-                );
+                ch.rightPincer.setPosition(0.55);
             }
+
 
 
 //            if (gamepad2.dpad_left){
@@ -157,7 +157,10 @@ public class BasicTeleOp extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-            telemetry.addData("position", ch.launcher.getPosition());
+            telemetry.addData("Launcher Position", ch.launcher.getPosition());
+            telemetry.addData("arm position", ch.arm.getCurrentPosition());
+            telemetry.addData("Wrist position", ch.wrist.getPosition());
+
             telemetry.update();
         }
     }

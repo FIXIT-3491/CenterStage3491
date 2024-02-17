@@ -50,7 +50,7 @@ public class CH {
 
         leftPincer = hardwareMap.get(Servo.class, "leftPincer");
         rightPincer = hardwareMap.get(Servo.class, "rightPincer");
-        arm =hardwareMap.get(DcMotor.class, "arm");
+        arm =   hardwareMap.get(DcMotor.class, "arm");
         wrist = hardwareMap.get(Servo.class, "wrist");
 
         frontLDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -62,6 +62,7 @@ public class CH {
         frontRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -143,12 +144,18 @@ public class CH {
         moveRobot(0, 0, 0);  // stop motors when turn done
     }
 
-    public void Arm(int targetPosition) {
+    public void armMove(int targetPosition) {
 
         double power = 0.5;
-        while (arm.getCurrentPosition() < targetPosition && opMode_ref.opModeIsActive()) {
+        arm.setTargetPosition(targetPosition);
 
-            arm.setPower(power);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        arm.setPower(power);
+
+        while (arm.isBusy() && opMode_ref.opModeIsActive()) {
+            opMode_ref.telemetry.addData("arm poz", arm.getCurrentPosition());
+            opMode_ref.telemetry.update();
         }
         arm.setPower(0);
     }
@@ -221,7 +228,7 @@ public class CH {
             if (targetFound) {
 
                 double rangeError = (desiredTag.ftcPose.range - RT.A_DESIRED_DISTANCE);
-                double headingError = desiredTag.ftcPose.bearing;
+                double headingError = desiredTag.ftcPose.bearing - 18;
                 double yawError = -desiredTag.ftcPose.yaw;
 
                 if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {

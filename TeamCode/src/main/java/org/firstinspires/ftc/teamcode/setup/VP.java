@@ -27,7 +27,7 @@ public class VP {
     public VisionPortal visionPortal;
     public AprilTagProcessor aprilTag;
     public WebcamName webcam1, webcam2;
-    public static int DESIRED_TAG_ID = 5;
+    public int DESIRED_TAG_ID = 0;
 
     public static final String TFOD_MODEL_ASSET = "rookDetection.tflite";
     public static final String[] LABELS = {"rook"};
