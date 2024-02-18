@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.Teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.setup.CH;
 
@@ -43,15 +44,16 @@ public class BasicTeleOp extends LinearOpMode {
 
     private CH ch = null;
     private ElapsedTime runtime = new ElapsedTime();
-    public double wristPos = 0;
+
+    double wristTargetPos = 0.35;
+    int armTargetPosition = 0;
 
     @Override
     public void runOpMode() {
         ch = new CH(hardwareMap, this);
-       // ch.hookArm.setPosition(ch.armMIN_POS);
-//        ch.launcher.setPosition(1);
         ch.launcher.setPosition(0.19);
         ch.wrist.setPosition(0.35);
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -60,6 +62,7 @@ public class BasicTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
             double max;
+
             if (gamepad2.dpad_up){ // tighten
                 ch.winchMotor.setPower(RT.W_TIGHTEN);
             }
@@ -69,100 +72,100 @@ public class BasicTeleOp extends LinearOpMode {
             else if (gamepad2.dpad_left || gamepad2.dpad_right){ // hold winch
                 ch.winchMotor.setPower(0.3);
             }
-            else {
+            else { //zero out winch
                 ch.winchMotor.setPower(0);
             }
 
-            if (gamepad2.a){ // launch
+            if (gamepad2.a){ // launch drone
                 ch.launcher.setPosition(0.7);
             }
-            if (gamepad2.left_bumper){ // open
+
+            if (gamepad2.left_bumper){ // open left pincer
                 ch.leftPincer.setPosition(0.2);
             }
             else { // close
                 ch.leftPincer.setPosition(0.5);
             }
-            if (gamepad2.right_bumper){ // open
+
+            if (gamepad2.right_bumper){ // open right pincer
                 ch.rightPincer.setPosition(0.85);
             }
             else { // close
                 ch.rightPincer.setPosition(0.55);
             }
+            if (gamepad2.y){
+                armTargetPosition = 1500;
 
+            }
+            if (gamepad2.left_stick_y > 0 ){ // arm up
+                armTargetPosition = armTargetPosition -10;
+            }
+            if (gamepad2.left_stick_y < 0 ){ // arm down
+                armTargetPosition = armTargetPosition +10;
+            }
 
+            if (gamepad2.right_trigger > 0){ // wrist
+                wristTargetPos = wristTargetPos - 0.01;
+            }
+            if (gamepad2.left_trigger > 0) {
+                wristTargetPos = wristTargetPos + 0.01;
+            }
 
-//            if (gamepad2.dpad_left){
-//                ch.launcher.setPosition(0.19);
-//            }
+            ch.arm.setTargetPosition(armTargetPosition);
+            ch.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            ch.arm.setPower(0.5);
 
+            ch.wrist.setPosition(wristTargetPos);
 
-//            if (gamepad1.b){
-//                ch.gate.setPosition(0);
-//            }
-//            if (gamepad1.x){
-//                ch.gate.setPosition(0.5);
-//            }
-//            if (gamepad2.b) {
-//                ch.hookArm.setPosition(ch.armPOS_2);
-//            }
-//            if (gamepad2.y) {
-//                ch.hookArm.setPosition(ch.armPOS_1);
-//            }
-//            if (gamepad2.x) {
-//                ch.hookArm.setPosition(ch.armMIN_POS);
-//            }
-
-            double armMotion   = -gamepad2.left_stick_y;
+            if (wristTargetPos < 0){
+                wristTargetPos = 0;
+            }
+            if (wristTargetPos > 0.35){
+                wristTargetPos = 0.35;
+            }
+            if (armTargetPosition < 30){
+                armTargetPosition = 31;
+            }
+            if (armTargetPosition > 2150){
+                armTargetPosition = 2149;
+            }
 
             double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
             double lateral =  gamepad1.left_stick_x;
             double yaw     =  gamepad1.right_stick_x;
-
-            // Combine the joystick requests for each axis-motion to determine each wheel's power.
-            // Set up a variable for each drive wheel to save the power level for telemetry.
             double leftFrontPower  = axial + lateral + yaw;
             double rightFrontPower = axial - lateral - yaw;
             double leftBackPower   = axial - lateral + yaw;
             double rightBackPower  = axial + lateral - yaw;
-
-            // Normalize the values so no wheel power exceeds 100%
-            // This ensures that the robot maintains the desired motion.
             max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
             max = Math.max(max, Math.abs(leftBackPower));
             max = Math.max(max, Math.abs(rightBackPower));
-
             if (max > 1.0) {
                 leftFrontPower  /= max;
                 rightFrontPower /= max;
                 leftBackPower   /= max;
                 rightBackPower  /= max;
             }
-
-            ch.arm.setPower(armMotion *0.3);
-
-            // Send calculated power to wheels
-            if (gamepad1.left_bumper) {
+            if (gamepad1.left_bumper) { //slow button
                 ch.frontLDrive.setPower(0.3*leftFrontPower);
                 ch.frontRDrive.setPower(0.3*rightFrontPower);
                 ch.backLDrive.setPower(0.3*leftBackPower);
                 ch.backRDrive.setPower(0.3*rightBackPower);
+            } else{
+                ch.frontLDrive.setPower(0.6 * leftFrontPower);
+                ch.frontRDrive.setPower(0.6 * rightFrontPower);
+                ch.backLDrive.setPower(0.6 * leftBackPower);
+                ch.backRDrive.setPower(0.6 * rightBackPower);
             }
-            else{
-                ch.frontLDrive.setPower(leftFrontPower);
-                ch.frontRDrive.setPower(rightFrontPower);
-                ch.backLDrive.setPower(leftBackPower);
-                ch.backRDrive.setPower(rightBackPower);
-            }
-            // Show the elapsed game time and wheel power.
+
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.addData("Launcher Position", ch.launcher.getPosition());
             telemetry.addData("arm position", ch.arm.getCurrentPosition());
             telemetry.addData("Wrist position", ch.wrist.getPosition());
-
             telemetry.update();
         }
-    }
 
+    }
 }

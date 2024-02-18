@@ -195,7 +195,6 @@ public class CH {
         } // while
         moveRobot(0,0,0);
     }//public void
-
     public void moveAprilTag(VP vp){
 
         boolean targetNotReached = true;

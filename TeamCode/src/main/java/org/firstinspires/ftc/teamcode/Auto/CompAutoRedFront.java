@@ -39,10 +39,10 @@ public class CompAutoRedFront extends LinearOpMode {
             ch.EncoderMove(750);
 
             if (Location == "left") {
-                ch.imuTurn(57);
+                ch.imuTurn(55);
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
             } else if (Location == "right") {
-                ch.imuTurn(-50);
+                ch.imuTurn(-35);
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
             } else {
                 ch.EncoderMove(RT.E_SPIKE_LEFT_CENTER);

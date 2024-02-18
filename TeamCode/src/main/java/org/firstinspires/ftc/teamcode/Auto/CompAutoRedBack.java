@@ -43,14 +43,14 @@ public class CompAutoRedBack extends LinearOpMode {
             if (Location == "left") {
                 vp.DESIRED_TAG_ID = 4;
                 TelemetryStep("Turn to left");
-                ch.imuTurn(57);
+                ch.imuTurn(55);
                 TelemetryStep("Move to left");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
 
             } else if (Location == "right") {
                 vp.DESIRED_TAG_ID = 6;
                 TelemetryStep("Turn to right");
-                ch.imuTurn(-50);
+                ch.imuTurn(-35);
                 TelemetryStep("Move to right");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
             } else {
@@ -79,10 +79,14 @@ public class CompAutoRedBack extends LinearOpMode {
             ch.moveRobot(0,0,0);
 
             TelemetryStep("Move arm up");
-            ch.armMove(2000);
+            ch.armMove(2100);
             TelemetryStep("Drop on backdrop ");
             ch.rightPincer.setPosition(0.85);
             sleep(2000);
+
+            ch.armMove(0);
+            sleep(2000);
+
 
         } // if active
     } // run op mode
