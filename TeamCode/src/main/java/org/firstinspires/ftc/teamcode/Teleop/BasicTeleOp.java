@@ -97,18 +97,22 @@ public class BasicTeleOp extends LinearOpMode {
                 armTargetPosition = 1500;
 
             }
-            if (gamepad2.left_stick_y > 0 ){ // arm up
-                armTargetPosition = armTargetPosition -10;
-            }
+
             if (gamepad2.left_stick_y < 0 ){ // arm down
-                armTargetPosition = armTargetPosition +10;
+                armTargetPosition = armTargetPosition +30;
+            }
+            else{
+                armTargetPosition = armTargetPosition -30;
             }
 
-            if (gamepad2.right_trigger > 0){ // wrist
-                wristTargetPos = wristTargetPos - 0.01;
-            }
+ // hi - the atom smashers
+
+
             if (gamepad2.left_trigger > 0) {
                 wristTargetPos = wristTargetPos + 0.01;
+            }
+            else {
+                wristTargetPos = wristTargetPos - 0.01;
             }
 
             ch.arm.setTargetPosition(armTargetPosition);
@@ -120,11 +124,11 @@ public class BasicTeleOp extends LinearOpMode {
             if (wristTargetPos < 0){
                 wristTargetPos = 0;
             }
-            if (wristTargetPos > 0.35){
-                wristTargetPos = 0.35;
+            if (wristTargetPos > 0.33){
+                wristTargetPos = 0.33;
             }
-            if (armTargetPosition < 30){
-                armTargetPosition = 31;
+            if (armTargetPosition < 10){
+                armTargetPosition = 10;
             }
             if (armTargetPosition > 2150){
                 armTargetPosition = 2149;
@@ -146,16 +150,17 @@ public class BasicTeleOp extends LinearOpMode {
                 leftBackPower   /= max;
                 rightBackPower  /= max;
             }
-            if (gamepad1.left_bumper) { //slow button
-                ch.frontLDrive.setPower(0.3*leftFrontPower);
-                ch.frontRDrive.setPower(0.3*rightFrontPower);
-                ch.backLDrive.setPower(0.3*leftBackPower);
-                ch.backRDrive.setPower(0.3*rightBackPower);
-            } else{
-                ch.frontLDrive.setPower(0.6 * leftFrontPower);
-                ch.frontRDrive.setPower(0.6 * rightFrontPower);
-                ch.backLDrive.setPower(0.6 * leftBackPower);
-                ch.backRDrive.setPower(0.6 * rightBackPower);
+            if (gamepad1.left_bumper) {
+                ch.frontLDrive.setPower(0.3 * leftFrontPower);
+                ch.frontRDrive.setPower(0.3 * rightFrontPower);
+                ch.backLDrive.setPower(0.3 * leftBackPower);
+                ch.backRDrive.setPower(0.3 * rightBackPower);
+            }
+            else { //slow button
+                ch.frontLDrive.setPower(leftFrontPower);
+                ch.frontRDrive.setPower(rightFrontPower);
+                ch.backLDrive.setPower(leftBackPower);
+                ch.backRDrive.setPower(rightBackPower);
             }
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());

@@ -24,7 +24,6 @@ public class CompAutoRedBack extends LinearOpMode {
         vp = new VP(hardwareMap, this);
 
         vp.initCompVision();
-
         ch.rightPincer.setPosition(0.5);
 
         telemetry.addData("Status", "initialized ");
