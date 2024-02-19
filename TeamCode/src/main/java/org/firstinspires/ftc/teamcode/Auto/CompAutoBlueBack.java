@@ -25,6 +25,8 @@ public class CompAutoBlueBack extends LinearOpMode {
 
         vp.initCompVision();
 
+        ch.rightPincer.setPosition(0.55);
+
         telemetry.addData("Status", "initialized ");
         telemetry.update();
 
@@ -33,27 +35,64 @@ public class CompAutoBlueBack extends LinearOpMode {
         stepTimer.reset();
         if (opModeIsActive())
         {
+            TelemetryStep("TensorDetect");
             Location = vp.TensorDetect();
-
+            TelemetryStep("Move forward");
             ch.EncoderMove(750);
 
             if (Location == "left") {
-                ch.imuTurn(57);
+                vp.DESIRED_TAG_ID = 1;
+                TelemetryStep("Turn to left");
+                ch.imuTurn(55);
+                TelemetryStep("Move to left");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
+
             } else if (Location == "right") {
-                ch.imuTurn(-50);
+                vp.DESIRED_TAG_ID = 3;
+                TelemetryStep("Turn to right");
+                ch.imuTurn(-35);
+                TelemetryStep("Move to right");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
             } else {
+                vp.DESIRED_TAG_ID = 2;
+                TelemetryStep("Move to Center");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_CENTER);
             }
+
+            TelemetryStep("Back from spike mark");
             ch.moveRobot(-0.4, 0, 0);
             sleep(500);
             ch.moveRobot(0, 0, 0);
 
-            ch.imuTurn(100);
+            TelemetryStep("Turn to backdrop");
+            ch.imuTurn(-100);
+
             vp.visionPortal.setActiveCamera(vp.webcam1);
+            stepTimer.reset();
+
+            TelemetryStep("Move april tag");
             ch.moveAprilTag(vp);
+
+            TelemetryStep("Move to backdrop");
+            ch.moveRobot(-0.4,0,0);
+            sleep(1000);
+            ch.moveRobot(0,0,0);
+
+            TelemetryStep("Move arm up");
+            ch.armMove(2100);
+            TelemetryStep("Drop on backdrop ");
+            ch.rightPincer.setPosition(0.85);
+            sleep(2000);
+
+            ch.armMove(0);
+            sleep(2000);
+
 
         } // if active
     } // run op mode
+    private void TelemetryStep(String step) {
+        telemetry.addData("Step", step);
+        telemetry.addData("prop location", Location);
+        telemetry.update();
+    }
 } //linear op mode

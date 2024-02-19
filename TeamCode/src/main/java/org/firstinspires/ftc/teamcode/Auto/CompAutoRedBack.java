@@ -25,7 +25,7 @@ public class CompAutoRedBack extends LinearOpMode {
 
         vp.initCompVision();
 
-        ch.rightPincer.setPosition(0.57);
+        ch.rightPincer.setPosition(0.5);
 
         telemetry.addData("Status", "initialized ");
         telemetry.update();
@@ -64,7 +64,7 @@ public class CompAutoRedBack extends LinearOpMode {
             sleep(500);
             ch.moveRobot(0, 0, 0);
 
-            TelemetryStep("Move to backdrop");
+            TelemetryStep("Turn to backdrop");
             ch.imuTurn(100);
 
             vp.visionPortal.setActiveCamera(vp.webcam1);
