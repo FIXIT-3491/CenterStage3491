@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.setup.CH;
-
+@Disabled
 @Autonomous(name="WristTest", group="Linear OpMode")
 
 public class WristTest extends LinearOpMode {

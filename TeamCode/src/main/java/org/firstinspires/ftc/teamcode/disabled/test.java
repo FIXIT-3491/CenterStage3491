@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.disabled;
 import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
@@ -87,6 +88,7 @@ import java.util.concurrent.TimeUnit;
  *
  */
 
+@Disabled
 @Autonomous(name="test", group = "LinearOpMode")
 public class test extends LinearOpMode
 {
@@ -114,6 +116,8 @@ public class test extends LinearOpMode
     private WebcamName webcam1, webcam2;
 
     private boolean targetNotReached = true;
+
+
     @Override public void runOpMode() {
         boolean targetFound     = false;    // Set to true when an AprilTag target is detected
         double  drive           = 0;        // Desired forward power/speed (-1 to +1)
