@@ -4,9 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.CS.RT;
 import org.firstinspires.ftc.teamcode.setup.CH;
-import org.firstinspires.ftc.teamcode.setup.VP;
 
 @Autonomous(name="armTest", group="Linear OpMode")
 

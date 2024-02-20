@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.setup;
 
 
-import static org.firstinspires.ftc.teamcode.CS.RT;
+import static org.firstinspires.ftc.teamcode.Teleop.CS.RT;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -191,7 +191,8 @@ public class CH {
             moveRobot(power,0,0);
 
             opMode_ref.sleep(RT.E_CYCLE_MS);
-
+            opMode_ref.telemetry.addData("encoder poz", backRDrive.getCurrentPosition());
+            opMode_ref.telemetry.update();
         } // while
         moveRobot(0,0,0);
     }//public void

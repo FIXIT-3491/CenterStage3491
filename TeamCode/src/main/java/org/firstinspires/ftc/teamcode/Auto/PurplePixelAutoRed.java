@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.CS.RT;
+import org.firstinspires.ftc.teamcode.Teleop.CS.RT;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
 
@@ -50,7 +50,7 @@ public class PurplePixelAutoRed extends LinearOpMode {
             } else if (Location == "right") {
                 vp.DESIRED_TAG_ID = 6;
                 TelemetryStep("Turn to right");
-                ch.imuTurn(-35);
+                ch.imuTurn(-33);
                 TelemetryStep("Move to right");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
             } else {

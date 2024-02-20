@@ -34,7 +34,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.setup.CH;
 
-import org.firstinspires.ftc.teamcode.CS.RT;
+import org.firstinspires.ftc.teamcode.Teleop.CS.RT;
 
 
 
@@ -47,6 +47,8 @@ public class BasicTeleOp extends LinearOpMode {
 
     double wristTargetPos = 0.35;
     int armTargetPosition = 0;
+    double rightPincerPos = RT.C_RIGHT_CLOSE;
+    double leftPincerPos = RT.C_LEFT_CLOSE;
 
     @Override
     public void runOpMode() {
@@ -64,10 +66,10 @@ public class BasicTeleOp extends LinearOpMode {
             double max;
 
             if (gamepad2.dpad_up){ // tighten
-                ch.winchMotor.setPower(RT.W_TIGHTEN);
+                ch.winchMotor.setPower(RT.WINCH_TIGHTEN);
             }
             else if (gamepad2.dpad_down) { // loosen winch
-                ch.winchMotor.setPower(RT.W_LOOSEN);
+                ch.winchMotor.setPower(RT.WINCH_LOOSEN);
             }
             else if (gamepad2.dpad_left || gamepad2.dpad_right){ // hold winch
                 ch.winchMotor.setPower(0.3);
@@ -81,57 +83,60 @@ public class BasicTeleOp extends LinearOpMode {
             }
 
             if (gamepad2.left_bumper){ // open left pincer
-                ch.leftPincer.setPosition(0.2);
+                leftPincerPos = RT.C_LEFT_OPEN;
             }
             else { // close
-                ch.leftPincer.setPosition(0.5);
+                leftPincerPos = RT.C_LEFT_CLOSE;
             }
 
             if (gamepad2.right_bumper){ // open right pincer
-                ch.rightPincer.setPosition(0.85);
+                rightPincerPos = RT.C_RIGHT_OPEN;
             }
             else { // close
-                ch.rightPincer.setPosition(0.55);
+                rightPincerPos = RT.C_RIGHT_CLOSE;
             }
-            if (gamepad2.y){
-                armTargetPosition = 1500;
-
-            }
-
-            if (gamepad2.left_stick_y < 0 ){ // arm down
-                armTargetPosition = armTargetPosition +30;
-            }
-            else{
-                armTargetPosition = armTargetPosition -30;
-            }
-
- // hi - the atom smashers
-
 
             if (gamepad2.left_trigger > 0) {
                 wristTargetPos = wristTargetPos + 0.01;
+            }
+            else if (gamepad2.y){
+                wristTargetPos = 0.4;
             }
             else {
                 wristTargetPos = wristTargetPos - 0.01;
             }
 
+            if (gamepad2.y){
+                armTargetPosition = RT.ARM_UP;
+            }
+            if (gamepad2.left_stick_y < 0 ){ // arm down
+                armTargetPosition = armTargetPosition +15;
+            }
+            else if (gamepad2.left_stick_y > 0 ){
+                armTargetPosition = armTargetPosition -15;
+            }
+
+
+
             ch.arm.setTargetPosition(armTargetPosition);
             ch.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ch.arm.setPower(0.5);
+            ch.arm.setPower(0.6);
 
             ch.wrist.setPosition(wristTargetPos);
+            ch.leftPincer.setPosition(leftPincerPos);
+            ch.rightPincer.setPosition(rightPincerPos);
 
-            if (wristTargetPos < 0){
-                wristTargetPos = 0;
+            if (wristTargetPos < RT.WRIST_UP){
+                wristTargetPos = RT.WRIST_UP;
             }
-            if (wristTargetPos > 0.33){
-                wristTargetPos = 0.33;
+            if (wristTargetPos > RT.WRIST_DOWN){
+                wristTargetPos = RT.WRIST_DOWN;
             }
-            if (armTargetPosition < 10){
-                armTargetPosition = 10;
+            if (armTargetPosition < RT.ARM_DOWN){
+                armTargetPosition = RT.ARM_DOWN;
             }
-            if (armTargetPosition > 2150){
-                armTargetPosition = 2149;
+            if (armTargetPosition > RT.ARM_MAX){
+                armTargetPosition = RT.ARM_MAX;
             }
 
             double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
@@ -157,10 +162,10 @@ public class BasicTeleOp extends LinearOpMode {
                 ch.backRDrive.setPower(0.3 * rightBackPower);
             }
             else { //slow button
-                ch.frontLDrive.setPower(leftFrontPower);
-                ch.frontRDrive.setPower(rightFrontPower);
-                ch.backLDrive.setPower(leftBackPower);
-                ch.backRDrive.setPower(rightBackPower);
+                ch.frontLDrive.setPower(0.7 * leftFrontPower);
+                ch.frontRDrive.setPower(0.7 * rightFrontPower);
+                ch.backLDrive.setPower(0.7 * leftBackPower);
+                ch.backRDrive.setPower(0.7 * rightBackPower);
             }
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -168,7 +173,6 @@ public class BasicTeleOp extends LinearOpMode {
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.addData("Launcher Position", ch.launcher.getPosition());
             telemetry.addData("arm position", ch.arm.getCurrentPosition());
-            telemetry.addData("Wrist position", ch.wrist.getPosition());
             telemetry.update();
         }
 

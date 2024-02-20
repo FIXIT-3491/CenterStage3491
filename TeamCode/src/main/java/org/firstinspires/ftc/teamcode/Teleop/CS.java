@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Teleop;
 //first and last letter naming scheme
 public class CS { //Constants
     public static class RT { // Robot stuff
@@ -9,17 +9,34 @@ public class CS { //Constants
 
         public static final double A_MAX_AUTO_SPEED = 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
         public static final double A_MAX_AUTO_STRAFE = 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
-        public static final double A_MAX_AUTO_TURN = 0.2;   //  Clip the turn speed to this max value (adjust for your robot)
+        public static final double A_MAX_AUTO_TURN = 0.4;   //  Clip the turn speed to this max value (adjust for your robot)
 
         public static final double E_INCREMENT = 0.01;     // amount to ramp motor each CYCLE_MS cycle
         public static final int    E_CYCLE_MS = 25;     // period of each cycle
-        public static final double E_MAX_POWER = 0.4;     // Maximum FWD power applied to motor
+        public static final double E_MAX_POWER = 0.5;     // Maximum FWD power applied to motor
         public static final double E_MIN_POWER = 0.1;     // Maximum REV power applied to motor
         public static final int    E_SPIKE_LEFT_RIGHT = 500;
-        public static final int    E_SPIKE_LEFT_CENTER = 650;
+        public static final int    E_SPIKE_LEFT_CENTER = 675;
 
-        public static final double W_TIGHTEN = -0.7; //winch
-        public static final double W_LOOSEN = 0.7;
+        public static final double WINCH_TIGHTEN = -0.7; //winch
+        public static final double WINCH_LOOSEN = 0.7;
+
+        public static final double C_RIGHT_CLOSE = 0.55;
+        public static final double C_LEFT_CLOSE = 0.5;
+        public static final double C_RIGHT_OPEN = 0.85;
+        public static final double C_LEFT_OPEN = 0.2;
+
+        public static final int ARM_UP = 1500;
+        public static final int ARM_DOWN = 5;
+        public static final int ARM_MAX = 2050;
+
+        public static final double WRIST_UP = 0;
+        public static final double WRIST_DOWN = 0.33;
+        public static final double WRIST_HANG = 0.4;
+
+
+
+
 
         //public static final double armMIN_POS = 0.25; // old arm poz
         //public static final double armPOS_1 = 0.52;

@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.CS.RT;
+import org.firstinspires.ftc.teamcode.Teleop.CS.RT;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
 
@@ -25,6 +25,8 @@ public class CompAutoRedFront extends LinearOpMode {
 
         vp.initCompVision();
 
+        ch.rightPincer.setPosition(RT.C_RIGHT_CLOSE);
+
         telemetry.addData("Status", "initialized ");
         telemetry.update();
 
@@ -33,30 +35,63 @@ public class CompAutoRedFront extends LinearOpMode {
         stepTimer.reset();
         if (opModeIsActive())
         {
+            TelemetryStep("TensorDetect");
             Location = vp.TensorDetect();
-
-            vp.visionPortal.setProcessorEnabled(vp.tfod,false); // turn off tesnor flow (tesnor is on purpose because tensor makes me wanna snore)
+            TelemetryStep("Move forward");
             ch.EncoderMove(750);
 
             if (Location == "left") {
-                ch.imuTurn(55);
+                vp.DESIRED_TAG_ID = 4;
+                TelemetryStep("Turn to left");
+                ch.imuTurn(52);
+                TelemetryStep("Move to left");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
+
             } else if (Location == "right") {
-                ch.imuTurn(-35);
+                vp.DESIRED_TAG_ID = 6;
+                TelemetryStep("Turn to right");
+                ch.imuTurn(-33);
+                TelemetryStep("Move to right");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
             } else {
+                vp.DESIRED_TAG_ID = 5;
+                TelemetryStep("Move to Center");
                 ch.EncoderMove(RT.E_SPIKE_LEFT_CENTER);
             }
+
+            TelemetryStep("Back from spike mark");
             ch.moveRobot(-0.4, 0, 0);
             sleep(500);
             ch.moveRobot(0, 0, 0);
 
+            TelemetryStep("Move to backdrop");
             ch.imuTurn(100);
-
+            ch.EncoderMove(750);
+            ch.imuTurn(0);
+            ch.EncoderMove(1500);
+            ch.imuTurn(-90);
+            ch.EncoderMove(2000);
+            ch.moveRobot(0.8,0,0);
+            sleep(500);
+            ch.moveRobot(0,0,0);
             vp.visionPortal.setActiveCamera(vp.webcam1);
-            vp.setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
-            ch.moveAprilTag(vp);
+            ch.imuTurn(60);
+            ch.moveRobot(-0.5,0.5,0.05); sleep(700); ch.moveRobot(0,0,0);
 
+            ch.moveAprilTag(vp);
+            ch.moveRobot(-0.4,0,0);
+            sleep(1200);
+            ch.moveRobot(0,0,0);
+            ch.armMove(2100);
+            sleep(200);
+            ch.rightPincer.setPosition(0.85);
+            sleep(400);
+            ch.armMove(0);
         } // if active
     } // run op mode
+    private void TelemetryStep(String step) {
+        telemetry.addData("Step", step);
+        telemetry.addData("prop location", Location);
+        telemetry.update();
+    }
 } //linear op mode

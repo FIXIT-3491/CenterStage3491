@@ -1,16 +1,15 @@
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Teleop.CS.RT;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
 
-@Autonomous(name="CompAutoRedBack", group="Linear OpMode")
+@Autonomous(name="AprilTagTest", group="Linear OpMode")
 
-public class CompAutoRedBack extends LinearOpMode {
+public class AprilTagTest extends LinearOpMode {
     public CH ch = null;
     private VP vp = null;
     private ElapsedTime stepTimer = new ElapsedTime();
@@ -24,7 +23,8 @@ public class CompAutoRedBack extends LinearOpMode {
         vp = new VP(hardwareMap, this);
 
         vp.initCompVision();
-        ch.rightPincer.setPosition(0.5);
+
+        ch.rightPincer.setPosition(0.55);
 
         telemetry.addData("Status", "initialized ");
         telemetry.update();
@@ -34,38 +34,8 @@ public class CompAutoRedBack extends LinearOpMode {
         stepTimer.reset();
         if (opModeIsActive())
         {
-            TelemetryStep("TensorDetect");
-            Location = vp.TensorDetect();
-            TelemetryStep("Move forward");
-            ch.EncoderMove(750);
-
-            if (Location == "left") {
-                vp.DESIRED_TAG_ID = 4;
-                TelemetryStep("Turn to left");
-                ch.imuTurn(52);
-                TelemetryStep("Move to left");
-                ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
-
-            } else if (Location == "right") {
-                vp.DESIRED_TAG_ID = 6;
-                TelemetryStep("Turn to right");
-                ch.imuTurn(-33);
-                TelemetryStep("Move to right");
-                ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
-            } else {
-                vp.DESIRED_TAG_ID = 5;
-                TelemetryStep("Move to Center");
-                ch.EncoderMove(RT.E_SPIKE_LEFT_CENTER);
-            }
-
-            TelemetryStep("Back from spike mark");
-            ch.moveRobot(-0.4, 0, 0);
-            sleep(500);
-            ch.moveRobot(0, 0, 0);
-
-            TelemetryStep("Turn to backdrop");
             ch.imuTurn(100);
-
+            vp.DESIRED_TAG_ID = 6;
             YellowPixel();
 
         } // if active
@@ -98,13 +68,14 @@ public class CompAutoRedBack extends LinearOpMode {
         TelemetryStep("Drive off backdrop");
         ch.EncoderMove(400);
         TelemetryStep("turn to 0");
-        ch.imuTurn(179);
+        ch.imuTurn(0);
         TelemetryStep("move to park");
-        ch.EncoderMove(900);
+        ch.EncoderMove(1100);
         TelemetryStep("turn to park");
-        ch.imuTurn(-90);
+        ch.imuTurn(100);
         TelemetryStep("park");
-        ch.EncoderMove(1000);
+        ch.moveRobot(-0.4,0,0);
+        sleep(1000);
+        ch.moveRobot(0,0,0);
     }
-
 } //linear op mode

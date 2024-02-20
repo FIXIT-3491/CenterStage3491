@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.CS.RT;
+import org.firstinspires.ftc.teamcode.Teleop.CS.RT;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
 
@@ -51,9 +51,6 @@ public class CompAutoBlueFront extends LinearOpMode {
             sleep(500);
             ch.moveRobot(0, 0, 0);
 
-            ch.imuTurn(100);
-            vp.visionPortal.setActiveCamera(vp.webcam1);
-            ch.moveAprilTag(vp);
 
         } // if active
     } // run op mode
