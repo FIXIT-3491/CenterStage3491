@@ -25,7 +25,7 @@ public class CompAutoBlueBack extends LinearOpMode {
 
         vp.initCompVision();
 
-        ch.rightPincer.setPosition(0.55);
+        ch.rightPincer.setPosition(0.5);
 
         telemetry.addData("Status", "initialized ");
         telemetry.update();
@@ -94,5 +94,36 @@ public class CompAutoBlueBack extends LinearOpMode {
         telemetry.addData("Step", step);
         telemetry.addData("prop location", Location);
         telemetry.update();
+    }
+    private void YellowPixel(){
+        vp.visionPortal.setActiveCamera(vp.webcam1);
+        stepTimer.reset();
+
+        TelemetryStep("Move april tag");
+        ch.moveAprilTag(vp);
+        TelemetryStep("Move to backdrop");
+        ch.moveRobot(-0.4,0,0);
+        sleep(1200);
+        ch.moveRobot(0,0,0);
+        TelemetryStep("Move arm up");
+        ch.armMove(2100);
+        TelemetryStep("Drop on backdrop ");
+        ch.rightPincer.setPosition(0.85);
+        sleep(400);
+        TelemetryStep("Lower Arm");
+        ch.armMove(0);
+        sleep(500);
+        TelemetryStep("Close Pincer");
+        ch.rightPincer.setPosition(0.55);
+        TelemetryStep("Drive off backdrop");
+        ch.EncoderMove(400);
+        TelemetryStep("turn to 0");
+        ch.imuTurn(179);
+        TelemetryStep("move to park");
+        ch.EncoderMove(900);
+        TelemetryStep("turn to park");
+        ch.imuTurn(-90);
+        TelemetryStep("park");
+        ch.EncoderMove(1000);
     }
 } //linear op mode

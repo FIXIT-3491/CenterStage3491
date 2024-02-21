@@ -66,13 +66,14 @@ public class CompAutoRedFront extends LinearOpMode {
 
             TelemetryStep("Move to backdrop");
             ch.imuTurn(100);
+
             ch.EncoderMove(750);
             ch.imuTurn(0);
             ch.EncoderMove(1500);
-            ch.imuTurn(-90);
-            ch.EncoderMove(2000);
+            ch.imuTurn(-87);
+            ch.EncoderMove(1000);
             ch.moveRobot(0.8,0,0);
-            sleep(500);
+            sleep(1200);
             ch.moveRobot(0,0,0);
             vp.visionPortal.setActiveCamera(vp.webcam1);
             ch.imuTurn(60);

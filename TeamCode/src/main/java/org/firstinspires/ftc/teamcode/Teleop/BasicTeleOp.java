@@ -53,7 +53,6 @@ public class BasicTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         ch = new CH(hardwareMap, this);
-        ch.launcher.setPosition(0.19);
         ch.wrist.setPosition(0.35);
 
         telemetry.addData("Status", "Initialized");
@@ -81,6 +80,9 @@ public class BasicTeleOp extends LinearOpMode {
             if (gamepad2.a){ // launch drone
                 ch.launcher.setPosition(0.7);
             }
+            if (gamepad2.b){
+                ch.launcher.setPosition(0.19);
+            }
 
             if (gamepad2.left_bumper){ // open left pincer
                 leftPincerPos = RT.C_LEFT_OPEN;
@@ -100,7 +102,7 @@ public class BasicTeleOp extends LinearOpMode {
                 wristTargetPos = wristTargetPos + 0.01;
             }
             else if (gamepad2.y){
-                wristTargetPos = 0.4;
+                wristTargetPos = 0.32;
             }
             else {
                 wristTargetPos = wristTargetPos - 0.01;
@@ -115,8 +117,6 @@ public class BasicTeleOp extends LinearOpMode {
             else if (gamepad2.left_stick_y > 0 ){
                 armTargetPosition = armTargetPosition -15;
             }
-
-
 
             ch.arm.setTargetPosition(armTargetPosition);
             ch.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -162,10 +162,10 @@ public class BasicTeleOp extends LinearOpMode {
                 ch.backRDrive.setPower(0.3 * rightBackPower);
             }
             else { //slow button
-                ch.frontLDrive.setPower(0.7 * leftFrontPower);
-                ch.frontRDrive.setPower(0.7 * rightFrontPower);
-                ch.backLDrive.setPower(0.7 * leftBackPower);
-                ch.backRDrive.setPower(0.7 * rightBackPower);
+                ch.frontLDrive.setPower(leftFrontPower);
+                ch.frontRDrive.setPower(rightFrontPower);
+                ch.backLDrive.setPower(leftBackPower);
+                ch.backRDrive.setPower(rightBackPower);
             }
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());

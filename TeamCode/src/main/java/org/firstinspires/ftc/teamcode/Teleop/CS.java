@@ -26,7 +26,7 @@ public class CS { //Constants
         public static final double C_RIGHT_OPEN = 0.85;
         public static final double C_LEFT_OPEN = 0.2;
 
-        public static final int ARM_UP = 1500;
+        public static final int ARM_UP = 1300;
         public static final int ARM_DOWN = 5;
         public static final int ARM_MAX = 2050;
 

@@ -101,10 +101,11 @@ public class CompAutoRedBack extends LinearOpMode {
         ch.imuTurn(179);
         TelemetryStep("move to park");
         ch.EncoderMove(900);
-        TelemetryStep("turn to park");
-        ch.imuTurn(-90);
-        TelemetryStep("park");
-        ch.EncoderMove(1000);
+        TelemetryStep("park ");
+        ch.moveRobot(0,-0.5,0);
+        sleep(1000);
+        ch.moveRobot(0,0,0);
+
     }
 
 } //linear op mode

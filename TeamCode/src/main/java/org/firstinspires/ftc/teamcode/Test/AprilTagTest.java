@@ -24,7 +24,7 @@ public class AprilTagTest extends LinearOpMode {
 
         vp.initCompVision();
 
-        ch.rightPincer.setPosition(0.55);
+        ch.rightPincer.setPosition(0.5);
 
         telemetry.addData("Status", "initialized ");
         telemetry.update();
@@ -68,13 +68,11 @@ public class AprilTagTest extends LinearOpMode {
         TelemetryStep("Drive off backdrop");
         ch.EncoderMove(400);
         TelemetryStep("turn to 0");
-        ch.imuTurn(0);
+        ch.imuTurn(179);
         TelemetryStep("move to park");
-        ch.EncoderMove(1100);
-        TelemetryStep("turn to park");
-        ch.imuTurn(100);
-        TelemetryStep("park");
-        ch.moveRobot(-0.4,0,0);
+        ch.EncoderMove(900);
+        TelemetryStep("park ");
+        ch.moveRobot(0,0.5,0);
         sleep(1000);
         ch.moveRobot(0,0,0);
     }
