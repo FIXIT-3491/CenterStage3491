@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.setup;
 
 
-import static org.firstinspires.ftc.teamcode.Teleop.CS.RT;
+import static org.firstinspires.ftc.teamcode.Teleop.Constants.RT;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;

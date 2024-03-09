@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Teleop.CS.RT;
+import org.firstinspires.ftc.teamcode.Teleop.Constants.RT;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
 
@@ -88,21 +88,21 @@ public class CompAutoRedBack extends LinearOpMode {
         TelemetryStep("Move arm up");
         ch.armMove(2100);
         TelemetryStep("Drop on backdrop ");
-        ch.rightPincer.setPosition(0.85);
+        ch.rightPincer.setPosition(RT.C_RIGHT_OPEN);
         sleep(400);
         TelemetryStep("Lower Arm");
         ch.armMove(0);
         sleep(500);
         TelemetryStep("Close Pincer");
-        ch.rightPincer.setPosition(0.55);
+        ch.rightPincer.setPosition(RT.C_RIGHT_CLOSE);
         TelemetryStep("Drive off backdrop");
         ch.EncoderMove(400);
         TelemetryStep("turn to 0");
         ch.imuTurn(179);
         TelemetryStep("move to park");
-        ch.EncoderMove(900);
+        ch.EncoderMove(1200);
         TelemetryStep("park ");
-        ch.moveRobot(0,-0.5,0);
+        ch.moveRobot(0,0.5,0);
         sleep(1000);
         ch.moveRobot(0,0,0);
 

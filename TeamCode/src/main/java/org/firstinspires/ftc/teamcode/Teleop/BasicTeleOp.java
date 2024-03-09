@@ -28,13 +28,14 @@
  */
 
 package org.firstinspires.ftc.teamcode.Teleop;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.setup.CH;
 
-import org.firstinspires.ftc.teamcode.Teleop.CS.RT;
+import org.firstinspires.ftc.teamcode.Teleop.Constants.RT;
 
 
 
@@ -45,7 +46,7 @@ public class BasicTeleOp extends LinearOpMode {
     private CH ch = null;
     private ElapsedTime runtime = new ElapsedTime();
 
-    double wristTargetPos = 0.35;
+    double wristTargetPos = 0;
     int armTargetPosition = 0;
     double rightPincerPos = RT.C_RIGHT_CLOSE;
     double leftPincerPos = RT.C_LEFT_CLOSE;

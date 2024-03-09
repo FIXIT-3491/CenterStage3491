@@ -99,9 +99,9 @@ public class VP {
         boolean cupFound = false;
         ElapsedTime TensorTimer = new ElapsedTime();
         TensorTimer.reset();
-        String PropLocation = "middle";
+        String PropLocation = "not detected";
 
-        while (TensorTimer.milliseconds() < 7000 && !cupFound && opMode_ref.opModeIsActive()) {
+        while (TensorTimer.milliseconds() < 4000 && !cupFound && opMode_ref.opModeIsActive()) {
             List<Recognition> currentRecognitions = tfod.getRecognitions();
             opMode_ref.telemetry.addData("Time", TensorTimer.milliseconds());
             opMode_ref.telemetry.update();

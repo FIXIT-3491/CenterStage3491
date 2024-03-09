@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Teleop;
 //first and last letter naming scheme
-public class CS { //Constants
+public class Constants { //Constants
     public static class RT { // Robot stuff
         public static final double A_SPEED_GAIN =  0.02  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
         public static final double A_STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
@@ -21,7 +21,7 @@ public class CS { //Constants
         public static final double WINCH_TIGHTEN = -0.7; //winch
         public static final double WINCH_LOOSEN = 0.7;
 
-        public static final double C_RIGHT_CLOSE = 0.55;
+        public static final double C_RIGHT_CLOSE = 0.5;
         public static final double C_LEFT_CLOSE = 0.5;
         public static final double C_RIGHT_OPEN = 0.85;
         public static final double C_LEFT_OPEN = 0.2;
