@@ -18,7 +18,7 @@ public class CompAutoRedFront extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        telemetry.update();
+        ch.imu.resetYaw();
 
         ch = new CH(hardwareMap, this);
         vp = new VP(hardwareMap, this);
