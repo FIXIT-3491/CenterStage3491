@@ -30,7 +30,7 @@ public class Constants { //Constants
         public static final int ARM_DOWN = 50;
         public static final int ARM_MAX = 2050;
 
-        public static final double WRIST_UP = 0;
+        public static final double WRIST_UP = 0.1;
         public static final double WRIST_DOWN = 0.33;
         public static final double WRIST_HANG = 0.4;
     }

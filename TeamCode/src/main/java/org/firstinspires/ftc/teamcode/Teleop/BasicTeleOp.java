@@ -22,6 +22,8 @@ public class BasicTeleOp extends LinearOpMode {
     public void runOpMode() {
         ch = new CH(hardwareMap, this);
         ch.wrist.setPosition(0.35);
+        ch.rightPincer.setPosition(RT.C_RIGHT_CLOSE);
+        ch.leftPincer.setPosition(RT.C_LEFT_CLOSE);
         ch.armEncoderReset();
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -84,24 +86,31 @@ public class BasicTeleOp extends LinearOpMode {
                 shoulderTargetPos = shoulderTargetPos -15;
             }
 
+            if (gamepad2.right_stick_y > 0){
+                armExtTargetPos = armExtTargetPos + 1;
+            }
+            if (gamepad2.right_stick_y < 0){
+                armExtTargetPos = armExtTargetPos - 1;
+            }
             ch.shoulder.setTargetPosition(shoulderTargetPos);
             ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             ch.shoulder.setPower(0.6);
 
 
-            ch.shoulder.setTargetPosition(shoulderTargetPos);
-            ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ch.shoulder.setPower(0.6);
-
-           // ch.armExtender.setTargetPosition();
+            //ch.armExtender.setTargetPosition(armExtTargetPos);
+            //ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //ch.armExtender.setPower(0.1);
 
             ch.wrist.setPosition(wristTargetPos);
             ch.leftPincer.setPosition(leftPincerPos);
             ch.rightPincer.setPosition(rightPincerPos);
 
+
+
             if (wristTargetPos < RT.WRIST_UP){
                 wristTargetPos = RT.WRIST_UP;
             }
+
             if (wristTargetPos > RT.WRIST_DOWN){
                 wristTargetPos = RT.WRIST_DOWN;
             }
@@ -111,8 +120,6 @@ public class BasicTeleOp extends LinearOpMode {
             if (shoulderTargetPos > RT.ARM_MAX){
                 shoulderTargetPos = RT.ARM_MAX;
             }
-
-            ch.armExtender.setPower(gamepad2.right_stick_y);
 
             double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
             double lateral =  gamepad1.left_stick_x;
@@ -146,7 +153,10 @@ public class BasicTeleOp extends LinearOpMode {
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.addData("Launcher Position", ch.launcher.getPosition());
-            telemetry.addData("arm position", ch.shoulder.getCurrentPosition());
+            telemetry.addData("shoulder position", ch.shoulder.getCurrentPosition());
+            telemetry.addData("armExt position", ch.armExtender.getCurrentPosition());
+            telemetry.addData("right pincer", ch.rightPincer.getPosition());
+            telemetry.addData("left pincer", ch.leftPincer.getPosition());
             telemetry.update();
         }
 

@@ -66,6 +66,7 @@ public class CH {
         backLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shoulder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armExtender.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shoulder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
