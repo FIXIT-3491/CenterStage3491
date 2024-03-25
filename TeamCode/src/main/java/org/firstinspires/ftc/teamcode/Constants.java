@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Teleop;
+package org.firstinspires.ftc.teamcode;
 //first and last letter naming scheme
 public class Constants { //Constants
     public static class RT { // Robot stuff
@@ -33,13 +33,5 @@ public class Constants { //Constants
         public static final double WRIST_UP = 0;
         public static final double WRIST_DOWN = 0.33;
         public static final double WRIST_HANG = 0.4;
-
-
-
-
-
-        //public static final double armMIN_POS = 0.25; // old arm poz
-        //public static final double armPOS_1 = 0.52;
-        //public static final double armPOS_2 = 0.65;
     }
 }

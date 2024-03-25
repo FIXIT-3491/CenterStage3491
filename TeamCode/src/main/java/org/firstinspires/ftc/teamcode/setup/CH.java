@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.setup;
 
 
-import static org.firstinspires.ftc.teamcode.Teleop.Constants.RT;
+import static org.firstinspires.ftc.teamcode.Constants.RT;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -25,8 +25,8 @@ public class CH {
     public DcMotor frontRDrive = null;
     public DcMotor backRDrive = null;
     public DcMotor winchMotor = null;
-    public DcMotor armExt = null;
     public DcMotor shoulder = null;
+    public DcMotor armExtender = null;
 
     public Servo wrist = null;
     public Servo leftPincer;
@@ -46,14 +46,15 @@ public class CH {
         frontRDrive = hardwareMap.get(DcMotor.class, "frontR");
         backRDrive  = hardwareMap.get(DcMotor.class, "backR");
 
-        shoulder    = hardwareMap.get(DcMotor.class, "shoulder");
-        winchMotor  = hardwareMap.get(DcMotor.class, "winch");
-        armExt      = hardwareMap.get(DcMotor.class, "armExt");
+        winchMotor = hardwareMap.get(DcMotor.class, "winch");
+        armExtender = hardwareMap.get(DcMotor.class, "armExtender");
+        shoulder =   hardwareMap.get(DcMotor.class, "shoulder");
 
-        leftPincer  = hardwareMap.get(Servo.class, "leftPincer");
+
+        leftPincer = hardwareMap.get(Servo.class, "leftPincer");
         rightPincer = hardwareMap.get(Servo.class, "rightPincer");
-        wrist       = hardwareMap.get(Servo.class, "wrist");
-        launcher    = hardwareMap.get(Servo.class, "launcher");
+        wrist = hardwareMap.get(Servo.class, "wrist");
+        launcher = hardwareMap.get(Servo.class, "launcher");
 
         frontLDrive.setDirection(DcMotor.Direction.REVERSE);
         backLDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -68,7 +69,7 @@ public class CH {
 
         backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shoulder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        armExt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armExtender.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
@@ -87,10 +88,11 @@ public class CH {
         backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     public void armEncoderReset(){
+        armExtender.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shoulder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armExt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shoulder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        armExt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armExtender.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
 
     public void moveRobot(double x, double y, double yaw) {
