@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.setup;
 
 
-import static org.firstinspires.ftc.teamcode.Teleop.Constants.RT;
+import static org.firstinspires.ftc.teamcode.Constants.RT;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -25,7 +25,8 @@ public class CH {
     public DcMotor frontRDrive = null;
     public DcMotor backRDrive = null;
     public DcMotor winchMotor = null;
-    public DcMotor arm = null;
+    public DcMotor shoulder = null;
+    public DcMotor armExtender = null;
 
     public Servo wrist = null;
     public Servo leftPincer;
@@ -46,12 +47,14 @@ public class CH {
         backRDrive = hardwareMap.get(DcMotor.class, "backR");
 
         winchMotor = hardwareMap.get(DcMotor.class, "winch");
-        launcher = hardwareMap.get(Servo.class, "launcher");
+        armExtender = hardwareMap.get(DcMotor.class, "armExtender");
+        shoulder =   hardwareMap.get(DcMotor.class, "shoulder");
+
 
         leftPincer = hardwareMap.get(Servo.class, "leftPincer");
         rightPincer = hardwareMap.get(Servo.class, "rightPincer");
-        arm =   hardwareMap.get(DcMotor.class, "arm");
         wrist = hardwareMap.get(Servo.class, "wrist");
+        launcher = hardwareMap.get(Servo.class, "launcher");
 
         frontLDrive.setDirection(DcMotor.Direction.REVERSE);
         backLDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -62,10 +65,10 @@ public class CH {
         frontRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shoulder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shoulder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
@@ -84,8 +87,11 @@ public class CH {
         backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     public void armEncoderReset(){
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armExtender.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shoulder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shoulder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armExtender.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
 
     public void moveRobot(double x, double y, double yaw) {
@@ -147,17 +153,17 @@ public class CH {
     public void armMove(int targetPosition) {
 
         double power = 0.5;
-        arm.setTargetPosition(targetPosition);
+        shoulder.setTargetPosition(targetPosition);
 
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        arm.setPower(power);
+        shoulder.setPower(power);
 
-        while (arm.isBusy() && opMode_ref.opModeIsActive()) {
-            opMode_ref.telemetry.addData("arm poz", arm.getCurrentPosition());
+        while (shoulder.isBusy() && opMode_ref.opModeIsActive()) {
+            opMode_ref.telemetry.addData("arm poz", shoulder.getCurrentPosition());
             opMode_ref.telemetry.update();
         }
-        arm.setPower(0);
+        shoulder.setPower(0);
     }
     public void EncoderMove(int targetPosition) {
 
