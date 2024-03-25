@@ -90,7 +90,7 @@ public class BasicTeleOp extends LinearOpMode {
             ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             ch.shoulder.setPower(0.6);
 
-            ch.armExtender.setTargetPosition();
+           // ch.armExtender.setTargetPosition();
 
             ch.wrist.setPosition(wristTargetPos);
             ch.leftPincer.setPosition(leftPincerPos);
