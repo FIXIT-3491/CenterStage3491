@@ -28,7 +28,6 @@
  */
 
 package org.firstinspires.ftc.teamcode.Teleop;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -46,7 +45,7 @@ public class BasicTeleOp extends LinearOpMode {
     private CH ch = null;
     private ElapsedTime runtime = new ElapsedTime();
 
-    double wristTargetPos = 0;
+    double wristTargetPos;
     int armTargetPosition = 0;
     double rightPincerPos = RT.C_RIGHT_CLOSE;
     double leftPincerPos = RT.C_LEFT_CLOSE;
@@ -54,6 +53,8 @@ public class BasicTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         ch = new CH(hardwareMap, this);
+
+        ch.armEncoderReset();
         ch.wrist.setPosition(0.35);
 
         telemetry.addData("Status", "Initialized");
@@ -100,13 +101,13 @@ public class BasicTeleOp extends LinearOpMode {
             }
 
             if (gamepad2.left_trigger > 0) {
-                wristTargetPos = wristTargetPos + 0.01;
+                wristTargetPos = wristTargetPos - 0.01;
             }
             else if (gamepad2.y){
                 wristTargetPos = 0.32;
             }
             else {
-                wristTargetPos = wristTargetPos - 0.01;
+                wristTargetPos = wristTargetPos + 0.01;
             }
 
             if (gamepad2.y){
@@ -118,10 +119,23 @@ public class BasicTeleOp extends LinearOpMode {
             else if (gamepad2.left_stick_y > 0 ){
                 armTargetPosition = armTargetPosition -15;
             }
+            if (gamepad2.right_stick_y > 0){
+                //if (ch.armExt.getCurrentPosition() > 0) {
+                    ch.armExt.setPower(0.5);
+                //}
+            }
+            else if (gamepad2.right_stick_y < 0){
+               // if (ch.armExt.getCurrentPosition() > 0) {
+                    ch.armExt.setPower(-0.5);
+                //}
+            }
+            else {
+                ch.armExt.setPower(0);
+            }
 
-            ch.arm.setTargetPosition(armTargetPosition);
-            ch.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ch.arm.setPower(0.6);
+            ch.shoulder.setTargetPosition(armTargetPosition);
+            ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            ch.shoulder.setPower(0.6);
 
             ch.wrist.setPosition(wristTargetPos);
             ch.leftPincer.setPosition(leftPincerPos);
@@ -173,7 +187,7 @@ public class BasicTeleOp extends LinearOpMode {
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.addData("Launcher Position", ch.launcher.getPosition());
-            telemetry.addData("arm position", ch.arm.getCurrentPosition());
+            telemetry.addData("arm position", ch.shoulder.getCurrentPosition());
             telemetry.update();
         }
 

@@ -18,8 +18,8 @@ public class Constants { //Constants
         public static final int    E_SPIKE_LEFT_RIGHT = 500;
         public static final int    E_SPIKE_LEFT_CENTER = 675;
 
-        public static final double WINCH_TIGHTEN = -0.7; //winch
-        public static final double WINCH_LOOSEN = 0.7;
+        public static final double WINCH_TIGHTEN = 0.7; //winch
+        public static final double WINCH_LOOSEN = -0.7;
 
         public static final double C_RIGHT_CLOSE = 0.5;
         public static final double C_LEFT_CLOSE = 0.5;
@@ -27,7 +27,7 @@ public class Constants { //Constants
         public static final double C_LEFT_OPEN = 0.2;
 
         public static final int ARM_UP = 1300;
-        public static final int ARM_DOWN = 5;
+        public static final int ARM_DOWN = 50;
         public static final int ARM_MAX = 2050;
 
         public static final double WRIST_UP = 0;
