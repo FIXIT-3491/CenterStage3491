@@ -92,7 +92,6 @@ public class BasicTeleOp extends LinearOpMode {
             if (gamepad2.right_stick_y < 0){
                 armExtTargetPos = armExtTargetPos - 1;
             }
-            ch.shoulder.setTargetPosition(shoulderTargetPos);
             ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             ch.shoulder.setPower(0.6);
 
