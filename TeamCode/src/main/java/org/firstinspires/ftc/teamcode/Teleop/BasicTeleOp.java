@@ -92,13 +92,14 @@ public class BasicTeleOp extends LinearOpMode {
             if (gamepad2.right_stick_y < 0){
                 armExtTargetPos = armExtTargetPos - 1;
             }
+            ch.shoulder.setTargetPosition(shoulderTargetPos);
             ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             ch.shoulder.setPower(0.6);
 
 
-            //ch.armExtender.setTargetPosition(armExtTargetPos);
-            //ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //ch.armExtender.setPower(0.1);
+            ch.armExtender.setTargetPosition(armExtTargetPos);
+            ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            ch.armExtender.setPower(0.1);
 
             ch.wrist.setPosition(wristTargetPos);
             ch.leftPincer.setPosition(leftPincerPos);

@@ -79,7 +79,6 @@ public class CH {
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample OpMode
-
         imu.resetYaw();
         imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
@@ -89,9 +88,9 @@ public class CH {
         backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     public void armEncoderReset(){
-        armExtender.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shoulder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shoulder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armExtender.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armExtender.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
