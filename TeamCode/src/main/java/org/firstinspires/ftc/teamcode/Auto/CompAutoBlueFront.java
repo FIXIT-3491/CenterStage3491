@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Constants.RT;
+import org.firstinspires.ftc.teamcode.Constants.CS;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
 
@@ -41,12 +41,12 @@ public class CompAutoBlueFront extends LinearOpMode {
 
             if (Location == "left") {
                 ch.imuTurn(57);
-                ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
+                ch.EncoderMove(CS.E_SPIKE_LEFT_RIGHT);
             } else if (Location == "right") {
                 ch.imuTurn(-50);
-                ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
+                ch.EncoderMove(CS.E_SPIKE_LEFT_RIGHT);
             } else {
-                ch.EncoderMove(RT.E_SPIKE_LEFT_CENTER);
+                ch.EncoderMove(CS.E_SPIKE_LEFT_CENTER);
             }
             ch.moveRobot(-0.4, 0, 0);
             sleep(500);

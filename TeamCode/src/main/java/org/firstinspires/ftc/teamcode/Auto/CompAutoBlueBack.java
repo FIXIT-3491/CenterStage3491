@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Constants.RT;
+import org.firstinspires.ftc.teamcode.Constants.CS;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
 
@@ -25,7 +25,7 @@ public class CompAutoBlueBack extends LinearOpMode {
         vp = new VP(hardwareMap, this);
 
         vp.initCompVision();
-        ch.rightPincer.setPosition(RT.C_RIGHT_CLOSE);
+        ch.rightPincer.setPosition(CS.C_RIGHT_CLOSE);
 
         telemetry.addData("Status", "initialized ");
         telemetry.update();
@@ -45,25 +45,25 @@ public class CompAutoBlueBack extends LinearOpMode {
                 TelemetryStep("Turn to left");
                 ch.imuTurn(50);
                 TelemetryStep("Move to left");
-                ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
+                ch.EncoderMove(CS.E_SPIKE_LEFT_RIGHT);
 
             } else if (Location == "right") {
                 vp.DESIRED_TAG_ID = 3;
                 TelemetryStep("Turn to right");
                 ch.imuTurn(-37);
                 TelemetryStep("Move to right");
-                ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
+                ch.EncoderMove(CS.E_SPIKE_LEFT_RIGHT);
             } else if (Location == "not detected") {
                 vp.DESIRED_TAG_ID = 3;
                 TelemetryStep("Turn to right");
                 ch.imuTurn(-41);
                 TelemetryStep("Move to right");
-                ch.EncoderMove(RT.E_SPIKE_LEFT_RIGHT);
+                ch.EncoderMove(CS.E_SPIKE_LEFT_RIGHT);
 
             } else {
                 vp.DESIRED_TAG_ID = 2;
                 TelemetryStep("Move to Center");
-                ch.EncoderMove(RT.E_SPIKE_LEFT_CENTER);
+                ch.EncoderMove(CS.E_SPIKE_LEFT_CENTER);
             }
 
             TelemetryStep("Back from spike mark");
@@ -91,14 +91,14 @@ public class CompAutoBlueBack extends LinearOpMode {
             TelemetryStep("Move arm up");
             ch.armMove(2100);
             TelemetryStep("Drop on backdrop ");
-            ch.rightPincer.setPosition(RT.C_RIGHT_OPEN);
+            ch.rightPincer.setPosition(CS.C_RIGHT_OPEN);
             sleep(400);
 
             TelemetryStep("Lower Arm");
             ch.armMove(0);
             sleep(500);
             TelemetryStep("Close Pincer");
-            ch.rightPincer.setPosition(RT.C_RIGHT_CLOSE);
+            ch.rightPincer.setPosition(CS.C_RIGHT_CLOSE);
             TelemetryStep("Drive off backdrop");
             ch.EncoderMove(400);
             TelemetryStep("turn to 0");
@@ -131,13 +131,13 @@ public class CompAutoBlueBack extends LinearOpMode {
         TelemetryStep("Move arm up");
         ch.armMove(2100);
         TelemetryStep("Drop on backdrop ");
-        ch.rightPincer.setPosition(RT.C_RIGHT_OPEN);
+        ch.rightPincer.setPosition(CS.C_RIGHT_OPEN);
         sleep(400);
         TelemetryStep("Lower Arm");
         ch.armMove(0);
         sleep(500);
         TelemetryStep("Close Pincer");
-        ch.rightPincer.setPosition(RT.C_RIGHT_CLOSE);
+        ch.rightPincer.setPosition(CS.C_RIGHT_CLOSE);
         TelemetryStep("Drive off backdrop");
         ch.EncoderMove(400);
         TelemetryStep("turn to 0");

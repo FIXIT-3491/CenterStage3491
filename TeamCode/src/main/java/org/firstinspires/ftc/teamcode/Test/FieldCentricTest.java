@@ -14,30 +14,35 @@ public class FieldCentricTest extends LinearOpMode {
 
     private CH ch = null;
 
-    double wristTargetPos = 0;
-    int armTargetPosition = 0;
-    double rightPincerPos = Constants.RT.C_RIGHT_CLOSE;
-    double leftPincerPos = Constants.RT.C_LEFT_CLOSE;
+    int armExtTargetPos = 0;
+    double wristTargetPos = Constants.CS.WRIST_UP;
+    int shoulderTargetPos = 0;
+    double rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
+    double leftPincerPos = Constants.CS.C_LEFT_CLOSE;
+
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         ch = new CH(hardwareMap, this);
         ch.wrist.setPosition(0.35);
-
+        ch.rightPincer.setPosition(Constants.CS.C_RIGHT_CLOSE);
+        ch.leftPincer.setPosition(Constants.CS.C_LEFT_CLOSE);
+        ch.armEncoderReset();
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
         waitForStart();
 
         while (opModeIsActive()) {
-
             double max;
             if (gamepad2.dpad_up){ // tighten
-                ch.winchMotor.setPower(Constants.RT.WINCH_TIGHTEN);
+                ch.winchMotor.setPower(Constants.CS.WINCH_TIGHTEN);
             }
             else if (gamepad2.dpad_down) { // loosen winch
-                ch.winchMotor.setPower(Constants.RT.WINCH_LOOSEN);
+                ch.winchMotor.setPower(Constants.CS.WINCH_LOOSEN);
             }
             else if (gamepad2.dpad_left || gamepad2.dpad_right){ // hold winch
-                ch.winchMotor.setPower(0.3);
+                ch.winchMotor.setPower(0.2);
             }
             else { //zero out winch
                 ch.winchMotor.setPower(0);
@@ -51,62 +56,90 @@ public class FieldCentricTest extends LinearOpMode {
             }
 
             if (gamepad2.left_bumper){ // open left pincer
-                leftPincerPos = Constants.RT.C_LEFT_OPEN;
+                leftPincerPos = Constants.CS.C_LEFT_OPEN;
             }
             else { // close
-                leftPincerPos = Constants.RT.C_LEFT_CLOSE;
+                leftPincerPos = Constants.CS.C_LEFT_CLOSE;
             }
+
             if (gamepad2.right_bumper){ // open right pincer
-                rightPincerPos = Constants.RT.C_RIGHT_OPEN;
+                rightPincerPos = Constants.CS.C_RIGHT_OPEN;
             }
             else { // close
-                rightPincerPos = Constants.RT.C_RIGHT_CLOSE;
+                rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
             }
 
             if (gamepad2.left_trigger > 0) {
-                wristTargetPos = wristTargetPos + 0.01;
+                wristTargetPos = wristTargetPos - 0.01;
             }
             else if (gamepad2.y){
                 wristTargetPos = 0.32;
             }
             else {
-                wristTargetPos = wristTargetPos - 0.01;
+                wristTargetPos = wristTargetPos + 0.01;
             }
 
             if (gamepad2.y){
-                armTargetPosition = Constants.RT.ARM_UP;
+                shoulderTargetPos = Constants.CS.ARM_UP;
             }
             if (gamepad2.left_stick_y < 0 ){ // arm down
-                armTargetPosition = armTargetPosition +15;
+                shoulderTargetPos = shoulderTargetPos +15;
             }
             else if (gamepad2.left_stick_y > 0 ){ // arm up
-                armTargetPosition = armTargetPosition -15;
+                shoulderTargetPos = shoulderTargetPos -15;
             }
 
-            ch.shoulder.setTargetPosition(armTargetPosition);
+            if (gamepad2.right_stick_y < 0){
+                armExtTargetPos = armExtTargetPos + 10;
+            }
+            if (gamepad2.right_stick_y >   0){
+                armExtTargetPos = armExtTargetPos - 10;
+            }
+            ch.shoulder.setTargetPosition(shoulderTargetPos);
             ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             ch.shoulder.setPower(0.6);
+
+
+            ch.armExtender.setTargetPosition(armExtTargetPos);
+            ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            ch.armExtender.setPower(0.6);
 
             ch.wrist.setPosition(wristTargetPos);
             ch.leftPincer.setPosition(leftPincerPos);
             ch.rightPincer.setPosition(rightPincerPos);
 
-            if (wristTargetPos < Constants.RT.WRIST_UP){
-                wristTargetPos = Constants.RT.WRIST_UP;
-            }
-            if (wristTargetPos > Constants.RT.WRIST_DOWN){
-                wristTargetPos = Constants.RT.WRIST_DOWN;
-            }
-            if (armTargetPosition < Constants.RT.ARM_DOWN){
-                armTargetPosition = Constants.RT.ARM_DOWN;
-            }
-            if (armTargetPosition > Constants.RT.ARM_MAX){
-                armTargetPosition = Constants.RT.ARM_MAX;
-            }
 
-//            if (gamepad1.options) {
-//                ch.imu.resetYaw();
-//            }
+            if (wristTargetPos < Constants.CS.WRIST_DOWN)
+                wristTargetPos = Constants.CS.WRIST_DOWN;
+
+            if (ch.armExtender.getCurrentPosition() < 375) {
+                if (wristTargetPos > Constants.CS.WRIST_UP)
+                    wristTargetPos = Constants.CS.WRIST_UP;
+            }
+            else {
+                if (wristTargetPos > Constants.CS.WRIST_SCORING)
+                    wristTargetPos = Constants.CS.WRIST_SCORING;
+            }
+            if (ch.armExtender.getCurrentPosition() > 30){ // if arm extender is out dont put arm down all the way
+                if (shoulderTargetPos < Constants.CS.ARM_DOWN_EXT)
+                    shoulderTargetPos = Constants.CS.ARM_DOWN_EXT;
+            }
+            else { // if arm extender is in put arm down all the way
+                if (shoulderTargetPos < Constants.CS.ARM_DOWN)
+                    shoulderTargetPos = Constants.CS.ARM_DOWN;
+            }
+            if (shoulderTargetPos > Constants.CS.ARM_MAX)
+                shoulderTargetPos = Constants.CS.ARM_MAX;
+
+            if (armExtTargetPos < 10)
+                armExtTargetPos = 10;
+
+            if (armExtTargetPos > 1000)
+                armExtTargetPos = 1000;
+
+            if (gamepad1.back) {
+                ch.imu.resetYaw();
+            }
 
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x;

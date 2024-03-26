@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.setup;
 
 
-import static org.firstinspires.ftc.teamcode.Constants.RT;
+import static org.firstinspires.ftc.teamcode.Constants.CS;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -60,6 +61,7 @@ public class CH {
         backLDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRDrive.setDirection(DcMotor.Direction.FORWARD);
         backRDrive.setDirection(DcMotor.Direction.FORWARD);
+        armExtender.setDirection(DcMotorSimple.Direction.REVERSE);
 
         frontLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -125,7 +127,7 @@ public class CH {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         double turn, headingError;
         headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
-        turn   = Range.clip(headingError * RT.A_TURN_GAIN, -RT.A_MAX_AUTO_TURN, RT.A_MAX_AUTO_TURN) ;
+        turn   = Range.clip(headingError * CS.A_TURN_GAIN, -CS.A_MAX_AUTO_TURN, CS.A_MAX_AUTO_TURN) ;
         if (powerLevel < 0) {
             turn = turn * -1;  // reverse turn if going backwards
         }
@@ -143,7 +145,7 @@ public class CH {
 
             orientation = imu.getRobotYawPitchRollAngles();
             headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
-            turn   = Range.clip(headingError * RT.A_TURN_GAIN, -RT.A_MAX_AUTO_TURN, RT.A_MAX_AUTO_TURN) ;
+            turn   = Range.clip(headingError * CS.A_TURN_GAIN, -CS.A_MAX_AUTO_TURN, CS.A_MAX_AUTO_TURN) ;
             moveRobot(0, 0, turn);
             opMode_ref.sleep(10);
 
@@ -181,23 +183,23 @@ public class CH {
 
             if (rampUp) {
                 // Keep stepping up until we hit the max value.
-                power += RT.E_INCREMENT;
-                if (power >= RT.E_MAX_POWER) {
-                    power = RT.E_MAX_POWER;
+                power += CS.E_INCREMENT;
+                if (power >= CS.E_MAX_POWER) {
+                    power = CS.E_MAX_POWER;
                 }
             }
             else {
                 // Keep stepping down until we hit the min value.
-                power -= RT.E_INCREMENT;
-                if (power <= RT.E_MIN_POWER) {
-                    power = RT.E_MIN_POWER;
+                power -= CS.E_INCREMENT;
+                if (power <= CS.E_MIN_POWER) {
+                    power = CS.E_MIN_POWER;
                     // rampUp = !rampUp;  // Switch ramp direction
                 }
             }
 
             moveRobot(power,0,0);
 
-            opMode_ref.sleep(RT.E_CYCLE_MS);
+            opMode_ref.sleep(CS.E_CYCLE_MS);
             opMode_ref.telemetry.addData("encoder poz", backRDrive.getCurrentPosition());
             opMode_ref.telemetry.update();
         } // while
@@ -234,7 +236,7 @@ public class CH {
             // Tell the driver what we see, and what to do.
             if (targetFound) {
 
-                double rangeError = (desiredTag.ftcPose.range - RT.A_DESIRED_DISTANCE);
+                double rangeError = (desiredTag.ftcPose.range - CS.A_DESIRED_DISTANCE);
                 double headingError = desiredTag.ftcPose.bearing - 18;
                 double yawError = -desiredTag.ftcPose.yaw;
 
@@ -244,9 +246,9 @@ public class CH {
                     strafe = 0;
                     targetNotReached = false;
                 } else {
-                    drive = Range.clip(rangeError * RT.A_SPEED_GAIN, -RT.A_MAX_AUTO_SPEED, RT.A_MAX_AUTO_SPEED);
-                    turn = Range.clip(headingError * RT.A_TURN_GAIN, -RT.A_MAX_AUTO_TURN, RT.A_MAX_AUTO_TURN);
-                    strafe = Range.clip(-yawError * RT.A_STRAFE_GAIN, -RT.A_MAX_AUTO_STRAFE, RT.A_MAX_AUTO_STRAFE);
+                    drive = Range.clip(rangeError * CS.A_SPEED_GAIN, -CS.A_MAX_AUTO_SPEED, CS.A_MAX_AUTO_SPEED);
+                    turn = Range.clip(headingError * CS.A_TURN_GAIN, -CS.A_MAX_AUTO_TURN, CS.A_MAX_AUTO_TURN);
+                    strafe = Range.clip(-yawError * CS.A_STRAFE_GAIN, -CS.A_MAX_AUTO_STRAFE, CS.A_MAX_AUTO_STRAFE);
 
                 }
 
