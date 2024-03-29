@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants.CS;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
@@ -19,13 +20,15 @@ public class CompAutoRedBack extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        ch.imu.resetYaw();
+//        ch.imu.resetYaw();
 
         ch = new CH(hardwareMap, this);
         vp = new VP(hardwareMap, this);
 
         vp.initCompVision();
+
         ch.rightPincer.setPosition(0.5);
+        ch.wrist.setPosition(CS.WRIST_UP);
 
         telemetry.addData("Status", "initialized ");
         telemetry.update();
@@ -35,6 +38,7 @@ public class CompAutoRedBack extends LinearOpMode {
         stepTimer.reset();
         if (opModeIsActive())
         {
+
             TelemetryStep("TensorDetect");
             Location = vp.TensorDetect();
             TelemetryStep("Move forward");
@@ -110,3 +114,5 @@ public class CompAutoRedBack extends LinearOpMode {
     }
 
 } //linear op mode
+
+//"hehehe" - Ryan

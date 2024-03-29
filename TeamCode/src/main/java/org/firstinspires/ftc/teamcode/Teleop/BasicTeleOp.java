@@ -3,6 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.Constants.CS;
 
@@ -77,6 +78,7 @@ public class BasicTeleOp extends LinearOpMode {
                 wristTargetPos = wristTargetPos + 0.01;
             }
 
+
             if (gamepad2.y){
                 shoulderTargetPos = CS.ARM_UP;
             }
@@ -126,14 +128,15 @@ public class BasicTeleOp extends LinearOpMode {
                 if (shoulderTargetPos < CS.ARM_DOWN)
                     shoulderTargetPos = CS.ARM_DOWN;
             }
+
             if (shoulderTargetPos > CS.ARM_MAX)
                 shoulderTargetPos = CS.ARM_MAX;
 
             if (armExtTargetPos < 10)
                 armExtTargetPos = 10;
 
-            if (armExtTargetPos > 1000)
-                armExtTargetPos = 1000;
+            if (armExtTargetPos > 1400)
+                armExtTargetPos = 1400;
 
             double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
             double lateral =  gamepad1.left_stick_x;
@@ -164,7 +167,9 @@ public class BasicTeleOp extends LinearOpMode {
                 ch.backRDrive.setPower(rightBackPower);
             }
 
-            telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
+            telemetry.addData("Front left/Right", "%4.2f, %4.2f", ch.frontLDrive.getCurrent(CurrentUnit.AMPS), ch.frontRDrive.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("Front left/Right", "%4.2f, %4.2f", ch.backLDrive.getCurrent(CurrentUnit.AMPS), ch.backRDrive.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("Front left/Right Current", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.addData("Launcher Position", ch.launcher.getPosition());
             telemetry.addData("shoulder position", ch.shoulder.getCurrentPosition());

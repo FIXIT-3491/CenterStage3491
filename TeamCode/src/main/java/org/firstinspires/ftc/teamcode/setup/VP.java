@@ -99,7 +99,7 @@ public class VP {
         boolean cupFound = false;
         ElapsedTime TensorTimer = new ElapsedTime();
         TensorTimer.reset();
-        String PropLocation = "not detected";
+        String PropLocation = "not detected1";
 
         while (TensorTimer.milliseconds() < 4000 && !cupFound && opMode_ref.opModeIsActive()) {
             List<Recognition> currentRecognitions = tfod.getRecognitions();

@@ -7,6 +7,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -14,6 +15,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -21,10 +23,10 @@ import java.util.List;
 
 
 public class CH {
-    public DcMotor backLDrive = null;
-    public DcMotor frontLDrive = null;
-    public DcMotor frontRDrive = null;
-    public DcMotor backRDrive = null;
+    public DcMotorEx backLDrive = null;
+    public DcMotorEx frontLDrive = null;
+    public DcMotorEx frontRDrive = null;
+    public DcMotorEx backRDrive = null;
     public DcMotor winchMotor = null;
     public DcMotor shoulder = null;
     public DcMotor armExtender = null;
@@ -42,10 +44,10 @@ public class CH {
     public CH(HardwareMap hardwareMap, LinearOpMode op){
 
         opMode_ref  = op;
-        frontLDrive = hardwareMap.get(DcMotor.class, "frontL");
-        backLDrive  = hardwareMap.get(DcMotor.class, "backL");
-        frontRDrive = hardwareMap.get(DcMotor.class, "frontR");
-        backRDrive  = hardwareMap.get(DcMotor.class, "backR");
+        frontLDrive = hardwareMap.get(DcMotorEx.class, "frontL");
+        backLDrive  = hardwareMap.get(DcMotorEx.class, "backL");
+        frontRDrive = hardwareMap.get(DcMotorEx.class, "frontR");
+        backRDrive  = hardwareMap.get(DcMotorEx.class, "backR");
 
         winchMotor = hardwareMap.get(DcMotor.class, "winch");
         armExtender = hardwareMap.get(DcMotor.class, "armExtender");
@@ -205,6 +207,53 @@ public class CH {
         } // while
         moveRobot(0,0,0);
     }//public void
+    //Shoulder:2000 ArmEXT:430 wrist:0.56
+
+    public void dropPixel(){
+        shoulder.setTargetPosition(1700);
+        shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        shoulder.setPower(0.5);
+
+        armExtender.setTargetPosition(1290);
+        armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armExtender.setPower(0.5);
+        opMode_ref.sleep( 2000);
+        wrist.setPosition(0.58);
+        opMode_ref.sleep( 1500);
+
+        rightPincer.setPosition(0.51);
+    }
+
+    public void dropPixel1(){
+        shoulder.setTargetPosition(1900);
+        shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        shoulder.setPower(0.5);
+
+        armExtender.setTargetPosition(770);
+        armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armExtender.setPower(0.5);
+        opMode_ref.sleep( 2000);
+        wrist.setPosition(0.4);
+        opMode_ref.sleep( 1500);
+
+        rightPincer.setPosition(0.51);
+    }
+
+    public void closeArm(){
+        shoulder.setTargetPosition(0);
+        shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        shoulder.setPower(0.5);
+
+        armExtender.setTargetPosition(0);
+        armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armExtender.setPower(0.5);
+        opMode_ref.sleep( 2000);
+        wrist.setPosition(CS.WRIST_UP);
+        opMode_ref.sleep( 1500);
+
+        rightPincer.setPosition(0.51);
+    }
+
     public void moveAprilTag(VP vp){
 
         boolean targetNotReached = true;
