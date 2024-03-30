@@ -249,6 +249,8 @@ public class CH {
         armExtender.setPower(0.5);
         opMode_ref.sleep( 2000);
         wrist.setPosition(CS.WRIST_UP);
+
+
         opMode_ref.sleep( 1500);
 
         rightPincer.setPosition(0.51);
