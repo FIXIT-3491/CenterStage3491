@@ -15,7 +15,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -72,7 +71,7 @@ public class CH {
         shoulder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armExtender.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         shoulder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armExtender.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -209,51 +208,53 @@ public class CH {
     }//public void
     //Shoulder:2000 ArmEXT:430 wrist:0.56
 
-    public void dropPixel(){
+    public void dropPixel2(){
         shoulder.setTargetPosition(1700);
         shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         shoulder.setPower(0.5);
 
         armExtender.setTargetPosition(1290);
         armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armExtender.setPower(0.5);
-        opMode_ref.sleep( 2000);
-        wrist.setPosition(0.58);
+        armExtender.setPower(0.9);
+
         opMode_ref.sleep( 1500);
 
-        rightPincer.setPosition(0.51);
+        wrist.setPosition(0.56);
+        opMode_ref.sleep( 2000);
+
+        rightPincer.setPosition(CS.C_RIGHT_OPEN);
     }
 
     public void dropPixel1(){
-        shoulder.setTargetPosition(1900);
+        shoulder.setTargetPosition(1800);
         shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         shoulder.setPower(0.5);
 
         armExtender.setTargetPosition(770);
         armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armExtender.setPower(0.5);
+        armExtender.setPower(0.9);
+
         opMode_ref.sleep( 2000);
         wrist.setPosition(0.4);
-        opMode_ref.sleep( 1500);
+        opMode_ref.sleep( 1000);
 
-        rightPincer.setPosition(0.51);
+        rightPincer.setPosition(CS.C_RIGHT_OPEN);
     }
 
-    public void closeArm(){
+    public void closeArmAuto(){
+        armExtender.setTargetPosition(0);
+        armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armExtender.setPower(0.9);
+        opMode_ref.sleep(3000);
+        wrist.setPosition(CS.WRIST_UP);
+        opMode_ref.sleep(1000);
+
         shoulder.setTargetPosition(0);
         shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         shoulder.setPower(0.5);
 
-        armExtender.setTargetPosition(0);
-        armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armExtender.setPower(0.5);
-        opMode_ref.sleep( 2000);
-        wrist.setPosition(CS.WRIST_UP);
 
-
-        opMode_ref.sleep( 1500);
-
-        rightPincer.setPosition(0.51);
+        rightPincer.setPosition(CS.C_RIGHT_CLOSE);
     }
 
     public void moveAprilTag(VP vp){

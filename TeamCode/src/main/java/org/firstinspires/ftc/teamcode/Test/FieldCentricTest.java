@@ -117,8 +117,8 @@ public class FieldCentricTest extends LinearOpMode {
                     wristTargetPos = Constants.CS.WRIST_UP;
             }
             else {
-                if (wristTargetPos > Constants.CS.WRIST_SCORING)
-                    wristTargetPos = Constants.CS.WRIST_SCORING;
+                if (wristTargetPos > Constants.CS.WRIST_LINE_1)
+                    wristTargetPos = Constants.CS.WRIST_LINE_1;
             }
             if (ch.armExtender.getCurrentPosition() > 30){ // if arm extender is out dont put arm down all the way
                 if (shoulderTargetPos < Constants.CS.ARM_DOWN_EXT)

@@ -31,8 +31,16 @@ public class Constants { //Constants
         public static final int ARM_DOWN_EXT = 500;
         public static final int ARM_MAX = 2100;
 
+        public static final int EXT_MAX = 1300;
+        public static final int EXT_POS2 = 1200;
+        public static final int EXT_POS1 = 700;
+        public static final int EXT_MIN = 0;
+
+
+
         public static final double WRIST_DOWN = 0.1;
-        public static final double WRIST_UP = 0.6;
-        public static final double WRIST_SCORING = 0.5;
+        public static final double WRIST_UP = 0.45;
+        public static final double WRIST_LINE_1 = 0.5;
+        public static final double WRIST_LINE_2 = 0.56;
     }
 }
