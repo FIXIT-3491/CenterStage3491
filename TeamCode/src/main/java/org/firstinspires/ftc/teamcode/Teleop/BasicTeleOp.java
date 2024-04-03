@@ -51,7 +51,7 @@ public class BasicTeleOp extends LinearOpMode {
             else  //zero out winch
                 ch.winchMotor.setPower(0);
 
-            if (gamepad2.a) { //toggle drone launch and close
+            if (gamepad2.right_trigger > 0 ) { //toggle drone launch and close
                 if (launchToggle) {
                     ch.launcher.setPosition(0.7);
                     launchToggle = false;
@@ -69,7 +69,10 @@ public class BasicTeleOp extends LinearOpMode {
                 armExtTargetPos = 770 ;
             } else if (gamepad2.b) {
                 shoulderTargetPos = 0;
-                armExtTargetPos = 0 ;
+                armExtTargetPos = 0;
+            } else if (gamepad2.a) {
+                shoulderTargetPos = 1900;
+                armExtTargetPos = 320;
             } else {
                 if (gamepad2.left_stick_y < 0) // arm down
                     shoulderTargetPos = shoulderTargetPos + 15;
@@ -92,12 +95,12 @@ public class BasicTeleOp extends LinearOpMode {
             else if (gamepad2.right_stick_y > 0)
                 armExtTargetPos = armExtTargetPos - 10;
 
-            if (gamepad2.left_trigger > 0 || gamepad1.left_trigger > 0 ) //wrist control
+            if (gamepad2.left_trigger > 0 || gamepad1.right_trigger > 0 ) //wrist control
                 wristTargetPos = CS.WRIST_DOWN;
             else
                 wristTargetPos = wristTargetPos + 0.05;
 
-                if (gamepad2.left_trigger > 0 || gamepad1.left_trigger > 0) { //wrist control
+                if (gamepad2.left_trigger > 0 || gamepad1.right_trigger > 0) { //wrist control
                 } else if (ch.armExtender.getCurrentPosition() < 375) {
                     if (wristTargetPos > CS.WRIST_UP)
                         wristTargetPos = CS.WRIST_UP;
@@ -143,7 +146,7 @@ public class BasicTeleOp extends LinearOpMode {
                     leftBackPower /= max;
                     rightBackPower /= max;
                 }
-                if (gamepad1.right_trigger > 0) { // slow power
+                if (gamepad1.left_trigger > 0) { // slow power
                     ch.frontLDrive.setPower(0.3 * leftFrontPower);
                     ch.frontRDrive.setPower(0.3 * rightFrontPower);
                     ch.backLDrive.setPower(0.3 * leftBackPower);
@@ -160,7 +163,7 @@ public class BasicTeleOp extends LinearOpMode {
 
                 ch.armExtender.setTargetPosition(armExtTargetPos);
                 ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                ch.armExtender.setPower(0.6);
+                ch.armExtender.setPower(1);
 
                 ch.wrist.setPosition(wristTargetPos);
                 ch.leftPincer.setPosition(leftPincerPos);

@@ -22,13 +22,13 @@ public class Constants { //Constants
         public static final double WINCH_LOOSEN = -0.7;
 
         public static final double C_RIGHT_CLOSE = 0.45;
-        public static final double C_LEFT_CLOSE = 0.5;
+        public static final double C_LEFT_CLOSE = 0.6;
         public static final double C_RIGHT_OPEN = 0.85;
         public static final double C_LEFT_OPEN = 0.2;
 
         public static final int ARM_UP = 1300;
-        public static final int ARM_DOWN = 50;
-        public static final int ARM_DOWN_EXT = 500;
+        public static final int ARM_DOWN = 20;
+        public static final int ARM_DOWN_EXT = 300;
         public static final int ARM_MAX = 2100;
 
         public static final int EXT_MAX = 1300;
@@ -41,6 +41,6 @@ public class Constants { //Constants
         public static final double WRIST_DOWN = 0.1;
         public static final double WRIST_UP = 0.45;
         public static final double WRIST_LINE_1 = 0.5;
-        public static final double WRIST_LINE_2 = 0.56;
+        public static final double WRIST_LINE_2 = 0.5;
     }
 }
