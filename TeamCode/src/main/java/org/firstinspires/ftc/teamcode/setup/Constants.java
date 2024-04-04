@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.setup;
 //first and last letter naming scheme
 public class Constants { //Constants
     public static class CS { // Robot stuff

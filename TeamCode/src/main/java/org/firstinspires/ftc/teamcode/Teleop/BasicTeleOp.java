@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.setup.CH;
-import org.firstinspires.ftc.teamcode.Constants.CS;
+import org.firstinspires.ftc.teamcode.setup.Constants.CS;
 
 @TeleOp(name="Basic TeleOp", group="Linear OpMode")
 
@@ -62,17 +62,17 @@ public class BasicTeleOp extends LinearOpMode {
             }
 
             if (gamepad2.x) {
-                shoulderTargetPos = 1700;
-                armExtTargetPos = 1250;
+                shoulderTargetPos = 650;
+                armExtTargetPos = 300;
             } else if (gamepad2.y) {
-                shoulderTargetPos = 1800;
-                armExtTargetPos = 770 ;
+                shoulderTargetPos = 700;
+                armExtTargetPos = 1000 ;
             } else if (gamepad2.b) {
                 shoulderTargetPos = 0;
                 armExtTargetPos = 0;
             } else if (gamepad2.a) {
-                shoulderTargetPos = 1900;
-                armExtTargetPos = 320;
+                shoulderTargetPos = 355;
+                armExtTargetPos = 30;
             } else {
                 if (gamepad2.left_stick_y < 0) // arm down
                     shoulderTargetPos = shoulderTargetPos + 15;
@@ -101,17 +101,17 @@ public class BasicTeleOp extends LinearOpMode {
                 wristTargetPos = wristTargetPos + 0.05;
 
                 if (gamepad2.left_trigger > 0 || gamepad1.right_trigger > 0) { //wrist control
-                } else if (ch.armExtender.getCurrentPosition() < 375) {
+                } else if (ch.shoulder.getCurrentPosition() < 310) {
                     if (wristTargetPos > CS.WRIST_UP)
                         wristTargetPos = CS.WRIST_UP;
-                } else if (ch.armExtender.getCurrentPosition() < CS.EXT_POS2) {
-                    if (wristTargetPos > CS.WRIST_LINE_1)
-                        wristTargetPos = CS.WRIST_LINE_1;
+                } else if (ch.shoulder.getCurrentPosition() < 600) {
+                    if (wristTargetPos > 0.205)
+                        wristTargetPos = 0.205;
                 } else {
-                    if (wristTargetPos > CS.WRIST_LINE_2)
-                        wristTargetPos = CS.WRIST_LINE_2;
+                    if (wristTargetPos != 0.15)
+                        wristTargetPos = 0.15;
                 }
-
+// wrist 0.2049 armExt 30 shoulder 355
             if (ch.armExtender.getCurrentPosition() > 30){ // if arm extender is out dont put arm down all the way
                 if (shoulderTargetPos < CS.ARM_DOWN_EXT)
                     shoulderTargetPos = CS.ARM_DOWN_EXT;
@@ -129,6 +129,18 @@ public class BasicTeleOp extends LinearOpMode {
 
                 if (armExtTargetPos > CS.EXT_MAX ) //max extension
                     armExtTargetPos = CS.EXT_MAX;
+
+            ch.shoulder.setTargetPosition(shoulderTargetPos);
+            ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            ch.shoulder.setPower(0.6);
+
+            ch.armExtender.setTargetPosition(armExtTargetPos);
+            ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            ch.armExtender.setPower(1);
+
+            ch.wrist.setPosition(wristTargetPos);
+            ch.leftPincer.setPosition(leftPincerPos);
+            ch.rightPincer.setPosition(rightPincerPos);
 
                 double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
                 double lateral = gamepad1.left_stick_x;
@@ -157,17 +169,6 @@ public class BasicTeleOp extends LinearOpMode {
                     ch.backLDrive.setPower(leftBackPower);
                     ch.backRDrive.setPower(rightBackPower);
                 }
-                ch.shoulder.setTargetPosition(shoulderTargetPos);
-                ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                ch.shoulder.setPower(0.6);
-
-                ch.armExtender.setTargetPosition(armExtTargetPos);
-                ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                ch.armExtender.setPower(1);
-
-                ch.wrist.setPosition(wristTargetPos);
-                ch.leftPincer.setPosition(leftPincerPos);
-                ch.rightPincer.setPosition(rightPincerPos);
 
                 telemetry.addData("Front left/Right", "%4.2f, %4.2f", ch.frontLDrive.getCurrent(CurrentUnit.AMPS), ch.frontRDrive.getCurrent(CurrentUnit.AMPS));
                 telemetry.addData("Back left/Right", "%4.2f, %4.2f", ch.backLDrive.getCurrent(CurrentUnit.AMPS), ch.backRDrive.getCurrent(CurrentUnit.AMPS));

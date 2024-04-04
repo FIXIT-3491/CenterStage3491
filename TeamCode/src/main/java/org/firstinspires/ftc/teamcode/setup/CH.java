@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.setup;
 
 
-import static org.firstinspires.ftc.teamcode.Constants.CS;
+import static org.firstinspires.ftc.teamcode.setup.Constants.CS;
+
+import org.firstinspires.ftc.teamcode.setup.PIDController;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -37,6 +39,9 @@ public class CH {
     public Servo launcher;
     public IMU imu;
     public boolean Front = true;
+
+    PIDController pidBackLDrive = new PIDController(0.1, 0.01, 0.1);
+    PIDController pidBackRDrive = new PIDController(0.1, 0.01, 0.1);
 
     private LinearOpMode opMode_ref = null;
 
@@ -170,43 +175,32 @@ public class CH {
         shoulder.setPower(0);
     }
     public void EncoderMove(int targetPosition) {
+        // Initialize the PID controller
+        PIDController pidBackLDrive = new PIDController(0.1, 0.01, 0.1);
+        PIDController pidBackRDrive = new PIDController(0.1, 0.01, 0.1);
 
-        double  power   = 0.1;
-        boolean rampUp  = true;
-
+        // Reset the encoders
         driveEncoderReset();
 
-        while (backRDrive.getCurrentPosition() < targetPosition && opMode_ref.opModeIsActive()){
+        // In your loop
+        while (opMode_ref.opModeIsActive() && Math.abs(backRDrive.getCurrentPosition() - targetPosition) > 10) {
+            // Calculate the motor powers
+            double backLDrivePower = pidBackLDrive.calculate(targetPosition, backLDrive.getCurrentPosition());
+            double backRDrivePower = pidBackRDrive.calculate(targetPosition, backRDrive.getCurrentPosition());
 
-            if (backRDrive.getCurrentPosition() > targetPosition*0.5 && rampUp) {
-                rampUp = !rampUp;   // Switch ramp direction
-            }
+            // Set the motor powers
+            backLDrive.setPower(backLDrivePower);
+            backRDrive.setPower(backRDrivePower);
 
-            if (rampUp) {
-                // Keep stepping up until we hit the max value.
-                power += CS.E_INCREMENT;
-                if (power >= CS.E_MAX_POWER) {
-                    power = CS.E_MAX_POWER;
-                }
-            }
-            else {
-                // Keep stepping down until we hit the min value.
-                power -= CS.E_INCREMENT;
-                if (power <= CS.E_MIN_POWER) {
-                    power = CS.E_MIN_POWER;
-                    // rampUp = !rampUp;  // Switch ramp direction
-                }
-            }
-
-            moveRobot(power,0,0);
-
-            opMode_ref.sleep(CS.E_CYCLE_MS);
             opMode_ref.telemetry.addData("encoder poz", backRDrive.getCurrentPosition());
             opMode_ref.telemetry.update();
-        } // while
-        moveRobot(0,0,0);
-    }//public void
-    //Shoulder:2000 ArmEXT:430 wrist:0.56
+        }
+
+        // Stop the motors
+        backLDrive.setPower(0);
+        backRDrive.setPower(0);
+    }
+
 
     public void dropPixel2(){
         shoulder.setTargetPosition(1700);
