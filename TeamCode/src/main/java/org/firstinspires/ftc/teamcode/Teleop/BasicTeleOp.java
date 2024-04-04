@@ -71,8 +71,8 @@ public class BasicTeleOp extends LinearOpMode {
                 shoulderTargetPos = 0;
                 armExtTargetPos = 0;
             } else if (gamepad2.a) {
-                shoulderTargetPos = 355;
-                armExtTargetPos = 30;
+                shoulderTargetPos = 360;
+                armExtTargetPos = 10;
             } else {
                 if (gamepad2.left_stick_y < 0) // arm down
                     shoulderTargetPos = shoulderTargetPos + 15;
