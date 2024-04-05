@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.setup;
 
 import static org.firstinspires.ftc.teamcode.setup.Constants.CS;
 
-import org.firstinspires.ftc.teamcode.setup.PIDController;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -148,7 +146,7 @@ public class CH {
 
             orientation = imu.getRobotYawPitchRollAngles();
             headingError    = heading - orientation.getYaw(AngleUnit.DEGREES);
-            turn   = Range.clip(headingError * CS.A_TURN_GAIN, -CS.A_MAX_AUTO_TURN, CS.A_MAX_AUTO_TURN) ;
+            turn   = Range.clip(headingError * CS.IMU_TURN_GAIN, -CS.IMU_MAX_AUTO_TURN, CS.IMU_MAX_AUTO_TURN);
             moveRobot(0, 0, turn);
             opMode_ref.sleep(10);
 
@@ -173,14 +171,14 @@ public class CH {
     }
     public void EncoderMove(int targetPosition) {
 
-        double  power   = 0.1;
+        double  power   = 0.6;
         boolean rampUp  = true;
 
         driveEncoderReset();
 
-        while (backRDrive.getCurrentPosition() < targetPosition && opMode_ref.opModeIsActive()){
+        while ((backRDrive.getCurrentPosition() + backLDrive.getCurrentPosition()) / 2 < Math.abs(targetPosition) && opMode_ref.opModeIsActive()){
 
-            if (backRDrive.getCurrentPosition() > targetPosition*0.5 && rampUp) {
+            if (Math.abs((backRDrive.getCurrentPosition() + backLDrive.getCurrentPosition()) / 2) > Math.abs(targetPosition)*0.5 && rampUp) {
                 rampUp = !rampUp;   // Switch ramp direction
             }
 
@@ -200,10 +198,15 @@ public class CH {
                 }
             }
 
+            if (targetPosition < 0) {
+                power = -power;
+            }
+
             moveRobot(power,0,0);
 
             opMode_ref.sleep(CS.E_CYCLE_MS);
-            opMode_ref.telemetry.addData("encoder poz", backRDrive.getCurrentPosition());
+            opMode_ref.telemetry.addData("encoder poz R", backRDrive.getCurrentPosition());
+            opMode_ref.telemetry.addData("encoder poz L", backLDrive.getCurrentPosition());
             opMode_ref.telemetry.update();
         } // while
         moveRobot(0,0,0);

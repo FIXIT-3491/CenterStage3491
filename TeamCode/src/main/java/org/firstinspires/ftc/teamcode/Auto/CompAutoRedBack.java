@@ -4,8 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Constants.CS;
+import org.firstinspires.ftc.teamcode.setup.Constants.CS;
 import org.firstinspires.ftc.teamcode.setup.CH;
 import org.firstinspires.ftc.teamcode.setup.VP;
 
@@ -28,7 +27,7 @@ public class CompAutoRedBack extends LinearOpMode {
         vp.initCompVision();
 
         ch.rightPincer.setPosition(0.5);
-        ch.wrist.setPosition(CS.WRIST_UP);
+        ch.wrist.setPosition(CS.WRIST_DOWN);
 
         telemetry.addData("Status", "initialized ");
         telemetry.update();
@@ -42,7 +41,9 @@ public class CompAutoRedBack extends LinearOpMode {
             TelemetryStep("TensorDetect");
             Location = vp.TensorDetect();
             TelemetryStep("Move forward");
+            ch.wrist.setPosition(CS.WRIST_UP);
             ch.EncoderMove(750);
+
 
             if (Location == "left") {
                 vp.DESIRED_TAG_ID = 4;
@@ -54,14 +55,17 @@ public class CompAutoRedBack extends LinearOpMode {
             } else if (Location == "right") {
                 vp.DESIRED_TAG_ID = 6;
                 TelemetryStep("Turn to right");
-                ch.imuTurn(-33);
+                ch.imuTurn(-32);
                 TelemetryStep("Move to right");
+                sleep(1000);
                 ch.EncoderMove(CS.E_SPIKE_LEFT_RIGHT);
             } else {
                 vp.DESIRED_TAG_ID = 5;
                 TelemetryStep("Move to Center");
                 ch.EncoderMove(CS.E_SPIKE_LEFT_CENTER);
             }
+
+            sleep(1000);
 
             TelemetryStep("Back from spike mark");
             ch.moveRobot(-0.4, 0, 0);

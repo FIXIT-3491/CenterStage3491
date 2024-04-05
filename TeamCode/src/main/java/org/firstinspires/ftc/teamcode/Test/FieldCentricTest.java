@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.setup.Constants;
 import org.firstinspires.ftc.teamcode.setup.CH;
 
 @TeleOp
@@ -20,14 +20,21 @@ public class FieldCentricTest extends LinearOpMode {
     double rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
     double leftPincerPos = Constants.CS.C_LEFT_CLOSE;
 
-
+    public boolean dropPixelCalled = false;
     @Override
     public void runOpMode() {
         ch = new CH(hardwareMap, this);
-        ch.wrist.setPosition(0.35);
+        ch.wrist.setPosition(Constants.CS.WRIST_UP);
         ch.rightPincer.setPosition(Constants.CS.C_RIGHT_CLOSE);
         ch.leftPincer.setPosition(Constants.CS.C_LEFT_CLOSE);
+
         ch.armEncoderReset();
+
+        ch.backLDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        ch.backRDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        boolean launchToggle = true;
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -35,92 +42,78 @@ public class FieldCentricTest extends LinearOpMode {
 
         while (opModeIsActive()) {
             double max;
-            if (gamepad2.dpad_up){ // tighten
+
+            if (gamepad2.dpad_up)  // tighten
                 ch.winchMotor.setPower(Constants.CS.WINCH_TIGHTEN);
-            }
-            else if (gamepad2.dpad_down) { // loosen winch
+            else if (gamepad2.dpad_down)  // loosen winch
                 ch.winchMotor.setPower(Constants.CS.WINCH_LOOSEN);
-            }
-            else if (gamepad2.dpad_left || gamepad2.dpad_right){ // hold winch
+            else if (gamepad2.dpad_left || gamepad2.dpad_right)  // hold winch
                 ch.winchMotor.setPower(0.2);
-            }
-            else { //zero out winch
+            else  //zero out winch
                 ch.winchMotor.setPower(0);
+
+            if (gamepad2.right_trigger > 0 ) { //toggle drone launch and close
+                if (launchToggle) {
+                    ch.launcher.setPosition(0.7);
+                    launchToggle = false;
+                } else {
+                    ch.launcher.setPosition(0.19);
+                    launchToggle = true;
+                }
             }
 
-            if (gamepad2.a){ // launch drone
-                ch.launcher.setPosition(0.7);
-            }
-            if (gamepad2.b){
-                ch.launcher.setPosition(0.19);
+            if (gamepad2.x) {
+                shoulderTargetPos = 650;
+                armExtTargetPos = 300;
+            } else if (gamepad2.y) {
+                shoulderTargetPos = 700;
+                armExtTargetPos = 1000 ;
+            } else if (gamepad2.b) {
+                shoulderTargetPos = 0;
+                armExtTargetPos = 0;
+            } else if (gamepad2.a) {
+                shoulderTargetPos = 480;
+                armExtTargetPos = 10;
+            } else {
+                if (gamepad2.left_stick_y < 0) // arm down
+                    shoulderTargetPos = shoulderTargetPos + 15;
+                else if (gamepad2.left_stick_y > 0) // arm up
+                    shoulderTargetPos = shoulderTargetPos - 15;
             }
 
-            if (gamepad2.left_bumper){ // open left pincer
+            if (gamepad2.left_bumper) // open left pincer
                 leftPincerPos = Constants.CS.C_LEFT_OPEN;
-            }
-            else { // close
+            else // close
                 leftPincerPos = Constants.CS.C_LEFT_CLOSE;
-            }
 
-            if (gamepad2.right_bumper){ // open right pincer
+            if (gamepad2.right_bumper) // open right pincer
                 rightPincerPos = Constants.CS.C_RIGHT_OPEN;
-            }
-            else { // close
+            else // close
                 rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
-            }
 
-            if (gamepad2.left_trigger > 0) {
-                wristTargetPos = wristTargetPos - 0.01;
-            }
-            else if (gamepad2.y){
-                wristTargetPos = 0.32;
-            }
-            else {
-                wristTargetPos = wristTargetPos + 0.01;
-            }
-
-            if (gamepad2.y){
-                shoulderTargetPos = Constants.CS.ARM_UP;
-            }
-            if (gamepad2.left_stick_y < 0 ){ // arm down
-                shoulderTargetPos = shoulderTargetPos +15;
-            }
-            else if (gamepad2.left_stick_y > 0 ){ // arm up
-                shoulderTargetPos = shoulderTargetPos -15;
-            }
-
-            if (gamepad2.right_stick_y < 0){
+            if (gamepad2.right_stick_y < 0) //extender control
                 armExtTargetPos = armExtTargetPos + 10;
-            }
-            if (gamepad2.right_stick_y >   0){
+            else if (gamepad2.right_stick_y > 0)
                 armExtTargetPos = armExtTargetPos - 10;
-            }
-            ch.shoulder.setTargetPosition(shoulderTargetPos);
-            ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ch.shoulder.setPower(0.6);
 
-
-            ch.armExtender.setTargetPosition(armExtTargetPos);
-            ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ch.armExtender.setPower(0.6);
-
-            ch.wrist.setPosition(wristTargetPos);
-            ch.leftPincer.setPosition(leftPincerPos);
-            ch.rightPincer.setPosition(rightPincerPos);
-
-
-            if (wristTargetPos < Constants.CS.WRIST_DOWN)
+            if (gamepad2.left_trigger > 0 ) //wrist control
                 wristTargetPos = Constants.CS.WRIST_DOWN;
+            else
+                wristTargetPos = wristTargetPos + 0.05;
 
-            if (ch.armExtender.getCurrentPosition() < 375) {
+            if (gamepad2.left_trigger > 0 ) { //wrist control
+            } else if (ch.shoulder.getCurrentPosition() < 310) {
                 if (wristTargetPos > Constants.CS.WRIST_UP)
                     wristTargetPos = Constants.CS.WRIST_UP;
+            } else if (ch.shoulder.getCurrentPosition() < 600) {
+                if (wristTargetPos > 0.205)
+                    wristTargetPos = 0.205;
+            } else {
+                if (wristTargetPos != 0.15)
+                    wristTargetPos = 0.15;
             }
-            else {
-                if (wristTargetPos > Constants.CS.WRIST_LINE_1)
-                    wristTargetPos = Constants.CS.WRIST_LINE_1;
-            }
-            if (ch.armExtender.getCurrentPosition() > 30){ // if arm extender is out dont put arm down all the way
+// wrist 0.2049 armExt 30 shoulder 355
+            if (ch.armExtender.getCurrentPosition() > 40){ // if arm extender is out dont put arm down all the way
                 if (shoulderTargetPos < Constants.CS.ARM_DOWN_EXT)
                     shoulderTargetPos = Constants.CS.ARM_DOWN_EXT;
             }
@@ -128,14 +121,27 @@ public class FieldCentricTest extends LinearOpMode {
                 if (shoulderTargetPos < Constants.CS.ARM_DOWN)
                     shoulderTargetPos = Constants.CS.ARM_DOWN;
             }
-            if (shoulderTargetPos > Constants.CS.ARM_MAX)
-                shoulderTargetPos = Constants.CS.ARM_MAX;
 
-            if (armExtTargetPos < 10)
-                armExtTargetPos = 10;
+            if (shoulderTargetPos > Constants.CS.ARM_MAX ) //max shoulder
+                shoulderTargetPos = Constants.CS.ARM_MAX ;
 
-            if (armExtTargetPos > 1000)
-                armExtTargetPos = 1000;
+            if (armExtTargetPos < Constants.CS.EXT_MIN ) //min extension
+                armExtTargetPos = Constants.CS.EXT_MIN;
+
+            if (armExtTargetPos > Constants.CS.EXT_MAX ) //max extension
+                armExtTargetPos = Constants.CS.EXT_MAX;
+
+            ch.shoulder.setTargetPosition(shoulderTargetPos);
+            ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            ch.shoulder.setPower(0.6);
+
+            ch.armExtender.setTargetPosition(armExtTargetPos);
+            ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            ch.armExtender.setPower(1);
+
+            ch.wrist.setPosition(wristTargetPos);
+            ch.leftPincer.setPosition(leftPincerPos);
+            ch.rightPincer.setPosition(rightPincerPos);
 
             if (gamepad1.back) {
                 ch.imu.resetYaw();

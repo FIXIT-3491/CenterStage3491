@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.setup;
 //first and last letter naming scheme
 public class Constants { //Constants
     public static class CS { // Robot stuff
@@ -6,6 +6,10 @@ public class Constants { //Constants
         public static final double A_STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
         public static final double A_TURN_GAIN =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
         public static final double A_DESIRED_DISTANCE = 16.0; //  this is how close the camera should get to the target (inches)
+
+        public static final double IMU_TURN_GAIN =  0.04  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+        public static final double IMU_MAX_AUTO_TURN = 0.4;   //  Clip the turn speed to this max value (adjust for your robot)
+
 
         public static final double A_MAX_AUTO_SPEED = 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
         public static final double A_MAX_AUTO_STRAFE = 0.2;   //  Clip the approach speed to this max value (adjust for your robot)
@@ -28,7 +32,7 @@ public class Constants { //Constants
 
         public static final int ARM_UP = 1300;
         public static final int ARM_DOWN = 20;
-        public static final int ARM_DOWN_EXT = 300;
+        public static final int ARM_DOWN_EXT = 500;
         public static final int ARM_MAX = 2100;
 
         public static final int EXT_MAX = 1300;
