@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -40,9 +39,6 @@ public class CH {
     public Servo launcher;
     public IMU imu;
     public boolean Front = true;
-
-    PIDController pidBackLDrive = new PIDController();
-    PIDController pidBackRDrive = new PIDController();
 
     private LinearOpMode opMode_ref = null;
 
@@ -176,93 +172,43 @@ public class CH {
         shoulder.setPower(0);
     }
     public void EncoderMove(int targetPosition) {
-        // Initialize the PID controller
-        // Reset the encoders
+
+        double  power   = 0.1;
+        boolean rampUp  = true;
+
         driveEncoderReset();
 
-        // In your loop
-        while (opMode_ref.opModeIsActive() && Math.abs(backRDrive.getCurrentPosition() - targetPosition) > 10) {
-            // Calculate the motor powers
-            double backLDrivePower = pidBackLDrive.calculate(targetPosition, backLDrive.getCurrentPosition());
-            double backRDrivePower = pidBackRDrive.calculate(targetPosition, backRDrive.getCurrentPosition());
+        while (backRDrive.getCurrentPosition() < targetPosition && opMode_ref.opModeIsActive()){
 
-            // Set the motor powers
-            backLDrive.setPower(backLDrivePower);
-            backRDrive.setPower(backRDrivePower);
+            if (backRDrive.getCurrentPosition() > targetPosition*0.5 && rampUp) {
+                rampUp = !rampUp;   // Switch ramp direction
+            }
 
+            if (rampUp) {
+                // Keep stepping up until we hit the max value.
+                power += CS.E_INCREMENT;
+                if (power >= CS.E_MAX_POWER) {
+                    power = CS.E_MAX_POWER;
+                }
+            }
+            else {
+                // Keep stepping down until we hit the min value.
+                power -= CS.E_INCREMENT;
+                if (power <= CS.E_MIN_POWER) {
+                    power = CS.E_MIN_POWER;
+                    // rampUp = !rampUp;  // Switch ramp direction
+                }
+            }
+
+            moveRobot(power,0,0);
+
+            opMode_ref.sleep(CS.E_CYCLE_MS);
             opMode_ref.telemetry.addData("encoder poz", backRDrive.getCurrentPosition());
             opMode_ref.telemetry.update();
-        }
-
-        // Stop the motors
-        backLDrive.setPower(0);
-        backRDrive.setPower(0);
-    }
-    public void EncoderMove2(int targetPositionX, int targetPositionY) {
-        // Initialize the PID constants
-        double Kp = 0.1;
-        double Ki = 0;
-        double Kd = 0;
-
-        // Initialize integral sums and last errors
-        double integralSumX = 0;
-        double integralSumY = 0;
-        double lastErrorX = 0;
-        double lastErrorY = 0;
-
-        // Initialize elapsed timer
-        ElapsedTime timer = new ElapsedTime();
-
-        // Reset the encoders
-        driveEncoderReset();
-
-        // In your loop
-        while (opMode_ref.opModeIsActive() &&
-                (Math.abs(backLDrive.getCurrentPosition() - targetPositionX) > 10 ||
-                        Math.abs(backRDrive.getCurrentPosition() - targetPositionY) > 10)) {
-
-            // Obtain the current encoder positions
-            double currentX = backLDrive.getCurrentPosition();
-            double currentY = backRDrive.getCurrentPosition();
-
-            // Calculate the errors
-            double errorX = targetPositionX - currentX;
-            double errorY = targetPositionY - currentY;
-
-            // Calculate the derivatives (rates of change of the errors)
-            double derivativeX = (errorX - lastErrorX) / timer.seconds();
-            double derivativeY = (errorY - lastErrorY) / timer.seconds();
-
-            // Calculate the integrals (sums of all errors over time)
-            integralSumX += errorX * timer.seconds();
-            integralSumY += errorY * timer.seconds();
-
-            // Calculate the outputs
-            double outputX = Kp * errorX + Ki * integralSumX + Kd * derivativeX;
-            double outputY = Kp * errorY + Ki * integralSumY + Kd * derivativeY;
-
-            // Set the motor powers
-            backLDrive.setPower(outputX);
-            backRDrive.setPower(outputY);
-
-            opMode_ref.telemetry.addData("encoder poz X", backLDrive.getCurrentPosition());
-            opMode_ref.telemetry.addData("encoder poz Y", backRDrive.getCurrentPosition());
-            opMode_ref.telemetry.update();
-
-            // Update last errors
-            lastErrorX = errorX;
-            lastErrorY = errorY;
-
-            // Reset the timer for the next loop
-            timer.reset();
-        }
-
-        // Stop the motors
-        backLDrive.setPower(0);
-        backRDrive.setPower(0);
-    }
-
-
+        } // while
+        moveRobot(0,0,0);
+    }//public void
+    //Shoulder:2000 ArmEXT:430 wrist:0.56
 
     public void dropPixel2(){
         shoulder.setTargetPosition(1700);
