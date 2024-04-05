@@ -20,8 +20,7 @@ public class motorTest extends LinearOpMode {
 
         while (opModeIsActive()){
 
-            ch.EncoderMove2(200, 2, 2);
-
+            ch.EncoderMove2(200,0);
             break;
         }
         sleep(10000);

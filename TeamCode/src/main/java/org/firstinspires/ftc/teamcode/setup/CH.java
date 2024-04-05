@@ -198,7 +198,7 @@ public class CH {
         backLDrive.setPower(0);
         backRDrive.setPower(0);
     }
-    public void EncoderMove2(int targetPositionX, int targetPositionY, int targetPositionZ) {
+    public void EncoderMove2(int targetPositionX, int targetPositionY) {
         // Initialize the PID constants
         double Kp = 0.1;
         double Ki = 0;
@@ -207,10 +207,8 @@ public class CH {
         // Initialize integral sums and last errors
         double integralSumX = 0;
         double integralSumY = 0;
-        double integralSumZ = 0;
         double lastErrorX = 0;
         double lastErrorY = 0;
-        double lastErrorZ = 0;
 
         // Initialize elapsed timer
         ElapsedTime timer = new ElapsedTime();
@@ -221,48 +219,39 @@ public class CH {
         // In your loop
         while (opMode_ref.opModeIsActive() &&
                 (Math.abs(backLDrive.getCurrentPosition() - targetPositionX) > 10 ||
-                        Math.abs(backRDrive.getCurrentPosition() - targetPositionY) > 10 ||
-                        Math.abs(backRDrive.getCurrentPosition() - targetPositionZ) > 10)) {
+                        Math.abs(backRDrive.getCurrentPosition() - targetPositionY) > 10)) {
 
             // Obtain the current encoder positions
             double currentX = backLDrive.getCurrentPosition();
             double currentY = backRDrive.getCurrentPosition();
-            double currentZ = backRDrive.getCurrentPosition();
 
             // Calculate the errors
             double errorX = targetPositionX - currentX;
             double errorY = targetPositionY - currentY;
-            double errorZ = targetPositionZ - currentZ;
 
             // Calculate the derivatives (rates of change of the errors)
             double derivativeX = (errorX - lastErrorX) / timer.seconds();
             double derivativeY = (errorY - lastErrorY) / timer.seconds();
-            double derivativeZ = (errorZ - lastErrorZ) / timer.seconds();
 
             // Calculate the integrals (sums of all errors over time)
             integralSumX += errorX * timer.seconds();
             integralSumY += errorY * timer.seconds();
-            integralSumZ += errorZ * timer.seconds();
 
             // Calculate the outputs
             double outputX = Kp * errorX + Ki * integralSumX + Kd * derivativeX;
             double outputY = Kp * errorY + Ki * integralSumY + Kd * derivativeY;
-            double outputZ = Kp * errorZ + Ki * integralSumZ + Kd * derivativeZ;
 
             // Set the motor powers
             backLDrive.setPower(outputX);
             backRDrive.setPower(outputY);
-            backRDrive.setPower(outputZ);
 
             opMode_ref.telemetry.addData("encoder poz X", backLDrive.getCurrentPosition());
             opMode_ref.telemetry.addData("encoder poz Y", backRDrive.getCurrentPosition());
-            opMode_ref.telemetry.addData("encoder poz Z", backRDrive.getCurrentPosition());
             opMode_ref.telemetry.update();
 
             // Update last errors
             lastErrorX = errorX;
             lastErrorY = errorY;
-            lastErrorZ = errorZ;
 
             // Reset the timer for the next loop
             timer.reset();
@@ -272,6 +261,7 @@ public class CH {
         backLDrive.setPower(0);
         backRDrive.setPower(0);
     }
+
 
 
     public void dropPixel2(){
