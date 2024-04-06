@@ -89,6 +89,9 @@ public class CH {
     public void driveEncoderReset(){
         backRDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
     public void armEncoderReset(){
         shoulder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -176,6 +179,9 @@ public class CH {
 
         driveEncoderReset();
 
+//        if (backRDrive.getCurrentPosition() > targetPosition*0.5 && rampUp) {
+//            rampUp = !rampUp;   // Switch ramp direction
+//        }
         while ((backRDrive.getCurrentPosition() + backLDrive.getCurrentPosition()) / 2 < Math.abs(targetPosition) && opMode_ref.opModeIsActive()){
 
             if (Math.abs((backRDrive.getCurrentPosition() + backLDrive.getCurrentPosition()) / 2) > Math.abs(targetPosition)*0.5 && rampUp) {
@@ -295,7 +301,7 @@ public class CH {
 
                 double rangeError = (desiredTag.ftcPose.range - CS.A_DESIRED_DISTANCE);
                 double headingError = desiredTag.ftcPose.bearing - 18;
-                double yawError = -desiredTag.ftcPose.yaw;
+                double yawError = desiredTag.ftcPose.yaw;
 
                 if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {
                     drive = 0;
@@ -310,7 +316,7 @@ public class CH {
                 }
 
                 // Apply desired axes motions to the drivetrain.
-                moveRobot(-drive, strafe, turn);
+                moveRobot(drive, strafe, turn);
                 opMode_ref.sleep(10);
             }
             else {

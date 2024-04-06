@@ -45,14 +45,14 @@ public class CompAutoRedFront extends LinearOpMode {
                 TelemetryStep("Turn to left");
                 ch.imuTurn(52);
                 TelemetryStep("Move to left");
-                ch.EncoderMove(CS.E_SPIKE_LEFT_RIGHT);
+                ch.EncoderMove(CS.E_SPIKE_RIGHT);
 
             } else if (Location == "right") {
                 vp.DESIRED_TAG_ID = 6;
                 TelemetryStep("Turn to right");
                 ch.imuTurn(-33);
                 TelemetryStep("Move to right");
-                ch.EncoderMove(CS.E_SPIKE_LEFT_RIGHT);
+                ch.EncoderMove(CS.E_SPIKE_RIGHT);
             } else {
                 vp.DESIRED_TAG_ID = 5;
                 TelemetryStep("Move to Center");

@@ -41,10 +41,10 @@ public class CompAutoBlueFront extends LinearOpMode {
 
             if (Location == "left") {
                 ch.imuTurn(57);
-                ch.EncoderMove(CS.E_SPIKE_LEFT_RIGHT);
+                ch.EncoderMove(CS.E_SPIKE_RIGHT);
             } else if (Location == "right") {
                 ch.imuTurn(-50);
-                ch.EncoderMove(CS.E_SPIKE_LEFT_RIGHT);
+                ch.EncoderMove(CS.E_SPIKE_RIGHT);
             } else {
                 ch.EncoderMove(CS.E_SPIKE_LEFT_CENTER);
             }

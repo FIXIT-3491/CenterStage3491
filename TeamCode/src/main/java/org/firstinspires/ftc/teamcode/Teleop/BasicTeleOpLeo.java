@@ -164,10 +164,10 @@ public class BasicTeleOpLeo extends LinearOpMode {
                     ch.backLDrive.setPower(0.3 * leftBackPower);
                     ch.backRDrive.setPower(0.3 * rightBackPower);
                 } else { // full power
-                    ch.frontLDrive.setPower(leftFrontPower);
-                    ch.frontRDrive.setPower(rightFrontPower);
-                    ch.backLDrive.setPower(leftBackPower);
-                    ch.backRDrive.setPower(rightBackPower);
+                    ch.frontLDrive.setPower(0.8 *leftFrontPower);
+                    ch.frontRDrive.setPower(0.8 *rightFrontPower);
+                    ch.backLDrive.setPower(0.8 *leftBackPower);
+                    ch.backRDrive.setPower(0.8 *rightBackPower);
                 }
 
                 telemetry.addData("Front left/Right", "%4.2f, %4.2f", ch.frontLDrive.getCurrent(CurrentUnit.AMPS), ch.frontRDrive.getCurrent(CurrentUnit.AMPS));

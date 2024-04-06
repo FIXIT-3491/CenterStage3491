@@ -19,8 +19,9 @@ public class Constants { //Constants
         public static final int    E_CYCLE_MS = 25;     // period of each cycle
         public static final double E_MAX_POWER = 0.5;     // Maximum FWD power applied to motor
         public static final double E_MIN_POWER = 0.1;     // Maximum REV power applied to motor
-        public static final int    E_SPIKE_LEFT_RIGHT = 500;
-        public static final int    E_SPIKE_LEFT_CENTER = 675;
+        public static final int    E_SPIKE_RIGHT = 375;
+        public static final int    E_SPIKE_LEFT = 400;
+        public static final int    E_SPIKE_LEFT_CENTER = 625;
 
         public static final double WINCH_TIGHTEN = 0.7; //winch
         public static final double WINCH_LOOSEN = -0.7;

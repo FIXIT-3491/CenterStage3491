@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Test;
+package org.firstinspires.ftc.teamcode.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -39,7 +39,6 @@ public class FieldCentricTest extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-
         while (opModeIsActive()) {
             double max;
 
@@ -72,7 +71,7 @@ public class FieldCentricTest extends LinearOpMode {
                 shoulderTargetPos = 0;
                 armExtTargetPos = 0;
             } else if (gamepad2.a) {
-                shoulderTargetPos = 480;
+                shoulderTargetPos = 500;
                 armExtTargetPos = 10;
             } else {
                 if (gamepad2.left_stick_y < 0) // arm down
@@ -81,22 +80,22 @@ public class FieldCentricTest extends LinearOpMode {
                     shoulderTargetPos = shoulderTargetPos - 15;
             }
 
-            if (gamepad2.left_bumper) // open left pincer
+            if (gamepad2.left_bumper || gamepad1.left_bumper) // open left pincer
                 leftPincerPos = Constants.CS.C_LEFT_OPEN;
             else // close
                 leftPincerPos = Constants.CS.C_LEFT_CLOSE;
 
-            if (gamepad2.right_bumper) // open right pincer
+            if (gamepad2.right_bumper || gamepad1.right_bumper) // open right pincer
                 rightPincerPos = Constants.CS.C_RIGHT_OPEN;
             else // close
                 rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
 
             if (gamepad2.right_stick_y < 0) //extender control
-                armExtTargetPos = armExtTargetPos + 10;
+                armExtTargetPos = armExtTargetPos + 15;
             else if (gamepad2.right_stick_y > 0)
-                armExtTargetPos = armExtTargetPos - 10;
+                armExtTargetPos = armExtTargetPos - 15;
 
-            if (gamepad2.left_trigger > 0 ) //wrist control
+            if (gamepad2.left_trigger > 0  || gamepad2.right_trigger > 0 ) //wrist control
                 wristTargetPos = Constants.CS.WRIST_DOWN;
             else
                 wristTargetPos = wristTargetPos + 0.05;
@@ -112,7 +111,7 @@ public class FieldCentricTest extends LinearOpMode {
                 if (wristTargetPos != 0.15)
                     wristTargetPos = 0.15;
             }
-// wrist 0.2049 armExt 30 shoulder 355
+
             if (ch.armExtender.getCurrentPosition() > 40){ // if arm extender is out dont put arm down all the way
                 if (shoulderTargetPos < Constants.CS.ARM_DOWN_EXT)
                     shoulderTargetPos = Constants.CS.ARM_DOWN_EXT;
@@ -164,7 +163,7 @@ public class FieldCentricTest extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
-            if (gamepad1.left_bumper) {
+            if (gamepad1.left_trigger > 0) {
                 ch.frontLDrive.setPower(0.3 * frontLeftPower);
                 ch.frontRDrive.setPower(0.3 * frontRightPower);
                 ch.backLDrive.setPower(0.3 * backLeftPower);
