@@ -237,17 +237,16 @@ public class CH {
     }
 
     public void dropPixel1(){
-        shoulder.setTargetPosition(1800);
+        shoulder.setTargetPosition(360);
         shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        shoulder.setPower(0.5);
+        shoulder.setPower(0.6);
 
-        armExtender.setTargetPosition(770);
+        armExtender.setTargetPosition(10);
         armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armExtender.setPower(0.9);
+        armExtender.setPower(1);
 
+        wrist.setPosition(CS.WRIST_UP);
         opMode_ref.sleep( 2000);
-        wrist.setPosition(0.4);
-        opMode_ref.sleep( 1000);
 
         rightPincer.setPosition(CS.C_RIGHT_OPEN);
     }
@@ -300,7 +299,7 @@ public class CH {
             if (targetFound) {
 
                 double rangeError = (desiredTag.ftcPose.range - CS.A_DESIRED_DISTANCE);
-                double headingError = desiredTag.ftcPose.bearing - 18;
+                double headingError = desiredTag.ftcPose.bearing+10;
                 double yawError = desiredTag.ftcPose.yaw;
 
                 if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {

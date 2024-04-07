@@ -60,8 +60,10 @@ public class BasicTeleOp extends LinearOpMode {
                     launchToggle = true;
                 }
             }
-
-            if (gamepad2.x) {
+            if (gamepad2.a) {
+                shoulderTargetPos = 360;
+                armExtTargetPos = 10;
+            } else if (gamepad2.x) {
                 shoulderTargetPos = 650;
                 armExtTargetPos = 300;
             } else if (gamepad2.y) {
@@ -70,10 +72,7 @@ public class BasicTeleOp extends LinearOpMode {
             } else if (gamepad2.b) {
                 shoulderTargetPos = 0;
                 armExtTargetPos = 0;
-            } else if (gamepad2.a) {
-                shoulderTargetPos = 360;
-                armExtTargetPos = 10;
-            } else {
+            }  else {
                 if (gamepad2.left_stick_y < 0) // arm down
                     shoulderTargetPos = shoulderTargetPos + 15;
                 else if (gamepad2.left_stick_y > 0) // arm up

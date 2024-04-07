@@ -4,7 +4,7 @@ public class Constants { //Constants
     public static class CS { // Robot stuff
         public static final double A_SPEED_GAIN =  0.02  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
         public static final double A_STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
-        public static final double A_TURN_GAIN =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+        public static final double A_TURN_GAIN =  0.02  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
         public static final double A_DESIRED_DISTANCE = 16.0; //  this is how close the camera should get to the target (inches)
 
         public static final double IMU_TURN_GAIN =  0.04  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)

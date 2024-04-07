@@ -21,12 +21,7 @@ public class ArmTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-            ch.dropPixel2();
-            sleep(1000);
-            ch.closeArmAuto();
-
-            idle();
-            sleep(10000);
+ch.EncoderMove(300);
 
 
             telemetry.addData("shoulder position", ch.shoulder.getCurrentPosition());
@@ -35,7 +30,7 @@ public class ArmTest extends LinearOpMode {
             telemetry.addData("left pincer", ch.leftPincer.getPosition());
             telemetry.addData("wrist", ch.wrist.getPosition());
             telemetry.update();
-            break;
+
         }
 
     }

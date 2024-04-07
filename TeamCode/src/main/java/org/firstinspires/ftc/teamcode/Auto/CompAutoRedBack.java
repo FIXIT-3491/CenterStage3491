@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -96,30 +97,8 @@ public class CompAutoRedBack extends LinearOpMode {
 
         TelemetryStep("Move april tag");
         ch.moveAprilTag(vp);
-        TelemetryStep("Move to backdrop");
-        ch.moveRobot(-0.4,0,0);
-        sleep(1200);
-        ch.moveRobot(0,0,0);
-        TelemetryStep("Move arm up");
-        ch.armMove(2100);
-        TelemetryStep("Drop on backdrop ");
-        ch.rightPincer.setPosition(CS.C_RIGHT_OPEN);
-        sleep(400);
-        TelemetryStep("Lower Arm");
-        ch.armMove(0);
-        sleep(500);
-        TelemetryStep("Close Pincer");
-        ch.rightPincer.setPosition(CS.C_RIGHT_CLOSE);
-        TelemetryStep("Drive off backdrop");
-        ch.EncoderMove(400);
-        TelemetryStep("turn to 0");
-        ch.imuTurn(179);
-        TelemetryStep("move to park");
-        ch.EncoderMove(1200);
-        TelemetryStep("park ");
-        ch.moveRobot(0,0.5,0);
-        sleep(1000);
-        ch.moveRobot(0,0,0);
+        ch.dropPixel1();
+        ch.EncoderMove(300);
 
     }
 

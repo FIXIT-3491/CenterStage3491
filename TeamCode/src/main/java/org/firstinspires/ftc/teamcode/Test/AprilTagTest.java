@@ -34,9 +34,8 @@ public class AprilTagTest extends LinearOpMode {
         stepTimer.reset();
         if (opModeIsActive())
         {
-            ch.imuTurn(100);
             vp.DESIRED_TAG_ID = 6;
-            YellowPixel();
+            ch.moveAprilTag(vp);
 
         } // if active
     } // run op mode
