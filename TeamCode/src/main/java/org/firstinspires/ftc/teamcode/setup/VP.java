@@ -39,7 +39,7 @@ public class VP {
 
     public VP(HardwareMap hardwareMap, LinearOpMode op) {
         opMode_ref = op;
-        webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
+//        webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
         webcam2 = hardwareMap.get(WebcamName.class, "Webcam 2");
     }
 
@@ -77,7 +77,7 @@ public class VP {
 
     }
 
-    public void setManualExposure(int exposureMS, int gain) {
+    public void setManualExposure(int exposureMS) {
 
 //        if(visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING){
 //            while (!opMode_ref.isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)){

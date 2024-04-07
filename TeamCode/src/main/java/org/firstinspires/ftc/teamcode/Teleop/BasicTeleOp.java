@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.setup.CH;
+import org.firstinspires.ftc.teamcode.setup.Constants;
 import org.firstinspires.ftc.teamcode.setup.Constants.CS;
 
 @TeleOp(name="Basic TeleOp", group="Linear OpMode")
@@ -14,18 +15,18 @@ public class BasicTeleOp extends LinearOpMode {
     private CH ch = null;
 
     int armExtTargetPos = 0;
-    double wristTargetPos = CS.WRIST_UP;
+    double wristTargetPos = Constants.CS.WRIST_UP;
     int shoulderTargetPos = 0;
-    double rightPincerPos = CS.C_RIGHT_CLOSE;
-    double leftPincerPos = CS.C_LEFT_CLOSE;
+    double rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
+    double leftPincerPos = Constants.CS.C_LEFT_CLOSE;
 
     public boolean dropPixelCalled = false;
     @Override
     public void runOpMode() {
         ch = new CH(hardwareMap, this);
-        ch.wrist.setPosition(CS.WRIST_UP);
-        ch.rightPincer.setPosition(CS.C_RIGHT_CLOSE);
-        ch.leftPincer.setPosition(CS.C_LEFT_CLOSE);
+        ch.wrist.setPosition(Constants.CS.WRIST_UP);
+        ch.rightPincer.setPosition(Constants.CS.C_RIGHT_CLOSE);
+        ch.leftPincer.setPosition(Constants.CS.C_LEFT_CLOSE);
 
         ch.armEncoderReset();
 
@@ -38,14 +39,13 @@ public class BasicTeleOp extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-
         while (opModeIsActive()) {
             double max;
 
             if (gamepad2.dpad_up)  // tighten
-                ch.winchMotor.setPower(CS.WINCH_TIGHTEN);
+                ch.winchMotor.setPower(Constants.CS.WINCH_TIGHTEN);
             else if (gamepad2.dpad_down)  // loosen winch
-                ch.winchMotor.setPower(CS.WINCH_LOOSEN);
+                ch.winchMotor.setPower(Constants.CS.WINCH_LOOSEN);
             else if (gamepad2.dpad_left || gamepad2.dpad_right)  // hold winch
                 ch.winchMotor.setPower(0.2);
             else  //zero out winch
@@ -60,10 +60,8 @@ public class BasicTeleOp extends LinearOpMode {
                     launchToggle = true;
                 }
             }
-            if (gamepad2.a) {
-                shoulderTargetPos = 360;
-                armExtTargetPos = 10;
-            } else if (gamepad2.x) {
+
+            if (gamepad2.x) {
                 shoulderTargetPos = 650;
                 armExtTargetPos = 300;
             } else if (gamepad2.y) {
@@ -72,7 +70,10 @@ public class BasicTeleOp extends LinearOpMode {
             } else if (gamepad2.b) {
                 shoulderTargetPos = 0;
                 armExtTargetPos = 0;
-            }  else {
+            } else if (gamepad2.a) {
+                shoulderTargetPos = 500;
+                armExtTargetPos = 10;
+            } else {
                 if (gamepad2.left_stick_y < 0) // arm down
                     shoulderTargetPos = shoulderTargetPos + 15;
                 else if (gamepad2.left_stick_y > 0) // arm up
@@ -80,54 +81,54 @@ public class BasicTeleOp extends LinearOpMode {
             }
 
             if (gamepad2.left_bumper || gamepad1.left_bumper) // open left pincer
-                leftPincerPos = CS.C_LEFT_OPEN;
+                leftPincerPos = Constants.CS.C_LEFT_OPEN;
             else // close
-                leftPincerPos = CS.C_LEFT_CLOSE;
+                leftPincerPos = Constants.CS.C_LEFT_CLOSE;
 
             if (gamepad2.right_bumper || gamepad1.right_bumper) // open right pincer
-                rightPincerPos = CS.C_RIGHT_OPEN;
+                rightPincerPos = Constants.CS.C_RIGHT_OPEN;
             else // close
-                rightPincerPos = CS.C_RIGHT_CLOSE;
+                rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
 
             if (gamepad2.right_stick_y < 0) //extender control
-                armExtTargetPos = armExtTargetPos + 10;
+                armExtTargetPos = armExtTargetPos + 15;
             else if (gamepad2.right_stick_y > 0)
-                armExtTargetPos = armExtTargetPos - 10;
+                armExtTargetPos = armExtTargetPos - 15;
 
-            if (gamepad2.left_trigger > 0 || gamepad1.right_trigger > 0 ) //wrist control
-                wristTargetPos = CS.WRIST_DOWN;
+            if (gamepad2.left_trigger > 0  || gamepad1.right_trigger > 0 ) //wrist control
+                wristTargetPos = Constants.CS.WRIST_DOWN;
             else
                 wristTargetPos = wristTargetPos + 0.05;
 
-                if (gamepad2.left_trigger > 0 || gamepad1.right_trigger > 0) { //wrist control
-                } else if (ch.shoulder.getCurrentPosition() < 310) {
-                    if (wristTargetPos > CS.WRIST_UP)
-                        wristTargetPos = CS.WRIST_UP;
-                } else if (ch.shoulder.getCurrentPosition() < 600) {
-                    if (wristTargetPos > 0.205)
-                        wristTargetPos = 0.205;
-                } else {
-                    if (wristTargetPos != 0.15)
-                        wristTargetPos = 0.15;
-                }
-// wrist 0.2049 armExt 30 shoulder 355
-            if (ch.armExtender.getCurrentPosition() > 30){ // if arm extender is out dont put arm down all the way
-                if (shoulderTargetPos < CS.ARM_DOWN_EXT)
-                    shoulderTargetPos = CS.ARM_DOWN_EXT;
+            if (gamepad2.left_trigger > 0 ) { //wrist control
+            } else if (ch.shoulder.getCurrentPosition() < 310) {
+                if (wristTargetPos > Constants.CS.WRIST_UP)
+                    wristTargetPos = Constants.CS.WRIST_UP;
+            } else if (ch.shoulder.getCurrentPosition() < 600) {
+                if (wristTargetPos > 0.205)
+                    wristTargetPos = 0.205;
+            } else {
+                if (wristTargetPos != 0.15)
+                    wristTargetPos = 0.15;
+            }
+
+            if (ch.armExtender.getCurrentPosition() > 40){ // if arm extender is out dont put arm down all the way
+                if (shoulderTargetPos < Constants.CS.ARM_DOWN_EXT)
+                    shoulderTargetPos = Constants.CS.ARM_DOWN_EXT;
             }
             else { // if arm extender is in put arm down all the way
-                if (shoulderTargetPos < CS.ARM_DOWN)
-                    shoulderTargetPos = CS.ARM_DOWN;
+                if (shoulderTargetPos < Constants.CS.ARM_DOWN)
+                    shoulderTargetPos = Constants.CS.ARM_DOWN;
             }
 
-                if (shoulderTargetPos > CS.ARM_MAX ) //max shoulder
-                    shoulderTargetPos = CS.ARM_MAX ;
+            if (shoulderTargetPos > Constants.CS.ARM_MAX ) //max shoulder
+                shoulderTargetPos = Constants.CS.ARM_MAX ;
 
-                if (armExtTargetPos < CS.EXT_MIN ) //min extension
-                    armExtTargetPos = CS.EXT_MIN;
+            if (armExtTargetPos < Constants.CS.EXT_MIN ) //min extension
+                armExtTargetPos = Constants.CS.EXT_MIN;
 
-                if (armExtTargetPos > CS.EXT_MAX ) //max extension
-                    armExtTargetPos = CS.EXT_MAX;
+            if (armExtTargetPos > Constants.CS.EXT_MAX ) //max extension
+                armExtTargetPos = Constants.CS.EXT_MAX;
 
             ch.shoulder.setTargetPosition(shoulderTargetPos);
             ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);

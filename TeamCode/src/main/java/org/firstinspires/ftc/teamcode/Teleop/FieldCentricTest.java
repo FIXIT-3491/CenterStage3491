@@ -95,7 +95,7 @@ public class FieldCentricTest extends LinearOpMode {
             else if (gamepad2.right_stick_y > 0)
                 armExtTargetPos = armExtTargetPos - 15;
 
-            if (gamepad2.left_trigger > 0  || gamepad2.right_trigger > 0 ) //wrist control
+            if (gamepad2.left_trigger > 0  || gamepad1.right_trigger > 0 ) //wrist control
                 wristTargetPos = Constants.CS.WRIST_DOWN;
             else
                 wristTargetPos = wristTargetPos + 0.05;

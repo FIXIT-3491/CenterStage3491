@@ -21,7 +21,7 @@ public class CompAutoRedBack extends LinearOpMode {
     public void runOpMode() {
 
 //        ch.imu.resetYaw();
-
+        vp.setManualExposure(6);
         ch = new CH(hardwareMap, this);
         vp = new VP(hardwareMap, this);
 
@@ -73,9 +73,24 @@ public class CompAutoRedBack extends LinearOpMode {
 
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(-90);
-
-
             YellowPixel();
+
+            ch.moveRobot(-0.5,0,0);
+            sleep(500);
+            ch.moveRobot(0,0,0);
+
+            ch.closeArmAuto();
+            ch.imuTurn(0);
+
+            ch.moveRobot(-0.5,0,0);
+            sleep(1100);
+            ch.moveRobot(0,0,0);
+
+            ch.moveRobot(0,-0.5,0);
+            sleep(500);
+            ch.moveRobot(0,0,0);
+
+
 
         } // if active
     } // run op mode
@@ -98,7 +113,9 @@ public class CompAutoRedBack extends LinearOpMode {
         TelemetryStep("Move april tag");
         ch.moveAprilTag(vp);
         ch.dropPixel1();
-        ch.EncoderMove(300);
+        ch.EncoderMove(400);
+        sleep(500);
+        ch.rightPincer.setPosition(CS.C_RIGHT_OPEN);
 
     }
 
