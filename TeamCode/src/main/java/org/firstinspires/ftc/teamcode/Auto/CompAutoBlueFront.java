@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.setup.Constants.CS;
-import org.firstinspires.ftc.teamcode.setup.CH;
-import org.firstinspires.ftc.teamcode.setup.VP;
+import org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
+import org.firstinspires.ftc.teamcode.CaptainHook.CH;
+import org.firstinspires.ftc.teamcode.CaptainHook.VP;
 
 @Autonomous(name="CompAutoBlueFront", group="Linear OpMode")
 

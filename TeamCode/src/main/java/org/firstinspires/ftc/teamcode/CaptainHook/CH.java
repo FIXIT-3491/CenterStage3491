@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.setup;
+package org.firstinspires.ftc.teamcode.CaptainHook;
 
 
-import static org.firstinspires.ftc.teamcode.setup.Constants.CS;
+import static org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -237,11 +237,11 @@ public class CH {
     }
 
     public void dropPixel1(){
-        shoulder.setTargetPosition(500);
+        shoulder.setTargetPosition(475);
         shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         shoulder.setPower(0.6);
 
-        armExtender.setTargetPosition(10);
+        armExtender.setTargetPosition(50);
         armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armExtender.setPower(1);
     }
@@ -254,6 +254,7 @@ public class CH {
         wrist.setPosition(CS.WRIST_UP);
         rightPincer.setPosition(CS.C_RIGHT_CLOSE);
     }
+
 
     public void moveAprilTag(VP vp){
 

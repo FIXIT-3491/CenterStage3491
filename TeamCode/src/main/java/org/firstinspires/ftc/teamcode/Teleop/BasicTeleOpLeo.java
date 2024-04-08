@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.setup.CH;
-import org.firstinspires.ftc.teamcode.setup.Constants.CS;
+import org.firstinspires.ftc.teamcode.CaptainHook.CH;
+import org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
 
 @TeleOp(name="Basic TeleOpLeo", group="Linear OpMode")
 

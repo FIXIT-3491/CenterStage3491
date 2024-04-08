@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.setup.CH;
+import org.firstinspires.ftc.teamcode.CaptainHook.CH;
 @Disabled
 @Autonomous(name="WristTest", group="Linear OpMode")
 

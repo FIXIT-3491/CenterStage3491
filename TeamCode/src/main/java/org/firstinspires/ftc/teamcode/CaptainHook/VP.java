@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.setup;
+package org.firstinspires.ftc.teamcode.CaptainHook;
 
 
 import android.util.Size;
@@ -7,17 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
-import org.firstinspires.ftc.teamcode.Auto.CompAutoRedFront;
 
 
 import java.util.List;
@@ -39,7 +34,7 @@ public class VP {
 
     public VP(HardwareMap hardwareMap, LinearOpMode op) {
         opMode_ref = op;
-//        webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
+
         webcam2 = hardwareMap.get(WebcamName.class, "Webcam 2");
     }
 
@@ -59,9 +54,6 @@ public class VP {
         // Note: Decimation can be changed on-the-fly to adapt during a match.
         aprilTag.setDecimation(2);
 
-        CameraName switchableCamera = ClassFactory.getInstance()
-                .getCameraManager().nameForSwitchableCamera(webcam2, webcam1);
-
         tfod = new TfodProcessor.Builder()
                 .setModelAssetName(TFOD_MODEL_ASSET)
                 .setModelLabels(LABELS)
@@ -69,7 +61,7 @@ public class VP {
         tfod.setMinResultConfidence(0.80f);
 
         visionPortal = new VisionPortal.Builder()
-                .setCamera(switchableCamera)
+                .setCamera(webcam2)
                 .setCameraResolution(new Size(640, 480))
                 .addProcessor(aprilTag)
                 .addProcessor(tfod)

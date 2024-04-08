@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.setup.Constants;
-import org.firstinspires.ftc.teamcode.setup.CH;
+import org.firstinspires.ftc.teamcode.CaptainHook.Constants;
+import org.firstinspires.ftc.teamcode.CaptainHook.CH;
 
 @TeleOp
 (name="FieldCentricTest", group="Linear OpMode")
@@ -71,8 +71,8 @@ public class FieldCentricTest extends LinearOpMode {
                 shoulderTargetPos = 0;
                 armExtTargetPos = 0;
             } else if (gamepad2.a) {
-                shoulderTargetPos = 500;
-                armExtTargetPos = 10;
+                shoulderTargetPos = 420;
+                armExtTargetPos = 0;
             } else {
                 if (gamepad2.left_stick_y < 0) // arm down
                     shoulderTargetPos = shoulderTargetPos + 15;
@@ -101,7 +101,7 @@ public class FieldCentricTest extends LinearOpMode {
                 wristTargetPos = wristTargetPos + 0.05;
 
             if (gamepad2.left_trigger > 0 ) { //wrist control
-            } else if (ch.shoulder.getCurrentPosition() < 310) {
+            } else if (ch.shoulder.getCurrentPosition() < 300) {
                 if (wristTargetPos > Constants.CS.WRIST_UP)
                     wristTargetPos = Constants.CS.WRIST_UP;
             } else if (ch.shoulder.getCurrentPosition() < 600) {
@@ -180,6 +180,8 @@ public class FieldCentricTest extends LinearOpMode {
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
             telemetry.addData("Launcher Position", ch.launcher.getPosition());
             telemetry.addData("arm position", ch.shoulder.getCurrentPosition());
+            telemetry.addData("right pincer", ch.rightPincer.getPosition());
+            telemetry.addData("left pincer", ch.leftPincer.getPosition());
             telemetry.update();
 
         }
