@@ -245,6 +245,14 @@ public class CH {
         armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armExtender.setPower(1);
     }
+    public void WhitePixel(){
+        shoulder.setTargetPosition(215);
+        shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        shoulder.setPower(0.6);
+
+        wrist.setPosition(0.075);
+        leftPincer.setPosition(CS.C_LEFT_OPEN);
+    }
 
     public void closeArmAuto(){
         shoulder.setTargetPosition(0);
@@ -289,6 +297,63 @@ public class CH {
 
                 double rangeError = (desiredTag.ftcPose.range - CS.A_DESIRED_DISTANCE);
                 double headingError = desiredTag.ftcPose.bearing+10;
+                double yawError = desiredTag.ftcPose.yaw;
+
+                if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {
+                    drive = 0;
+                    turn = 0;
+                    strafe = 0;
+                    targetNotReached = false;
+                } else {
+                    drive = Range.clip(rangeError * CS.A_SPEED_GAIN, -CS.A_MAX_AUTO_SPEED, CS.A_MAX_AUTO_SPEED);
+                    turn = Range.clip(headingError * CS.A_TURN_GAIN, -CS.A_MAX_AUTO_TURN, CS.A_MAX_AUTO_TURN);
+                    strafe = Range.clip(-yawError * CS.A_STRAFE_GAIN, -CS.A_MAX_AUTO_STRAFE, CS.A_MAX_AUTO_STRAFE);
+
+                }
+
+                // Apply desired axes motions to the drivetrain.
+                moveRobot(drive, strafe, turn);
+                opMode_ref.sleep(10);
+            }
+            else {
+                moveRobot(0,0,0);
+            }
+        }
+    }
+
+    public void moveAprilTag2(VP vp){
+
+        boolean targetNotReached = true;
+        AprilTagDetection desiredTag = null;
+
+        boolean targetFound     = false;    // Set to true when an AprilTag target is detected
+        double  drive           = 0;        // Desired forward power/speed (-1 to +1)
+        double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
+        double  turn            = 0;        // Desired turning power/speed (-1 to +1)
+
+        desiredTag = null;
+        while (targetNotReached && opMode_ref.opModeIsActive()) {
+            targetFound = false;
+            List<AprilTagDetection> currentDetections = vp.aprilTag.getDetections();
+            for (AprilTagDetection detection : currentDetections) {
+                if (detection.metadata != null) {
+                    if ((vp.DESIRED_TAG_ID < 0) || (detection.id == vp.DESIRED_TAG_ID)) {                     //  Check to see if we want to track towards this tag.
+                        targetFound = true;                         // Yes, we want to use this tag.
+                        desiredTag = detection;
+                        break;  // don't look any further.
+                    } else {
+                        // This tag is in the library, but we do not want to track it right now.
+                    }
+                } else {
+                    // This tag is NOT in the library, so we don't have enough information to track to it.
+                }
+            }
+
+            // Tell the driver what we see, and what to do.
+            if (targetFound) {
+
+                double rangeError = (desiredTag.ftcPose.range - 10);
+                double headingError = desiredTag.ftcPose.bearing;
                 double yawError = desiredTag.ftcPose.yaw;
 
                 if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {

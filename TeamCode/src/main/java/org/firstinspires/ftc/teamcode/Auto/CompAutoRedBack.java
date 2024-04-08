@@ -42,7 +42,7 @@ public class CompAutoRedBack extends LinearOpMode {
 
             YellowPixel();
 
-            AwayFromBackDrop();
+            Park();
 
         } // if active
     } // run op mode
@@ -65,7 +65,7 @@ public class CompAutoRedBack extends LinearOpMode {
             TelemetryStep("Turn to left");
             ch.imuTurn(44);
             TelemetryStep("Move to left");
-            ch.EncoderMove(Constants.CS.E_SPIKE_LEFT);
+            ch.EncoderMove(CS.E_SPIKE_LEFT);
             BackFromSpike(750);
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(-80);
@@ -75,7 +75,7 @@ public class CompAutoRedBack extends LinearOpMode {
             TelemetryStep("Turn to right");
             ch.imuTurn(-32);
             TelemetryStep("Move to right");
-            ch.EncoderMove(Constants.CS.E_SPIKE_RIGHT);
+            ch.EncoderMove(CS.E_SPIKE_RIGHT);
             BackFromSpike(550);
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(-95);
@@ -83,14 +83,14 @@ public class CompAutoRedBack extends LinearOpMode {
         } else {
             vp.DESIRED_TAG_ID = 5;
             TelemetryStep("Move to Center");
-            ch.EncoderMove(Constants.CS.E_SPIKE_LEFT_CENTER);
+            ch.EncoderMove(CS.E_SPIKE_LEFT_CENTER);
             BackFromSpike(600);
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(-90);
         }
     }
     private void BackFromSpike(int amount){
-        ch.wrist.setPosition(Constants.CS.WRIST_UP);
+        ch.wrist.setPosition(CS.WRIST_UP);
         TelemetryStep("Back from spike mark");
         ch.moveRobot(-0.5, 0, 0);
         sleep(amount);
@@ -106,9 +106,9 @@ public class CompAutoRedBack extends LinearOpMode {
         ch.dropPixel1();
         ch.EncoderMove(400);
         sleep(500);
-        ch.rightPincer.setPosition(Constants.CS.C_RIGHT_OPEN);
+        ch.rightPincer.setPosition(CS.C_RIGHT_OPEN);
     }
-    public void AwayFromBackDrop() {
+    public void Park() {
 
         ch.moveRobot(-0.5,0,0);
         sleep(500);
