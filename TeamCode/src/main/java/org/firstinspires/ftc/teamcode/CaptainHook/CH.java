@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -323,6 +324,7 @@ public class CH {
 
     public void moveAprilTag2(VP vp){
 
+        ElapsedTime stepTimer = new ElapsedTime();
         boolean targetNotReached = true;
         AprilTagDetection desiredTag = null;
 
@@ -332,7 +334,7 @@ public class CH {
         double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
         desiredTag = null;
-        while (targetNotReached && opMode_ref.opModeIsActive()) {
+        while (targetNotReached && opMode_ref.opModeIsActive() && stepTimer.milliseconds() < 4000) {
             targetFound = false;
             List<AprilTagDetection> currentDetections = vp.aprilTag.getDetections();
             for (AprilTagDetection detection : currentDetections) {

@@ -19,6 +19,7 @@ public class CompAutoRedFront extends LinearOpMode {
     private ElapsedTime stepTimer = new ElapsedTime();
     private String Location;
 
+
     @Override
     public void runOpMode() {
 
@@ -46,7 +47,7 @@ public class CompAutoRedFront extends LinearOpMode {
             vp.DESIRED_TAG_ID = 8;
 
             ch.WhitePixel();
-
+            vp.setManualExposure(6);
             ch.moveAprilTag2(vp);
 
             ch.moveRobot(0.3,0,0);
@@ -61,10 +62,21 @@ public class CompAutoRedFront extends LinearOpMode {
             ch.wrist.setPosition(CS.WRIST_UP);
             ch.imuTurn(0);
             ch.EncoderMove(1000);
-            ch.imuTurn(-87);
+            ch.imuTurn(-85);
             ch.moveRobot(0.7,0,0);
-            sleep(2500);
+            sleep(2000);
             ch.moveRobot(0,0,0);
+            ch.imuTurn(-110);
+            if (Location == "left") {
+                vp.DESIRED_TAG_ID = 4;
+            }
+            else if(Location == "right"){
+                vp.DESIRED_TAG_ID = 6;
+            }
+            else {
+                vp.DESIRED_TAG_ID = 5;
+            }
+            YellowPixel();
 
 
         } // if active
@@ -89,8 +101,10 @@ public class CompAutoRedFront extends LinearOpMode {
             ch.imuTurn(44);
             TelemetryStep("Move to left");
             ch.EncoderMove(CS.E_SPIKE_LEFT);
-            BackFromSpike(300);
+            BackFromSpike(500);
             TelemetryStep("Turn to backdrop");
+            ch.imuTurn(90);
+            ch.EncoderMove(1000);
             ch.imuTurn(70);
 
         } else if (Location == "right") {
@@ -124,7 +138,6 @@ public class CompAutoRedFront extends LinearOpMode {
     private void YellowPixel(){
         stepTimer.reset();
         ch.wrist.setPosition(0.15);
-        vp.setManualExposure(6);
 
         TelemetryStep("Move april tag");
         ch.moveAprilTag(vp);
