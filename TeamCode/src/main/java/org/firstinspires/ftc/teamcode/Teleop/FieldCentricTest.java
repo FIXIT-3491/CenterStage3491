@@ -59,7 +59,6 @@ public class FieldCentricTest extends LinearOpMode {
                        shoulderTargetPos = 1235;
                 }
 
-
             if (gamepad2.x) {
                 shoulderTargetPos = 650;
                 armExtTargetPos = 300;
@@ -99,11 +98,13 @@ public class FieldCentricTest extends LinearOpMode {
             else
                 wristTargetPos = wristTargetPos + 0.05;
 
-            if (gamepad1.left_trigger > 0 ) { //wrist control
-            }  else if (ch.rightPincer.getPosition() != Constants.CS.C_RIGHT_CLOSE && ch.leftPincer.getPosition() != Constants.CS.C_LEFT_CLOSE){
+            if (ch.rightPincer.getPosition() != Constants.CS.C_RIGHT_CLOSE && ch.leftPincer.getPosition() != Constants.CS.C_LEFT_CLOSE){
                 stepTimer.reset();
             }
-            else if (ch.shoulder.getCurrentPosition() < 300) {
+
+            if (gamepad1.left_trigger > 0 || gamepad1.right_trigger > 0) { //wrist control
+            } else if (stepTimer.milliseconds() > 1000){
+            } else if (ch.shoulder.getCurrentPosition() < 300) {
                 if (wristTargetPos > Constants.CS.WRIST_UP)
                     wristTargetPos = Constants.CS.WRIST_UP;
             } else if (ch.shoulder.getCurrentPosition() < 600) {
@@ -184,6 +185,7 @@ public class FieldCentricTest extends LinearOpMode {
             telemetry.addData("arm position", ch.shoulder.getCurrentPosition());
             telemetry.addData("right pincer", ch.rightPincer.getPosition());
             telemetry.addData("left pincer", ch.leftPincer.getPosition());
+            telemetry.addData("left pincer", stepTimer.milliseconds());
             telemetry.update();
 
         }
