@@ -20,6 +20,7 @@ public class CompAutoRedFront extends LinearOpMode {
     private String Location;
 
 
+
     @Override
     public void runOpMode() {
 
@@ -50,8 +51,8 @@ public class CompAutoRedFront extends LinearOpMode {
             vp.setManualExposure(6);
             ch.moveAprilTag2(vp);
 
-            ch.moveRobot(0.3,0,0);
-            sleep(300);
+            ch.moveRobot(0.2,0,0);
+            sleep(200);
             ch.moveRobot(0,0,0);
 
             ch.leftPincer.setPosition(CS.C_LEFT_CLOSE);

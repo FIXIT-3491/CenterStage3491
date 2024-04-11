@@ -247,7 +247,7 @@ public class CH {
         armExtender.setPower(1);
     }
     public void WhitePixel(){
-        shoulder.setTargetPosition(215);
+        shoulder.setTargetPosition(205);
         shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         shoulder.setPower(0.6);
 

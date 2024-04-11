@@ -23,7 +23,7 @@ public class Constants { //Constants
         public static final int    E_SPIKE_LEFT = 400;
         public static final int    E_SPIKE_LEFT_CENTER = 610;
 
-        public static final double WINCH_TIGHTEN = 0.7; //winch
+        public static final double WINCH_TIGHTEN = 1; //winch
         public static final double WINCH_LOOSEN = -0.7;
 
         public static final double C_RIGHT_CLOSE = 0.45;

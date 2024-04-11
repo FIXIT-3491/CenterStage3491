@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.CaptainHook.Constants;
@@ -19,6 +20,7 @@ public class FieldCentricTest extends LinearOpMode {
     int shoulderTargetPos = 0;
     double rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
     double leftPincerPos = Constants.CS.C_LEFT_CLOSE;
+    private ElapsedTime stepTimer = new ElapsedTime();
 
     public boolean dropPixelCalled = false;
     @Override
@@ -52,14 +54,11 @@ public class FieldCentricTest extends LinearOpMode {
                 ch.winchMotor.setPower(0);
 
             if (gamepad2.right_trigger > 0 ) { //toggle drone launch and close
-                if (launchToggle) {
-                    ch.launcher.setPosition(0.7);
-                    launchToggle = false;
-                } else {
-                    ch.launcher.setPosition(0.19);
-                    launchToggle = true;
+                       ch.launcher.setPosition(0.7);
+                       armExtTargetPos = 1040;
+                       shoulderTargetPos = 1235;
                 }
-            }
+
 
             if (gamepad2.x) {
                 shoulderTargetPos = 650;
@@ -80,12 +79,12 @@ public class FieldCentricTest extends LinearOpMode {
                     shoulderTargetPos = shoulderTargetPos - 15;
             }
 
-            if (gamepad2.left_bumper || gamepad1.left_bumper) // open left pincer
+            if (gamepad2.left_bumper || gamepad1.right_trigger > 0) // open left pincer
                 leftPincerPos = Constants.CS.C_LEFT_OPEN;
             else // close
                 leftPincerPos = Constants.CS.C_LEFT_CLOSE;
 
-            if (gamepad2.right_bumper || gamepad1.right_bumper) // open right pincer
+            if (gamepad2.right_bumper || gamepad1.right_trigger > 0) // open right pincer
                 rightPincerPos = Constants.CS.C_RIGHT_OPEN;
             else // close
                 rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
@@ -100,8 +99,11 @@ public class FieldCentricTest extends LinearOpMode {
             else
                 wristTargetPos = wristTargetPos + 0.05;
 
-            if (gamepad2.left_trigger > 0 ) { //wrist control
-            } else if (ch.shoulder.getCurrentPosition() < 300) {
+            if (gamepad1.left_trigger > 0 ) { //wrist control
+            }  else if (ch.rightPincer.getPosition() != Constants.CS.C_RIGHT_CLOSE && ch.leftPincer.getPosition() != Constants.CS.C_LEFT_CLOSE){
+                stepTimer.reset();
+            }
+            else if (ch.shoulder.getCurrentPosition() < 300) {
                 if (wristTargetPos > Constants.CS.WRIST_UP)
                     wristTargetPos = Constants.CS.WRIST_UP;
             } else if (ch.shoulder.getCurrentPosition() < 600) {
@@ -163,7 +165,7 @@ public class FieldCentricTest extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
-            if (gamepad1.left_trigger > 0) {
+            if (gamepad1.left_trigger > 0 || gamepad1.right_trigger > 0) {
                 ch.frontLDrive.setPower(0.3 * frontLeftPower);
                 ch.frontRDrive.setPower(0.3 * frontRightPower);
                 ch.backLDrive.setPower(0.3 * backLeftPower);
