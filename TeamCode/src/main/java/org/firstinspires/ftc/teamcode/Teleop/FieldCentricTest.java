@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -20,7 +21,11 @@ public class FieldCentricTest extends LinearOpMode {
     int shoulderTargetPos = 0;
     double rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
     double leftPincerPos = Constants.CS.C_LEFT_CLOSE;
-    private ElapsedTime stepTimer = new ElapsedTime();
+    private ElapsedTime pickupTime = new ElapsedTime();
+
+    boolean autoPickup = false;
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad previousGamepad1 = new Gamepad();
 
     public boolean dropPixelCalled = false;
     @Override
@@ -34,7 +39,6 @@ public class FieldCentricTest extends LinearOpMode {
 
         ch.backLDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         ch.backRDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         boolean launchToggle = true;
 
         telemetry.addData("Status", "Initialized");
@@ -43,6 +47,9 @@ public class FieldCentricTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             double max;
+
+            currentGamepad1.copy(gamepad1);
+
 
             if (gamepad2.dpad_up)  // tighten
                 ch.winchMotor.setPower(Constants.CS.WINCH_TIGHTEN);
@@ -54,10 +61,10 @@ public class FieldCentricTest extends LinearOpMode {
                 ch.winchMotor.setPower(0);
 
             if (gamepad2.right_trigger > 0 ) { //toggle drone launch and close
-                       ch.launcher.setPosition(0.7);
-                       armExtTargetPos = 1040;
-                       shoulderTargetPos = 1235;
-                }
+                ch.launcher.setPosition(0.7);
+                armExtTargetPos = 1040;
+                shoulderTargetPos = 1235;
+            }
 
             if (gamepad2.x) {
                 shoulderTargetPos = 650;
@@ -77,43 +84,59 @@ public class FieldCentricTest extends LinearOpMode {
                 else if (gamepad2.left_stick_y > 0) // arm up
                     shoulderTargetPos = shoulderTargetPos - 15;
             }
-
-            if (gamepad2.left_bumper || gamepad1.right_trigger > 0) // open left pincer
-                leftPincerPos = Constants.CS.C_LEFT_OPEN;
-            else // close
-                leftPincerPos = Constants.CS.C_LEFT_CLOSE;
-
-            if (gamepad2.right_bumper || gamepad1.right_trigger > 0) // open right pincer
-                rightPincerPos = Constants.CS.C_RIGHT_OPEN;
-            else // close
-                rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
-
             if (gamepad2.right_stick_y < 0) //extender control
                 armExtTargetPos = armExtTargetPos + 15;
             else if (gamepad2.right_stick_y > 0)
                 armExtTargetPos = armExtTargetPos - 15;
 
-            if (gamepad2.left_trigger > 0  || gamepad1.right_trigger > 0 ) //wrist control
+//            if (autoPickup){
+//            } else if (gamepad2.left_bumper || (currentGamepad1.right_trigger > 0 && previousGamepad1.right_trigger == 0)) // open left pincer
+//                leftPincerPos = Constants.CS.C_LEFT_OPEN;
+//            else // close
+//                leftPincerPos = Constants.CS.C_LEFT_CLOSE;
+////
+////            if (autoPickup) {
+////            } else if (gamepad2.right_bumper || (currentGamepad1.right_trigger > 0 && previousGamepad1.right_trigger == 0)) // open right pincer
+////                rightPincerPos = Constants.CS.C_RIGHT_OPEN;
+////            else // close
+////                rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
+
+            if (currentGamepad1.right_trigger > 0 && previousGamepad1.right_trigger == 0){
                 wristTargetPos = Constants.CS.WRIST_DOWN;
-            else
-                wristTargetPos = wristTargetPos + 0.05;
-
-            if (ch.rightPincer.getPosition() != Constants.CS.C_RIGHT_CLOSE && ch.leftPincer.getPosition() != Constants.CS.C_LEFT_CLOSE){
-                stepTimer.reset();
+                leftPincerPos = Constants.CS.C_LEFT_OPEN;
+                rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
             }
+//            if (currentGamepad1.right_trigger == 0 && previousGamepad1.right_trigger > 0){
+//                autoPickup = true;
+//                pickupTime.reset();
+//            }
+//
+//            if (autoPickup) { // do auto pickup action
+//                if (pickupTime.milliseconds() < 1000) {
+//                    leftPincerPos = Constants.CS.C_LEFT_CLOSE;
+//                    rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
+//                } else {  // after the claws have closed, we set the wrist servo position
+//                    wristTargetPos = Constants.CS.WRIST_UP;
+//                }
+//                // we allow a little more time and then we can turn off the auto pickup action
+//                if (pickupTime.milliseconds() >  500) {
+//                    autoPickup = false;
+//                }
+//            }
 
-            if (gamepad1.left_trigger > 0 || gamepad1.right_trigger > 0) { //wrist control
-            } else if (stepTimer.milliseconds() > 1000){
-            } else if (ch.shoulder.getCurrentPosition() < 300) {
-                if (wristTargetPos > Constants.CS.WRIST_UP)
-                    wristTargetPos = Constants.CS.WRIST_UP;
-            } else if (ch.shoulder.getCurrentPosition() < 600) {
-                if (wristTargetPos > 0.205)
-                    wristTargetPos = 0.205;
-            } else {
-                if (wristTargetPos != 0.15)
-                    wristTargetPos = 0.15;
-            }
+//            if (gamepad2.left_trigger > 0) { //wrist control
+//                wristTargetPos = Constants.CS.WRIST_DOWN;
+//            } else if (autoPickup){
+//            } else if (ch.shoulder.getCurrentPosition() < 300) {
+//                if (wristTargetPos != Constants.CS.WRIST_UP)
+//                    wristTargetPos = Constants.CS.WRIST_UP;
+//            } else if (ch.shoulder.getCurrentPosition() < 600) {
+//                if (wristTargetPos != 0.205)
+//                    wristTargetPos = 0.205;
+//            } else {
+//                if (wristTargetPos != 0.15)
+//                    wristTargetPos = 0.15;
+//            }
 
             if (ch.armExtender.getCurrentPosition() > 40){ // if arm extender is out dont put arm down all the way
                 if (shoulderTargetPos < Constants.CS.ARM_DOWN_EXT)
@@ -185,8 +208,9 @@ public class FieldCentricTest extends LinearOpMode {
             telemetry.addData("arm position", ch.shoulder.getCurrentPosition());
             telemetry.addData("right pincer", ch.rightPincer.getPosition());
             telemetry.addData("left pincer", ch.leftPincer.getPosition());
-            telemetry.addData("left pincer", stepTimer.milliseconds());
+            telemetry.addData("left pincer", pickupTime.milliseconds());
             telemetry.update();
+            previousGamepad1.copy(gamepad1);
 
         }
     }
