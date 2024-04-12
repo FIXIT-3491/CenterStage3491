@@ -47,7 +47,7 @@ public class FieldCentricTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            previousGamepad1.copy(gamepad1);
+            previousGamepad1.copy(currentGamepad1);
             currentGamepad1.copy(gamepad1);
 
 
@@ -89,40 +89,39 @@ public class FieldCentricTest extends LinearOpMode {
             else if (gamepad2.right_stick_y > 0)
                 armExtTargetPos = armExtTargetPos - 15;
 
-//            if (autoPickup){
-//            } else if (gamepad2.left_bumper || (currentGamepad1.right_trigger > 0 && previousGamepad1.right_trigger == 0)) // open left pincer
-//                leftPincerPos = Constants.CS.C_LEFT_OPEN;
-//            else // close
-//                leftPincerPos = Constants.CS.C_LEFT_CLOSE;
-////
-////            if (autoPickup) {
-////            } else if (gamepad2.right_bumper || (currentGamepad1.right_trigger > 0 && previousGamepad1.right_trigger == 0)) // open right pincer
-////                rightPincerPos = Constants.CS.C_RIGHT_OPEN;
-////            else // close
-////                rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
+            if (!autoPickup){
+                if (gamepad2.left_bumper) // open left pincer
+                    leftPincerPos = Constants.CS.C_LEFT_OPEN;
+                else // close
+                    leftPincerPos = Constants.CS.C_LEFT_CLOSE;
 
+                if (gamepad2.right_bumper) // open right pincer
+                    rightPincerPos = Constants.CS.C_RIGHT_OPEN;
+                else // close
+                    rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
+            }
             if (currentGamepad1.right_trigger > 0 && previousGamepad1.right_trigger == 0){
                 wristTargetPos = Constants.CS.WRIST_DOWN;
                 leftPincerPos = Constants.CS.C_LEFT_OPEN;
-                rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
+                rightPincerPos = Constants.CS.C_RIGHT_OPEN;
             }
-//            if (currentGamepad1.right_trigger == 0 && previousGamepad1.right_trigger > 0){
-//                autoPickup = true;
-//                pickupTime.reset();
-//            }
-//
-//            if (autoPickup) { // do auto pickup action
-//                if (pickupTime.milliseconds() < 1000) {
-//                    leftPincerPos = Constants.CS.C_LEFT_CLOSE;
-//                    rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
-//                } else {  // after the claws have closed, we set the wrist servo position
-//                    wristTargetPos = Constants.CS.WRIST_UP;
-//                }
-//                // we allow a little more time and then we can turn off the auto pickup action
-//                if (pickupTime.milliseconds() >  500) {
-//                    autoPickup = false;
-//                }
-//            }
+            if (currentGamepad1.right_trigger == 0 && previousGamepad1.right_trigger > 0){
+                autoPickup = true;
+                pickupTime.reset();
+            }
+
+            if (autoPickup) { // do auto pickup action
+                if (pickupTime.milliseconds() < 1000) {
+                    leftPincerPos = Constants.CS.C_LEFT_CLOSE;
+                    rightPincerPos = Constants.CS.C_RIGHT_CLOSE;
+                } else {  // after the claws have closed, we set the wrist servo position
+                    wristTargetPos = Constants.CS.WRIST_UP;
+                }
+                // we allow a little more time and then we can turn off the auto pickup action
+                if (pickupTime.milliseconds() >  1000) {
+                    autoPickup = false;
+                }
+            }
 
 //            if (gamepad2.left_trigger > 0) { //wrist control
 //                wristTargetPos = Constants.CS.WRIST_DOWN;
