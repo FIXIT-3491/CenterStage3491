@@ -46,8 +46,8 @@ public class FieldCentricTest extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-            double max;
 
+            previousGamepad1.copy(gamepad1);
             currentGamepad1.copy(gamepad1);
 
 
@@ -210,7 +210,7 @@ public class FieldCentricTest extends LinearOpMode {
             telemetry.addData("left pincer", ch.leftPincer.getPosition());
             telemetry.addData("left pincer", pickupTime.milliseconds());
             telemetry.update();
-            previousGamepad1.copy(gamepad1);
+
 
         }
     }
