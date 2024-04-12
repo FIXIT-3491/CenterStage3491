@@ -48,26 +48,13 @@ public class CompAutoRedFront extends LinearOpMode {
             vp.DESIRED_TAG_ID = 8;
 
             ch.WhitePixel();
+
             vp.setManualExposure(6);
+
             ch.moveAprilTag2(vp);
 
-            ch.moveRobot(0.2,0,0);
-            sleep(200);
-            ch.moveRobot(0,0,0);
+            DriveThroughTruss();
 
-            ch.leftPincer.setPosition(CS.C_LEFT_CLOSE);
-            sleep(1000);
-            ch.moveRobot(-0.5,0,0);
-            sleep(200);
-            ch.moveRobot(0,0,0);
-            ch.wrist.setPosition(CS.WRIST_UP);
-            ch.imuTurn(0);
-            ch.EncoderMove(1000);
-            ch.imuTurn(-85);
-            ch.moveRobot(0.7,0,0);
-            sleep(2000);
-            ch.moveRobot(0,0,0);
-            ch.imuTurn(-110);
             if (Location == "left") {
                 vp.DESIRED_TAG_ID = 4;
             }
@@ -77,7 +64,10 @@ public class CompAutoRedFront extends LinearOpMode {
             else {
                 vp.DESIRED_TAG_ID = 5;
             }
+
             YellowPixel();
+
+            Park();
 
 
         } // if active
@@ -134,7 +124,26 @@ public class CompAutoRedFront extends LinearOpMode {
         sleep(amount);
         ch.moveRobot(0, 0, 0);
     }
+    public void DriveThroughTruss(){
+        ch.moveRobot(0.2,0,0);
+        sleep(150);
+        ch.moveRobot(0,0,0);
 
+        ch.leftPincer.setPosition(CS.C_LEFT_CLOSE);
+        sleep(1000);
+        ch.moveRobot(-0.5,0,0);
+        sleep(200);
+        ch.moveRobot(0,0,0);
+        ch.wrist.setPosition(CS.WRIST_UP);
+        ch.imuTurn(0);
+        ch.EncoderMove(1000);
+        ch.imuTurn(-85);
+        ch.moveRobot(0.7,0,0);
+        sleep(2000);
+        ch.moveRobot(0,0,0);
+        ch.imuTurn(-110);
+        ch.closeArmAuto();
+    }
 
     private void YellowPixel(){
         stepTimer.reset();
