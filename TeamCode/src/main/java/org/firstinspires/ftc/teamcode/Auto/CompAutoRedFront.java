@@ -28,6 +28,7 @@ public class CompAutoRedFront extends LinearOpMode {
         vp = new VP(hardwareMap, this);
         vp.initCompVision();
 
+        ch.armEncoderReset();
         ch.rightPincer.setPosition(0.5);
         ch.wrist.setPosition(CS.WRIST_UP);
 
@@ -39,13 +40,11 @@ public class CompAutoRedFront extends LinearOpMode {
         stepTimer.reset();
         if (opModeIsActive())
         {
+//            TensorFlow();
+//
+//            PurplePixel();
 
-
-            TensorFlow();
-
-            PurplePixel();
-
-            vp.DESIRED_TAG_ID = 8;
+            vp.DESIRED_TAG_ID = 9;
 
             ch.WhitePixel();
 
@@ -53,22 +52,15 @@ public class CompAutoRedFront extends LinearOpMode {
 
             ch.moveAprilTag2(vp);
 
+            PickUpWhitePixel();
+
             DriveThroughTruss();
 
-            if (Location == "left") {
-                vp.DESIRED_TAG_ID = 4;
-            }
-            else if(Location == "right"){
-                vp.DESIRED_TAG_ID = 6;
-            }
-            else {
-                vp.DESIRED_TAG_ID = 5;
-            }
+            SetAprilTag();
 
             YellowPixel();
 
             Park();
-
 
         } // if active
     } // run op mode
@@ -87,7 +79,7 @@ public class CompAutoRedFront extends LinearOpMode {
     }
     public void PurplePixel(){
         if (Location == "left") {
-            vp.DESIRED_TAG_ID = 4;
+            vp.DESIRED_TAG_ID = 1;
             TelemetryStep("Turn to left");
             ch.imuTurn(44);
             TelemetryStep("Move to left");
@@ -99,7 +91,7 @@ public class CompAutoRedFront extends LinearOpMode {
             ch.imuTurn(70);
 
         } else if (Location == "right") {
-            vp.DESIRED_TAG_ID = 6;
+            vp.DESIRED_TAG_ID = 3;
             TelemetryStep("Turn to right");
             ch.imuTurn(-44);
             TelemetryStep("Move to right");
@@ -109,7 +101,7 @@ public class CompAutoRedFront extends LinearOpMode {
             ch.imuTurn(70);
 
         } else {
-            vp.DESIRED_TAG_ID = 5;
+            vp.DESIRED_TAG_ID = 2;
             TelemetryStep("Move to Center");
             ch.EncoderMove(Constants.CS.E_SPIKE_LEFT_CENTER);
             BackFromSpike(600);
@@ -124,7 +116,7 @@ public class CompAutoRedFront extends LinearOpMode {
         sleep(amount);
         ch.moveRobot(0, 0, 0);
     }
-    public void DriveThroughTruss(){
+    public void PickUpWhitePixel(){
         ch.moveRobot(0.2,0,0);
         sleep(150);
         ch.moveRobot(0,0,0);
@@ -136,6 +128,8 @@ public class CompAutoRedFront extends LinearOpMode {
         ch.moveRobot(0,0,0);
         ch.wrist.setPosition(CS.WRIST_UP);
         ch.imuTurn(0);
+    }
+    public void DriveThroughTruss(){
         ch.EncoderMove(1000);
         ch.imuTurn(-85);
         ch.moveRobot(0.7,0,0);
@@ -143,6 +137,18 @@ public class CompAutoRedFront extends LinearOpMode {
         ch.moveRobot(0,0,0);
         ch.imuTurn(-110);
         ch.closeArmAuto();
+    }
+    private void SetAprilTag(){
+        if (Location == "left") {
+            vp.DESIRED_TAG_ID = 4;
+        }
+        else if(Location == "right"){
+            vp.DESIRED_TAG_ID = 6;
+        }
+        else {
+            vp.DESIRED_TAG_ID = 5;
+        }
+
     }
 
     private void YellowPixel(){
