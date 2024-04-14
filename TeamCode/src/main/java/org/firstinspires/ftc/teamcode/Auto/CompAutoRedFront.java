@@ -29,32 +29,44 @@ public class CompAutoRedFront extends LinearOpMode {
         vp.initCompVision();
 
         ch.armEncoderReset();
-        ch.rightPincer.setPosition(0.5);
+        ch.rightPincer.setPosition(CS.C_RIGHT_CLOSE);
         ch.wrist.setPosition(CS.WRIST_UP);
 
         telemetry.addData("Status", "initialized ");
         telemetry.update();
 
+        ch.imu.resetYaw();
         waitForStart();
 
         stepTimer.reset();
         if (opModeIsActive())
         {
-//            TensorFlow();
-//
-//            PurplePixel();
+            TensorFlow();
 
-            vp.DESIRED_TAG_ID = 9;
+            PurplePixel();
 
-            ch.WhitePixel();
+            vp.DESIRED_TAG_ID = 8;
 
-            vp.setManualExposure(6);
+            if (Location != "left") {
+                ch.WhitePixel();
 
-            ch.moveAprilTag2(vp);
+                vp.setManualExposure(6);
 
-            PickUpWhitePixel();
+                ch.moveAprilTag2(vp);
 
-            DriveThroughTruss();
+                PickUpWhitePixel();
+                DriveThroughTruss();
+            }
+            else {
+
+
+                ch.imuTurn(-80);
+                ch.moveRobot(0.7,0,0);
+                sleep(1800);
+                ch.moveRobot(0,0,0);
+                ch.imuTurn(-110);
+                ch.closeArmAuto();
+            };;
 
             SetAprilTag();
 
@@ -79,34 +91,37 @@ public class CompAutoRedFront extends LinearOpMode {
     }
     public void PurplePixel(){
         if (Location == "left") {
-            vp.DESIRED_TAG_ID = 1;
             TelemetryStep("Turn to left");
             ch.imuTurn(44);
             TelemetryStep("Move to left");
-            ch.EncoderMove(CS.E_SPIKE_LEFT);
-            BackFromSpike(500);
+            ch.EncoderMove(350);
+            BackFromSpike(450);
             TelemetryStep("Turn to backdrop");
-            ch.imuTurn(90);
-            ch.EncoderMove(1000);
-            ch.imuTurn(70);
+            ch.imuTurn(7);
+            ch.EncoderMove(1200);
 
         } else if (Location == "right") {
-            vp.DESIRED_TAG_ID = 3;
             TelemetryStep("Turn to right");
             ch.imuTurn(-44);
             TelemetryStep("Move to right");
-            ch.EncoderMove(275);
+            ch.EncoderMove(215);
             BackFromSpike(700);
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(70);
 
         } else {
-            vp.DESIRED_TAG_ID = 2;
+            ch.moveRobot(0,0.5,0);
+            sleep(500);
+            ch.moveRobot(0,0,0);
             TelemetryStep("Move to Center");
-            ch.EncoderMove(Constants.CS.E_SPIKE_LEFT_CENTER);
+            ch.EncoderMove(500);
+            ch.moveRobot(0,-0.5,0);
+            sleep(500);
+            ch.moveRobot(0,0,0);
             BackFromSpike(600);
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(70);
+
         }
     }
     private void BackFromSpike(int amount){
@@ -157,26 +172,24 @@ public class CompAutoRedFront extends LinearOpMode {
 
         TelemetryStep("Move april tag");
         ch.moveAprilTag(vp);
-        ch.dropPixel1();
+        ch.shoulder.setTargetPosition(500);
+        ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ch.shoulder.setPower(0.8);
+        sleep(1000);
         ch.EncoderMove(400);
         sleep(500);
         ch.rightPincer.setPosition(Constants.CS.C_RIGHT_OPEN);
+        ch.leftPincer.setPosition(CS.C_LEFT_OPEN);
     }
     public void Park() {
 
         ch.moveRobot(-0.5,0,0);
-        sleep(500);
+        sleep(200);
         ch.moveRobot(0,0,0);
 
         ch.closeArmAuto();
         ch.imuTurn(0);
 
-        ch.moveRobot(-0.5,0,0);
-        sleep(1500);
-        ch.moveRobot(0,0,0);
 
-        ch.moveRobot(0,-0.5,0);
-        sleep(750);
-        ch.moveRobot(0,0,0);
     }
 } //linear op mode

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.CaptainHook.Constants;
@@ -25,12 +26,13 @@ public class CompAutoRedBack extends LinearOpMode {
         vp = new VP(hardwareMap, this);
         vp.initCompVision();
 
-        ch.rightPincer.setPosition(0.5);
+        ch.rightPincer.setPosition(CS.C_RIGHT_CLOSE);
         ch.wrist.setPosition(CS.WRIST_UP);
 
         telemetry.addData("Status", "initialized ");
         telemetry.update();
 
+        ch.imu.resetYaw();
         waitForStart();
 
         stepTimer.reset();
@@ -124,6 +126,9 @@ public class CompAutoRedBack extends LinearOpMode {
         ch.moveRobot(0,-0.5,0);
         sleep(750);
         ch.moveRobot(0,0,0);
+        ch.armExtender.setTargetPosition(0);
+        ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ch.armExtender.setPower(1);
     }
 
 } //linear op mode

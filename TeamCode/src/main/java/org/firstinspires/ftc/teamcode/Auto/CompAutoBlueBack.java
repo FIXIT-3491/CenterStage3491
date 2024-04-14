@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
@@ -24,12 +25,13 @@ public class CompAutoBlueBack extends LinearOpMode {
         vp = new VP(hardwareMap, this);
         vp.initCompVision();
 
-        ch.rightPincer.setPosition(0.5);
+        ch.rightPincer.setPosition(CS.C_RIGHT_CLOSE);
         ch.wrist.setPosition(CS.WRIST_UP);
 
         telemetry.addData("Status", "initialized ");
         telemetry.update();
 
+        ch.imu.resetYaw();
         waitForStart();
 
         stepTimer.reset();
@@ -60,25 +62,25 @@ public class CompAutoBlueBack extends LinearOpMode {
     }
     public void PurplePixel(){
 
-        if (Location == "left") {
+        if (Location == "left") { // actrually right
             vp.DESIRED_TAG_ID = 1;
             TelemetryStep("Turn to left");
-            ch.imuTurn(40);
+            ch.imuTurn(33);
             TelemetryStep("Move to left");
-            ch.EncoderMove(CS.E_SPIKE_LEFT);
+            ch.EncoderMove(475);
             BackFromSpike(600);
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(80);
 
-        } else if (Location == "right") {
+        } else if (Location == "right") { //actually left
             vp.DESIRED_TAG_ID = 3;
             TelemetryStep("Turn to right");
-            ch.imuTurn(-32);
+            ch.imuTurn(-33);
             TelemetryStep("Move to right");
-            ch.EncoderMove(CS.E_SPIKE_RIGHT);
+            ch.EncoderMove(425);
             BackFromSpike(550);
             TelemetryStep("Turn to backdrop");
-            ch.imuTurn(95);
+            ch.imuTurn(80);
 
         } else {
             vp.DESIRED_TAG_ID = 2;
@@ -86,7 +88,7 @@ public class CompAutoBlueBack extends LinearOpMode {
             ch.EncoderMove(CS.E_SPIKE_LEFT_CENTER);
             BackFromSpike(600);
             TelemetryStep("Turn to backdrop");
-            ch.imuTurn(90);
+            ch.imuTurn(80);
         }
     }
     private void BackFromSpike(int amount){
@@ -100,10 +102,14 @@ public class CompAutoBlueBack extends LinearOpMode {
         stepTimer.reset();
         ch.wrist.setPosition(0.15);
         vp.setManualExposure(6);
-
+        ch.armExtender.setTargetPosition(40);
+        ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ch.armExtender.setPower(1);
+        ch.EncoderMove(200);
         TelemetryStep("Move april tag");
         ch.moveAprilTag(vp);
         ch.dropPixel1();
+        sleep(1000);
         ch.EncoderMove(400);
         sleep(500);
         ch.rightPincer.setPosition(CS.C_RIGHT_OPEN);
@@ -124,6 +130,11 @@ public class CompAutoBlueBack extends LinearOpMode {
         ch.moveRobot(0,0.5,0);
         sleep(750);
         ch.moveRobot(0,0,0);
+        ch.armExtender.setTargetPosition(40);
+        ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ch.armExtender.setPower(1);
+        sleep(1000);
+
     }
 
 } //linear op mode

@@ -238,18 +238,16 @@ public class CH {
     }
 
     public void dropPixel1(){
-        shoulder.setTargetPosition(475);
+        shoulder.setTargetPosition(400);
         shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        shoulder.setPower(0.6);
+        shoulder.setPower(0.8);
 
-        armExtender.setTargetPosition(50);
-        armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armExtender.setPower(1);
+
     }
     public void WhitePixel(){
-        shoulder.setTargetPosition(205);
+        shoulder.setTargetPosition(240);
         shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        shoulder.setPower(0.6);
+        shoulder.setPower(1);
 
         wrist.setPosition(0.075);
         leftPincer.setPosition(CS.C_LEFT_OPEN);
@@ -259,6 +257,9 @@ public class CH {
         shoulder.setTargetPosition(0);
         shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         shoulder.setPower(0.5);
+        armExtender.setTargetPosition(0);
+        armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armExtender.setPower(1);
 
         wrist.setPosition(CS.WRIST_UP);
         rightPincer.setPosition(CS.C_RIGHT_CLOSE);
