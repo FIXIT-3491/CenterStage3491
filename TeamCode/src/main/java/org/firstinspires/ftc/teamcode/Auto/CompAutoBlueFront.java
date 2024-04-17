@@ -100,7 +100,7 @@ public class CompAutoBlueFront extends LinearOpMode {
 
         } else if (Location == "right") {
             TelemetryStep("Turn to right");
-            ch.imuTurn(-24);
+            ch.imuTurn(-30);
             TelemetryStep("Move to right");
             ch.EncoderMove(500);
             BackFromSpike(750);
@@ -140,13 +140,14 @@ public class CompAutoBlueFront extends LinearOpMode {
         ch.moveRobot(-0.5,0,0);
         sleep(100);
         ch.moveRobot(0,0,0);
-        ch.imuTurn(-10);
+        ch.imuTurn(-25);
         ch.wrist.setPosition(0.075);
         ch.EncoderMove(1000);
         ch.imuTurn(70);
     }
     public void DriveThroughTruss(){
 
+        sleep(5000);
         ch.moveRobot(0.7,0,0);
         sleep(2100);
         ch.moveRobot(0,0,0);
