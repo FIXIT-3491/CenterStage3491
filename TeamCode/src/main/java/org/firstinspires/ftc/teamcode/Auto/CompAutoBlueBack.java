@@ -102,9 +102,6 @@ public class CompAutoBlueBack extends LinearOpMode {
         stepTimer.reset();
         ch.wrist.setPosition(0.15);
         vp.setManualExposure(6);
-        ch.armExtender.setTargetPosition(40);
-        ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        ch.armExtender.setPower(1);
         ch.EncoderMove(200);
         TelemetryStep("Move april tag");
         ch.moveAprilTag(vp);
@@ -130,10 +127,10 @@ public class CompAutoBlueBack extends LinearOpMode {
         ch.moveRobot(0,0.5,0);
         sleep(750);
         ch.moveRobot(0,0,0);
-        ch.armExtender.setTargetPosition(40);
+        ch.armExtender.setTargetPosition(0);
         ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         ch.armExtender.setPower(1);
-        sleep(1000);
+
 
     }
 

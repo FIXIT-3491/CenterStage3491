@@ -117,7 +117,7 @@ public class CompAutoRedBack extends LinearOpMode {
         ch.moveRobot(0,0,0);
 
         ch.closeArmAuto();
-        ch.imuTurn(0);
+        ch.imuTurn(-5);
 
         ch.moveRobot(-0.5,0,0);
         sleep(1500);

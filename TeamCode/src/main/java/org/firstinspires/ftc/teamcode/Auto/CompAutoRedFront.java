@@ -64,7 +64,7 @@ public class CompAutoRedFront extends LinearOpMode {
                 ch.moveRobot(0.7,0,0);
                 sleep(1800);
                 ch.moveRobot(0,0,0);
-                ch.imuTurn(-110);
+                ch.imuTurn(-115);
                 ch.closeArmAuto();
             };;
 
@@ -150,7 +150,7 @@ public class CompAutoRedFront extends LinearOpMode {
         ch.moveRobot(0.7,0,0);
         sleep(2000);
         ch.moveRobot(0,0,0);
-        ch.imuTurn(-110);
+        ch.imuTurn(-115);
         ch.closeArmAuto();
     }
     private void SetAprilTag(){
@@ -190,6 +190,9 @@ public class CompAutoRedFront extends LinearOpMode {
         ch.closeArmAuto();
         ch.imuTurn(0);
 
+        ch.armExtender.setTargetPosition(0);
+        ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ch.armExtender.setPower(1);
 
     }
 } //linear op mode

@@ -45,7 +45,7 @@ public class Setup extends LinearOpMode {
                 ch.launcher.setPosition(0.7);
 
             } if (gamepad2.b){
-                ch.launcher.setPosition(0.19);
+                ch.launcher.setPosition(0.25);
 
             }
         }

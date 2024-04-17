@@ -113,7 +113,7 @@ public class CompAutoBlueFront extends LinearOpMode {
             sleep(500);
             ch.moveRobot(0,0,0);
             TelemetryStep("Move to Center");
-            ch.EncoderMove(525);
+            ch.EncoderMove(500);
             ch.moveRobot(0,0.5,0);
             sleep(500);
             ch.moveRobot(0,0,0);
@@ -190,5 +190,8 @@ public class CompAutoBlueFront extends LinearOpMode {
 
         ch.closeArmAuto();
         ch.imuTurn(0);
+        ch.armExtender.setTargetPosition(0);
+        ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ch.armExtender.setPower(1);
     }
 } //linear op mode

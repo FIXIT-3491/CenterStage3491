@@ -245,7 +245,7 @@ public class CH {
 
     }
     public void WhitePixel(){
-        shoulder.setTargetPosition(240);
+        shoulder.setTargetPosition(200); // 185 or //240
         shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         shoulder.setPower(1);
 
