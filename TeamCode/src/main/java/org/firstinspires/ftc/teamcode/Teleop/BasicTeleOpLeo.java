@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.Teleop;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.CaptainHook.CH;
 import org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
-
+@Disabled
 @TeleOp(name="Basic TeleOpLeo", group="Linear OpMode")
 
 public class BasicTeleOpLeo extends LinearOpMode {
@@ -65,63 +66,62 @@ public class BasicTeleOpLeo extends LinearOpMode {
             WristControl();
 
             maxPos();
-                double max;
-                double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
-                double lateral = gamepad1.left_stick_x;
-                double yaw = gamepad1.right_stick_x;
-                double leftFrontPower = axial + lateral + yaw;
-                double rightFrontPower = axial - lateral - yaw;
-                double leftBackPower = axial - lateral + yaw;
-                double rightBackPower = axial + lateral - yaw;
-                max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-                max = Math.max(max, Math.abs(leftBackPower));
-                max = Math.max(max, Math.abs(rightBackPower));
-                if (max > 1.0) {
-                    leftFrontPower /= max;
-                    rightFrontPower /= max;
-                    leftBackPower /= max;
-                    rightBackPower /= max;
-                }
-                if (gamepad1.left_bumper) { // slow power
-                    ch.frontLDrive.setPower(0.3 * leftFrontPower);
-                    ch.frontRDrive.setPower(0.3 * rightFrontPower);
-                    ch.backLDrive.setPower(0.3 * leftBackPower);
-                    ch.backRDrive.setPower(0.3 * rightBackPower);
-                } else { // full power
-                    ch.frontLDrive.setPower(0.8 *leftFrontPower);
-                    ch.frontRDrive.setPower(0.8 *rightFrontPower);
-                    ch.backLDrive.setPower(0.8 *leftBackPower);
-                    ch.backRDrive.setPower(0.8 *rightBackPower);
-                }
-
-                telemetry.addData("Front left/Right", "%4.2f, %4.2f", ch.frontLDrive.getCurrent(CurrentUnit.AMPS), ch.frontRDrive.getCurrent(CurrentUnit.AMPS));
-                telemetry.addData("Back left/Right", "%4.2f, %4.2f", ch.backLDrive.getCurrent(CurrentUnit.AMPS), ch.backRDrive.getCurrent(CurrentUnit.AMPS));
-                telemetry.addData("Front left/Right Current", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-                telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-                telemetry.addData("Launcher Position", ch.launcher.getPosition());
-                telemetry.addData("shoulder position", ch.shoulder.getCurrentPosition());
-                telemetry.addData("armExt position", ch.armExtender.getCurrentPosition());
-                telemetry.addData("right pincer", ch.rightPincer.getPosition());
-                telemetry.addData("left pincer", ch.leftPincer.getPosition());
-                telemetry.addData("wrist", ch.wrist.getPosition());
-                telemetry.update();
+            double max;
+            double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+            double lateral = gamepad1.left_stick_x;
+            double yaw = gamepad1.right_stick_x;
+            double leftFrontPower = axial + lateral + yaw;
+            double rightFrontPower = axial - lateral - yaw;
+            double leftBackPower = axial - lateral + yaw;
+            double rightBackPower = axial + lateral - yaw;
+            max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+            max = Math.max(max, Math.abs(leftBackPower));
+            max = Math.max(max, Math.abs(rightBackPower));
+            if (max > 1.0) {
+                leftFrontPower /= max;
+                rightFrontPower /= max;
+                leftBackPower /= max;
+                rightBackPower /= max;
             }
+
+            if (gamepad1.left_bumper || gamepad1.right_bumper) {
+                ch.frontLDrive.setPower(0.3 * leftFrontPower);
+                ch.frontRDrive.setPower(0.3 * rightFrontPower);
+                ch.backLDrive.setPower(0.3 * leftBackPower);
+                ch.backRDrive.setPower(0.3 * rightBackPower);
+            }
+            else { //slow button
+                ch.frontLDrive.setPower(leftFrontPower);
+                ch.frontRDrive.setPower(rightFrontPower);
+                ch.backLDrive.setPower(leftBackPower);
+                ch.backRDrive.setPower(rightFrontPower);
+            }
+
+            telemetry.addData("Launcher Position", ch.launcher.getPosition());
+            telemetry.addData("arm position", ch.shoulder.getCurrentPosition());
+            telemetry.addData("right pincer", ch.rightPincer.getPosition());
+            telemetry.addData("left pincer", ch.leftPincer.getPosition());
+            telemetry.addData("left pincer", pickupTime.milliseconds());
+            telemetry.update();
+
+
+        }
     }
     public void DroneLauncherControl(){
-        if (gamepad2.right_trigger > 0 ) { //toggle drone launch and close
+        if (gamepad2.right_bumper ) { //toggle drone launch and close
             ch.launcher.setPosition(0.7);
             armExtTargetPos = 1040;
             shoulderTargetPos = 1235;
         }
     }
     public void AutoPickup(){
-        if (currentGamepad1.right_trigger > 0 && previousGamepad1.right_trigger == 0){
+        if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper){
             wristTargetPos = CS.WRIST_DOWN;
             rightPincerPos = CS.C_RIGHT_OPEN;
             leftPincerPos = CS.C_LEFT_OPEN;
             rightTriggerPressed = true;
         }
-        if (currentGamepad1.right_trigger == 0 && previousGamepad1.right_trigger > 0){
+        if (!currentGamepad1.right_bumper && previousGamepad1.right_bumper){
             autoPickup = true;
             pickupTime.reset();
         }
@@ -162,7 +162,7 @@ public class BasicTeleOpLeo extends LinearOpMode {
         }
     }
     public void WristControl(){
-        if (gamepad2.left_trigger > 0) {
+        if (gamepad2.left_bumper) {
             wristTargetPos = CS.WRIST_DOWN;
         } else if (rightTriggerPressed == true) {
             telemetry.addData("working", true);

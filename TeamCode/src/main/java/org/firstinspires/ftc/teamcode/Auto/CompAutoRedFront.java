@@ -29,7 +29,7 @@ public class CompAutoRedFront extends LinearOpMode {
         vp.initCompVision();
 
         ch.armEncoderReset();
-        ch.rightPincer.setPosition(CS.C_RIGHT_CLOSE);
+        ch.rightPincer.setPosition(0.4);
         ch.wrist.setPosition(CS.WRIST_UP);
 
         telemetry.addData("Status", "initialized ");
@@ -114,7 +114,7 @@ public class CompAutoRedFront extends LinearOpMode {
             sleep(500);
             ch.moveRobot(0,0,0);
             TelemetryStep("Move to Center");
-            ch.EncoderMove(500);
+            ch.EncoderMove(480);
             ch.moveRobot(0,-0.5,0);
             sleep(500);
             ch.moveRobot(0,0,0);
@@ -171,6 +171,7 @@ public class CompAutoRedFront extends LinearOpMode {
         ch.wrist.setPosition(0.15);
 
         TelemetryStep("Move april tag");
+        ch.EncoderMove(200);
         ch.moveAprilTag(vp);
         ch.shoulder.setTargetPosition(500);
         ch.shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);

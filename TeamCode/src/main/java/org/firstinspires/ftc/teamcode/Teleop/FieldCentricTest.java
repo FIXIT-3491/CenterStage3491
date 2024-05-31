@@ -33,7 +33,6 @@ public class FieldCentricTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         ch = new CH(hardwareMap, this);
-        ch.wrist.setPosition(CS.WRIST_UP);
         ch.rightPincer.setPosition(CS.C_RIGHT_CLOSE);
         ch.leftPincer.setPosition(CS.C_LEFT_CLOSE);
 
@@ -47,6 +46,8 @@ public class FieldCentricTest extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
+
+        ch.wrist.setPosition(CS.WRIST_UP);
         while (opModeIsActive()) {
 
             previousGamepad1.copy(currentGamepad1);

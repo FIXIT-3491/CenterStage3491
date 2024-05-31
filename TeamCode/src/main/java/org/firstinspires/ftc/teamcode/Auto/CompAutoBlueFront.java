@@ -62,7 +62,7 @@ public class CompAutoBlueFront extends LinearOpMode {
                 ch.moveRobot(0.7,0,0);
                 sleep(1700);
                 ch.moveRobot(0,0,0);
-                ch.imuTurn(130);
+                ch.imuTurn(110);
                 ch.closeArmAuto();
             };
 
@@ -105,7 +105,7 @@ public class CompAutoBlueFront extends LinearOpMode {
             ch.EncoderMove(500);
             BackFromSpike(750);
             TelemetryStep("Turn to backdrop");
-            ch.imuTurn(0);
+            ch.imuTurn(-10);
             ch.EncoderMove(1500);
 
         } else {
@@ -140,7 +140,7 @@ public class CompAutoBlueFront extends LinearOpMode {
         ch.moveRobot(-0.5,0,0);
         sleep(100);
         ch.moveRobot(0,0,0);
-        ch.imuTurn(-25);
+        ch.imuTurn(-10);
         ch.wrist.setPosition(0.075);
         ch.EncoderMove(1000);
         ch.imuTurn(70);

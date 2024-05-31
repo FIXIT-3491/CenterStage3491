@@ -77,7 +77,7 @@ public class CompAutoRedBack extends LinearOpMode {
             TelemetryStep("Turn to right");
             ch.imuTurn(-32);
             TelemetryStep("Move to right");
-            ch.EncoderMove(CS.E_SPIKE_RIGHT);
+            ch.EncoderMove(390);
             BackFromSpike(550);
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(-95);
@@ -104,6 +104,7 @@ public class CompAutoRedBack extends LinearOpMode {
         vp.setManualExposure(6);
 
         TelemetryStep("Move april tag");
+
         ch.moveAprilTag(vp);
         ch.dropPixel1();
         ch.EncoderMove(400);
@@ -124,7 +125,7 @@ public class CompAutoRedBack extends LinearOpMode {
         ch.moveRobot(0,0,0);
 
         ch.moveRobot(0,-0.5,0);
-        sleep(750);
+        sleep(1400);
         ch.moveRobot(0,0,0);
         ch.armExtender.setTargetPosition(0);
         ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);

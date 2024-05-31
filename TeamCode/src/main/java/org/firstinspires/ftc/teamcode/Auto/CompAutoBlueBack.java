@@ -125,7 +125,7 @@ public class CompAutoBlueBack extends LinearOpMode {
         ch.moveRobot(0,0,0);
 
         ch.moveRobot(0,0.5,0);
-        sleep(750);
+        sleep(1400);
         ch.moveRobot(0,0,0);
         ch.armExtender.setTargetPosition(0);
         ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
