@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.CaptainHook.Constants;
 import org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
 import org.firstinspires.ftc.teamcode.CaptainHook.CH;
 
@@ -22,6 +23,7 @@ public class FieldCentricTest extends LinearOpMode {
     int shoulderTargetPos = 0;
     double rightPincerPos = CS.C_RIGHT_CLOSE;
     double leftPincerPos = CS.C_LEFT_CLOSE;
+    double spinnerPower = 0;
     private ElapsedTime pickupTime = new ElapsedTime();
 
     boolean autoPickup = false;
@@ -29,7 +31,10 @@ public class FieldCentricTest extends LinearOpMode {
     Gamepad currentGamepad1 = new Gamepad();
     Gamepad previousGamepad1 = new Gamepad();
 
-    public boolean dropPixelCalled = false;
+    public ElapsedTime intakeTimer = new ElapsedTime();
+    public ElapsedTime spinTimer = new ElapsedTime();
+
+
     @Override
     public void runOpMode() {
         ch = new CH(hardwareMap, this);
@@ -52,6 +57,44 @@ public class FieldCentricTest extends LinearOpMode {
 
             previousGamepad1.copy(currentGamepad1);
             currentGamepad1.copy(gamepad1);
+
+
+            if (ch.leftIntake.isPressed()) {
+                leftPincerPos = CS.C_LEFT_CLOSE;
+            } else {
+                leftPincerPos = CS.C_LEFT_OPEN;
+            }
+            if (ch.rightIntake.isPressed()) {
+                rightPincerPos = CS.C_RIGHT_CLOSE;
+            } else {
+                rightPincerPos = CS.C_RIGHT_OPEN;
+            }
+            spinnerPower = 0;
+            if (ch.leftIntake.isPressed() && ch.rightIntake.isPressed()) {
+
+                // Stop the spinner intake
+
+                spinnerPower = 0;
+//
+                // Reset the intake timer
+                intakeTimer.reset();
+            }
+            else {
+                // If the timer has been running for less than 2000 milliseconds (2 seconds)
+                if (intakeTimer.milliseconds() < 2000) {
+                    // Do nothing, effectively waiting for the 2-second delay to pass
+                    // You can add a comment here to indicate the waiting period
+                } else {
+                    // If 2 seconds have passed, set the spinner intake power to -1
+                    if (gamepad1.right_trigger > 0) {
+                        spinnerPower = -1;
+                    }
+                }
+            }
+
+            if (gamepad2.left_bumper || gamepad2.right_bumper){
+                spinnerPower = 1;
+            }
 
             WinchControl();
 
@@ -122,24 +165,28 @@ public class FieldCentricTest extends LinearOpMode {
             shoulderTargetPos = 1235;
         }
     }
-    public void AutoPickup(){
-        if (currentGamepad1.right_trigger > 0 && previousGamepad1.right_trigger == 0){
-            wristTargetPos = CS.WRIST_DOWN;
-            rightPincerPos = CS.C_RIGHT_OPEN;
-            leftPincerPos = CS.C_LEFT_OPEN;
-            rightTriggerPressed = true;
-        }
-        if (currentGamepad1.right_trigger == 0 && previousGamepad1.right_trigger > 0){
-            autoPickup = true;
-            pickupTime.reset();
-        }
+    public void AutoPickup() {
+        if (ch.leftIntake.isPressed() && ch.rightIntake.isPressed()) {
+            rightTriggerPressed = false;
+        } else {
+            if (currentGamepad1.right_trigger > 0 && previousGamepad1.right_trigger == 0) {
+                wristTargetPos = CS.WRIST_DOWN;
+                rightPincerPos = CS.C_RIGHT_OPEN;
+                leftPincerPos = CS.C_LEFT_OPEN;
+                rightTriggerPressed = true;
+            }
+            if (currentGamepad1.right_trigger == 0 && previousGamepad1.right_trigger > 0) {
+                autoPickup = true;
+                pickupTime.reset();
+            }
 
-        if (autoPickup) {
-            leftPincerPos = CS.C_LEFT_CLOSE;
-            rightPincerPos = CS.C_RIGHT_CLOSE;
-            if (pickupTime.milliseconds() >  300) {
-                autoPickup = false;
-                rightTriggerPressed = false;
+            if (autoPickup) {
+                leftPincerPos = CS.C_LEFT_CLOSE;
+                rightPincerPos = CS.C_RIGHT_CLOSE;
+                if (pickupTime.milliseconds() > 300) {
+                    autoPickup = false;
+                    rightTriggerPressed = false;
+                }
             }
         }
     }
@@ -217,16 +264,25 @@ public class FieldCentricTest extends LinearOpMode {
         ch.wrist.setPosition(wristTargetPos);
         ch.leftPincer.setPosition(leftPincerPos);
         ch.rightPincer.setPosition(rightPincerPos);
+
+        ch.spinnerIntake.setPower(spinnerPower);
     }
     public void PincerControl(){
+
         if (gamepad2.left_bumper) // open left pincer
             leftPincerPos = CS.C_LEFT_OPEN;
+        else if (ch.leftIntake.isPressed()){
+            leftPincerPos = CS.C_LEFT_CLOSE;
+        }
         else if (rightTriggerPressed);
         else // close
             leftPincerPos = CS.C_LEFT_CLOSE;
 
         if (gamepad2.right_bumper) // open right pincer
             rightPincerPos = CS.C_RIGHT_OPEN;
+        else if (ch.rightIntake.isPressed()){
+            rightPincerPos = CS.C_RIGHT_CLOSE;
+        }
         else if (rightTriggerPressed);
         else // close
             rightPincerPos = CS.C_RIGHT_CLOSE;
@@ -244,6 +300,3 @@ public class FieldCentricTest extends LinearOpMode {
             armExtTargetPos = armExtTargetPos - 15;
     }
 }
-
-
-
