@@ -31,6 +31,8 @@ public class FieldCentricTest extends LinearOpMode {
     Gamepad currentGamepad1 = new Gamepad();
     Gamepad previousGamepad1 = new Gamepad();
 
+    boolean sensorsPressed = false;
+
     public ElapsedTime intakeTimer = new ElapsedTime();
     public ElapsedTime spinTimer = new ElapsedTime();
 
@@ -70,31 +72,29 @@ public class FieldCentricTest extends LinearOpMode {
                 rightPincerPos = CS.C_RIGHT_OPEN;
             }
             spinnerPower = 0;
+
+
+
+            // Handle spinner power and timing logic
             if (ch.leftIntake.isPressed() && ch.rightIntake.isPressed()) {
-
-                // Stop the spinner intake
-
-                spinnerPower = 0;
-//
-                // Reset the intake timer
-                intakeTimer.reset();
-            }
-            else {
-                // If the timer has been running for less than 2000 milliseconds (2 seconds)
-                if (intakeTimer.milliseconds() < 2000) {
-                    // Do nothing, effectively waiting for the 2-second delay to pass
-                    // You can add a comment here to indicate the waiting period
-                } else {
-                    // If 2 seconds have passed, set the spinner intake power to -1
-                    if (gamepad1.right_trigger > 0) {
-                        spinnerPower = -1;
-                    }
+                if (!sensorsPressed) {
+                    intakeTimer.reset();
+                    sensorsPressed = true;
+                }
+                if (intakeTimer.milliseconds() < 500) {
+                    spinnerPower = -0.6;
+                }
+            } else {
+                sensorsPressed = false;
+                if (gamepad1.right_trigger > 0) {
+                    spinnerPower = -0.6;
+                }
+                if (gamepad2.left_bumper || gamepad2.right_bumper){
+                    spinnerPower = 0.15;
                 }
             }
 
-            if (gamepad2.left_bumper || gamepad2.right_bumper){
-                spinnerPower = 1;
-            }
+
 
             WinchControl();
 
@@ -183,7 +183,7 @@ public class FieldCentricTest extends LinearOpMode {
             if (autoPickup) {
                 leftPincerPos = CS.C_LEFT_CLOSE;
                 rightPincerPos = CS.C_RIGHT_CLOSE;
-                if (pickupTime.milliseconds() > 300) {
+                if (pickupTime.milliseconds() > 500) {
                     autoPickup = false;
                     rightTriggerPressed = false;
                 }

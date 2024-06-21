@@ -17,6 +17,7 @@ public class CompAutoRedBack extends LinearOpMode {
     private VP vp = null;
 
     private ElapsedTime stepTimer = new ElapsedTime();
+    private ElapsedTime otherTimer = new ElapsedTime();
     private String Location;
 
     @Override
@@ -67,7 +68,9 @@ public class CompAutoRedBack extends LinearOpMode {
             TelemetryStep("Turn to left");
             ch.imuTurn(44);
             TelemetryStep("Move to left");
+            ch.spinnerIntake.setPower(1);
             ch.EncoderMove(CS.E_SPIKE_LEFT);
+            ch.spinnerIntake.setPower(0);
             BackFromSpike(750);
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(-80);
@@ -77,15 +80,20 @@ public class CompAutoRedBack extends LinearOpMode {
             TelemetryStep("Turn to right");
             ch.imuTurn(-32);
             TelemetryStep("Move to right");
+            ch.spinnerIntake.setPower(1);
             ch.EncoderMove(390);
+            ch.spinnerIntake.setPower(0);
             BackFromSpike(550);
+
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(-95);
 
         } else {
             vp.DESIRED_TAG_ID = 5;
             TelemetryStep("Move to Center");
+            ch.spinnerIntake.setPower(1);
             ch.EncoderMove(CS.E_SPIKE_LEFT_CENTER);
+            ch.spinnerIntake.setPower(0);
             BackFromSpike(600);
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(-90);
@@ -109,7 +117,15 @@ public class CompAutoRedBack extends LinearOpMode {
         ch.dropPixel1();
         ch.EncoderMove(400);
         sleep(500);
+
         ch.rightPincer.setPosition(CS.C_RIGHT_OPEN);
+
+        if (stepTimer.milliseconds() < 750){
+            ch.spinnerIntake.setPower(0.3);
+        }
+
+        sleep(750);
+
     }
     public void Park() {
 

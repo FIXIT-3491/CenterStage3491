@@ -181,6 +181,7 @@ public class CompAutoRedFront extends LinearOpMode {
         sleep(500);
         ch.rightPincer.setPosition(Constants.CS.C_RIGHT_OPEN);
         ch.leftPincer.setPosition(CS.C_LEFT_OPEN);
+        ch.spinnerIntake.setPower(0.3);
     }
     public void Park() {
 

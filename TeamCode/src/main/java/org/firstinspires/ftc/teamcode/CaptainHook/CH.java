@@ -253,7 +253,7 @@ public class CH {
     }
 
     public void dropPixel1(){
-        shoulder.setTargetPosition(400);
+        shoulder.setTargetPosition(425);
         shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         shoulder.setPower(0.8);
 

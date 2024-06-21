@@ -67,7 +67,8 @@ public class CompAutoBlueBack extends LinearOpMode {
             TelemetryStep("Turn to left");
             ch.imuTurn(33);
             TelemetryStep("Move to left");
-            ch.EncoderMove(475);
+            ch.armMove(600);
+            ch.EncoderMove(515);
             BackFromSpike(600);
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(80);
@@ -77,14 +78,17 @@ public class CompAutoBlueBack extends LinearOpMode {
             TelemetryStep("Turn to right");
             ch.imuTurn(-33);
             TelemetryStep("Move to right");
-            ch.EncoderMove(425);
+            ch.armMove(800);
+            ch.EncoderMove(450);
             BackFromSpike(550);
+            ch.armMove(0);
             TelemetryStep("Turn to backdrop");
             ch.imuTurn(80);
 
         } else {
             vp.DESIRED_TAG_ID = 2;
             TelemetryStep("Move to Center");
+
             ch.EncoderMove(CS.E_SPIKE_LEFT_CENTER);
             BackFromSpike(600);
             TelemetryStep("Turn to backdrop");
@@ -98,7 +102,7 @@ public class CompAutoBlueBack extends LinearOpMode {
         sleep(amount);
         ch.moveRobot(0, 0, 0);
     }
-    private void YellowPixel(){
+    private void YellowPixel() {
         stepTimer.reset();
         ch.wrist.setPosition(0.15);
         vp.setManualExposure(6);
@@ -107,9 +111,12 @@ public class CompAutoBlueBack extends LinearOpMode {
         ch.moveAprilTag(vp);
         ch.dropPixel1();
         sleep(1000);
+        ch.spinnerIntake.setPower(0.3);
         ch.EncoderMove(400);
         sleep(500);
         ch.rightPincer.setPosition(CS.C_RIGHT_OPEN);
+        sleep(500);
+        ch.spinnerIntake.setPower(0);
     }
     public void Park() {
 
