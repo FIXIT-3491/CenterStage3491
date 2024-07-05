@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.CaptainHook.CH;
+import org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
 import org.firstinspires.ftc.teamcode.CaptainHook.SparkFunOTOSConfig;
 
     @TeleOp(name = "TestOTOS", group = "Linear OpMode")
@@ -26,6 +27,7 @@ import org.firstinspires.ftc.teamcode.CaptainHook.SparkFunOTOSConfig;
             waitForStart();
             // Loop until the OpMode ends
             while (opModeIsActive()) {
+                ch.wrist.setPosition(CS.WRIST_UP);
                 // Get the latest position, which includes the x and y coordinates, plus the
                 // heading angle
                 SparkFunOTOSConfig.Pose2D pos = myOtos.getPosition();
@@ -84,8 +86,6 @@ import org.firstinspires.ftc.teamcode.CaptainHook.SparkFunOTOSConfig;
 
                 // Update the telemetry on the driver station
                 telemetry.update();
-
-
             }
         }
 
@@ -114,7 +114,7 @@ import org.firstinspires.ftc.teamcode.CaptainHook.SparkFunOTOSConfig;
             // clockwise (negative rotation) from the robot's orientation, the offset
             // would be {-5, 10, -90}. These can be any value, even the angle can be
             // tweaked slightly to compensate for imperfect mounting (eg. 1.3 degrees).
-            SparkFunOTOSConfig.Pose2D offset = new SparkFunOTOSConfig.Pose2D(0, 0, 0);
+            SparkFunOTOSConfig.Pose2D offset = new SparkFunOTOSConfig.Pose2D(3, -1, 90);
             myOtos.setOffset(offset);
 
             // Here we can set the linear and angular scalars, which can compensate for
@@ -133,7 +133,7 @@ import org.firstinspires.ftc.teamcode.CaptainHook.SparkFunOTOSConfig;
             // multiple speeds to get an average, then set the linear scalar to the
             // inverse of the error. For example, if you move the robot 100 inches and
             // the sensor reports 103 inches, set the linear scalar to 100/103 = 0.971
-            myOtos.setLinearScalar(1.0);
+            myOtos.setLinearScalar(1.071);
             myOtos.setAngularScalar(1.0);
 
             // The IMU on the OTOS includes a gyroscope and accelerometer, which could
