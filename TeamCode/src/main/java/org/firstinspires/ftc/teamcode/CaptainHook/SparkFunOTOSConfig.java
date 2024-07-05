@@ -3,7 +3,7 @@
     
     Copyright (c) 2024 SparkFun Electronics
 */
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.CaptainHook;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.hardware.configuration.annotations.DevicePropertie
 import com.qualcomm.robotcore.hardware.configuration.annotations.I2cDeviceType;
 
 /**
- * {@link SparkFunOTOS} is the Java driver for the SparkFun Qwiic Optical Tracking Odometry Sensor
+ * {@link SparkFunOTOSConfig} is the Java driver for the SparkFun Qwiic Optical Tracking Odometry Sensor
  * (OTOS). This is a port of the Arduino library.
  *
  * @see <a href="https://www.sparkfun.com/products/24904">SparkFun OTOS Product Page</a>
@@ -27,7 +27,7 @@ import com.qualcomm.robotcore.hardware.configuration.annotations.I2cDeviceType;
         xmlTag = "SparkFunOTOS",
         description = "SparkFun Qwiic Optical Tracking Odometry Sensor"
 )
-public class SparkFunOTOS extends I2cDeviceSynchDevice {
+public class SparkFunOTOSConfig extends I2cDeviceSynchDevice {
     // Default I2C addresses of the Qwiic OTOS
     public static final byte DEFAULT_ADDRESS = 0x17;
     // Minimum scalar value for the linear and angular scalars
@@ -283,7 +283,7 @@ public class SparkFunOTOS extends I2cDeviceSynchDevice {
     protected double _meterToUnit;
     protected double _radToUnit;
 
-    public SparkFunOTOS(I2cDeviceSynchSimple i2cDeviceSynchSimple, boolean deviceClientIsOwned)
+    public SparkFunOTOSConfig(I2cDeviceSynchSimple i2cDeviceSynchSimple, boolean deviceClientIsOwned)
     {
         // Initialize the base class
         super(i2cDeviceSynchSimple, deviceClientIsOwned);

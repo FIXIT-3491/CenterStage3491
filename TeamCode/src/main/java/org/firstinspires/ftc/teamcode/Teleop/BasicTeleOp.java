@@ -8,12 +8,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.CaptainHook.CH;
 import org.firstinspires.ftc.teamcode.CaptainHook.Constants;
+import org.firstinspires.ftc.teamcode.CaptainHook.SparkFunOTOSConfig;
 
 @TeleOp(name="Basic TeleOp", group="Linear OpMode")
 
 public class BasicTeleOp extends LinearOpMode {
     private CH ch = null;
-
     int armExtTargetPos = 0;
     double wristTargetPos = Constants.CS.WRIST_UP;
     int shoulderTargetPos = 0;
@@ -25,6 +25,8 @@ public class BasicTeleOp extends LinearOpMode {
     boolean rightTriggerPressed = false;
     Gamepad currentGamepad1 = new Gamepad();
     Gamepad previousGamepad1 = new Gamepad();
+
+    SparkFunOTOSConfig myOtos;
 
     public boolean dropPixelCalled = false;
     @Override
@@ -43,8 +45,10 @@ public class BasicTeleOp extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
+
         waitForStart();
         while (opModeIsActive()) {
+
 
             previousGamepad1.copy(currentGamepad1);
             currentGamepad1.copy(gamepad1);
@@ -91,6 +95,7 @@ public class BasicTeleOp extends LinearOpMode {
                     ch.frontLDrive.setPower(leftFrontPower);
                     ch.frontRDrive.setPower(rightFrontPower);
                     ch.backLDrive.setPower(leftBackPower);
+
                     ch.backRDrive.setPower(rightBackPower);
                 }
 
