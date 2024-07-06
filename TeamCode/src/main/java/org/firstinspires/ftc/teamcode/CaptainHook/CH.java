@@ -45,7 +45,7 @@ public class CH {
     public TouchSensor rightIntake;
     public TouchSensor leftIntake;
     public IMU imu;
-    SparkFunOTOSConfig myOtos;
+    public SparkFunOTOSConfig myOtos;
 
 
     public boolean Front = true;
@@ -117,6 +117,30 @@ public class CH {
         shoulder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armExtender.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armExtender.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
+    public void configureOtos() {
+
+
+        myOtos.setLinearUnit(SparkFunOTOSConfig.LinearUnit.INCHES);
+        myOtos.setAngularUnit(SparkFunOTOSConfig.AngularUnit.DEGREES);
+
+        SparkFunOTOSConfig.Pose2D offset = new SparkFunOTOSConfig.Pose2D(3, -1, 90);
+        myOtos.setOffset(offset);
+
+        myOtos.setLinearScalar(1.071);
+        myOtos.setAngularScalar(1.0);
+
+        myOtos.calibrateImu();
+
+        myOtos.resetTracking();
+
+        SparkFunOTOSConfig.Pose2D currentPosition = new SparkFunOTOSConfig.Pose2D(0, 0, 0);
+        myOtos.setPosition(currentPosition);
+
+        SparkFunOTOSConfig.Version hwVersion = new SparkFunOTOSConfig.Version();
+        SparkFunOTOSConfig.Version fwVersion = new SparkFunOTOSConfig.Version();
+        myOtos.getVersionInfo(hwVersion, fwVersion);
 
     }
 
