@@ -42,6 +42,14 @@ public class Constants { //Constants
         public static final int EXT_POS1 = 700;
         public static final int EXT_MIN = 0;
 
+        public static final double SPARKFUN_SPEED_GAIN =  0.045  ;   // 0.02 Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
+        public static final double SPARKFUN_STRAFE_GAIN =  0.15;   // 0.015 Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
+        public static final double SPARKFUN_TURN_GAIN =  0.035  ;   // 0.01 Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+
+        public static final double SPARKFUN_MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
+        public static final double SPARKFUN_MAX_AUTO_STRAFE = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
+        public static final double SPARKFUN_MAX_AUTO_TURN = 0.5;   //  Clip the turn speed to this max value (adjust for your robot)
+
 
 
         public static final double WRIST_DOWN = 0.1;

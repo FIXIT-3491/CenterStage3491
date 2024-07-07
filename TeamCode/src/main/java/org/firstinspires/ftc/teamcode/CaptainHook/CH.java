@@ -47,6 +47,8 @@ public class CH {
     public IMU imu;
     public SparkFunOTOSConfig myOtos;
 
+    SparkFunOTOSConfig.Pose2D pos;
+
 
     public boolean Front = true;
 
@@ -128,7 +130,7 @@ public class CH {
         SparkFunOTOSConfig.Pose2D offset = new SparkFunOTOSConfig.Pose2D(3, -1, 90);
         myOtos.setOffset(offset);
 
-        myOtos.setLinearScalar(1.071);
+        myOtos.setLinearScalar(1.055);
         myOtos.setAngularScalar(1.0);
 
         myOtos.calibrateImu();
@@ -169,6 +171,86 @@ public class CH {
         backLDrive.setPower(leftBackPower);
         backRDrive.setPower(rightBackPower);
     }
+    public void moveRobotSparkfun(double x, double y, double yaw) {
+
+        // Calculate wheel powers.
+        double leftFrontPower    =  x +y +yaw;
+        double rightFrontPower   =  x -y -yaw;
+        double leftBackPower     =  x -y +yaw;
+        double rightBackPower    =  x +y -yaw;
+
+        // Normalize wheel powers to be less than 1.0
+        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+
+        if (max > 1.0) {
+            leftFrontPower /= max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        // Send powers to the wheels.
+        frontLDrive.setPower(leftFrontPower);
+        frontRDrive.setPower(rightFrontPower);
+        backLDrive.setPower(leftBackPower);
+        backRDrive.setPower(rightBackPower);
+        opMode_ref.sleep(10);
+    }
+    public void otosDrive(double targetX, double targetY, double targetHeading) {
+        double drive, strafe, turn;
+        double currentRange, targetRange, initialBearing, targetBearing, xError, yError, yawError;
+        double opp, adj;
+
+        SparkFunOTOSConfig.Pose2D currentPos = myPosition();
+        xError = targetX-currentPos.x;
+        yError = targetY-currentPos.y;
+        yawError = targetHeading-currentPos.h;
+
+        while(opMode_ref.opModeIsActive() && ((Math.abs(xError) > 0.5) || (Math.abs(yError) > 0.5)
+                || (Math.abs(yawError) > 4)) ) {
+            // Use the speed and turn "gains" to calculate how we want the robot to move.
+            drive  = Range.clip(xError * CS.SPARKFUN_SPEED_GAIN, -CS.SPARKFUN_MAX_AUTO_SPEED, CS.SPARKFUN_MAX_AUTO_SPEED);
+            strafe = Range.clip(yError * CS.SPARKFUN_STRAFE_GAIN, -CS.SPARKFUN_MAX_AUTO_STRAFE, CS.SPARKFUN_MAX_AUTO_STRAFE);
+            turn   = Range.clip(yawError * CS.SPARKFUN_TURN_GAIN, -CS.SPARKFUN_MAX_AUTO_TURN, CS.SPARKFUN_MAX_AUTO_TURN) ;
+
+            opMode_ref.telemetry.addData("Auto","Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
+            // current x,y swapped due to 90 degree rotation
+            opMode_ref.telemetry.addData("current X coordinate", currentPos.x);
+            opMode_ref.telemetry.addData("current Y coordinate", currentPos.y);
+            opMode_ref.telemetry.addData("current Heading angle", currentPos.h);
+            opMode_ref.telemetry.addData("target X coordinate", targetX);
+            opMode_ref.telemetry.addData("target Y coordinate", targetY);
+            opMode_ref.telemetry.addData("target Heading angle", targetHeading);
+            opMode_ref.telemetry.addData("xError", xError);
+            opMode_ref.telemetry.addData("yError", yError);
+            opMode_ref.telemetry.addData("yawError", yawError);
+            opMode_ref.telemetry.update();
+
+            // Apply desired axes motions to the drivetrain.
+            moveRobotSparkfun(drive, strafe, turn);
+
+            // then recalc error
+            currentPos = myPosition();
+            xError = targetX-currentPos.x;
+            yError = targetY-currentPos.y;
+            yawError = targetHeading-currentPos.h;
+        }
+        moveRobotSparkfun(0,0,0);
+        currentPos = myPosition();
+        opMode_ref.telemetry.addData("current X coordinate", currentPos.x);
+        opMode_ref.telemetry.addData("current Y coordinate", currentPos.y);
+        opMode_ref.telemetry.addData("current Heading angle", currentPos.h);
+        opMode_ref.telemetry.update();
+    }
+    SparkFunOTOSConfig.Pose2D myPosition() {
+        pos = myOtos.getPosition();
+        SparkFunOTOSConfig.Pose2D myPos = new SparkFunOTOSConfig.Pose2D(pos.y, pos.x, -pos.h);
+        return(myPos);
+    }
+
+
 
     public void imuMove(double powerLevel, double heading) { //heading positive left
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
