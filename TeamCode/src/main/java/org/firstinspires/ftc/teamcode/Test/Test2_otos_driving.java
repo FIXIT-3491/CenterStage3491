@@ -35,15 +35,15 @@ public class Test2_otos_driving extends LinearOpMode {
 
 
 //ch.otosDrive(-100,0,0);
-        ch.otosDrive(84, 0, 0);// left spike mark
-
-        ch.otosDrive(84, 54, 0);// left spike mark
-        ch.otosDrive(108, 54, 0);// left spike mark
-
-        ch.otosDrive(84, 54, 0);// left spike mark
-
-        ch.otosDrive(84, 0, 0);// left spike mark
-        ch.otosDrive(0, 0, 0);// left spike mark
+//        ch.otosDrive(84, 0, 0);// left spike mark
+//
+//        ch.otosDrive(84, 54, 0);// left spike mark
+//        ch.otosDrive(108, 54, 0);// left spike mark
+//
+//        ch.otosDrive(84, 54, 0);// left spike mark
+//
+//        ch.otosDrive(84, 0, 0);// left spike mark
+//        ch.otosDrive(0, 0, 0);// left spike mark
 
 
 
