@@ -31,21 +31,12 @@ public class Test2_otos_driving extends LinearOpMode {
         runtime.reset();
 
         ch.wrist.setPosition(CS.WRIST_UP);
-        //moveRobotTest();
-
-
-//ch.otosDrive(-100,0,0);
-//        ch.otosDrive(84, 0, 0);// left spike mark
-//
-//        ch.otosDrive(84, 54, 0);// left spike mark
-//        ch.otosDrive(108, 54, 0);// left spike mark
-//
-//        ch.otosDrive(84, 54, 0);// left spike mark
-//
-//        ch.otosDrive(84, 0, 0);// left spike mark
-//        ch.otosDrive(0, 0, 0);// left spike mark
-
-
+        ch.otosDrive(50,0,0);
+        ch.otosDrive(50,-24,0);
+        ch.otosDrive(50,-24,50);
+        ch.otosDrive(50,-24,0);
+        ch.otosDrive(5,-24,0);
+        ch.otosDrive(0,0,0);
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {

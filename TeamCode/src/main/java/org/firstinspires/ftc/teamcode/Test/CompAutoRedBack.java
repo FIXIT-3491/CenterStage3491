@@ -1,21 +1,24 @@
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.CaptainHook.Constants;
 import org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
 import org.firstinspires.ftc.teamcode.CaptainHook.CH;
 import org.firstinspires.ftc.teamcode.CaptainHook.VP;
+@Disabled
+@Autonomous(name="CompAutoRedBack", group="Linear OpMode")
 
-@Autonomous(name="CompAutoBlueBack", group="Linear OpMode")
-
-public class CompAutoBlueBack extends LinearOpMode {
+public class CompAutoRedBack extends LinearOpMode {
     public CH ch = null;
     private VP vp = null;
 
     private ElapsedTime stepTimer = new ElapsedTime();
+    private ElapsedTime otherTimer = new ElapsedTime();
     private String Location;
 
     @Override
@@ -61,38 +64,40 @@ public class CompAutoBlueBack extends LinearOpMode {
         ch.EncoderMove(750);
     }
     public void PurplePixel(){
-
-        if (Location == "left") { // actrually right
-            vp.DESIRED_TAG_ID = 1;
+        if (Location == "left") {
+            vp.DESIRED_TAG_ID = 4;
             TelemetryStep("Turn to left");
-            ch.imuTurn(33);
+            ch.imuTurn(44);
             TelemetryStep("Move to left");
-            ch.armMove(600);
-            ch.EncoderMove(515);
-            BackFromSpike(600);
+            ch.spinnerIntake.setPower(1);
+            ch.EncoderMove(CS.E_SPIKE_LEFT);
+            ch.spinnerIntake.setPower(0);
+            BackFromSpike(750);
             TelemetryStep("Turn to backdrop");
-            ch.imuTurn(80);
+            ch.imuTurn(-80);
 
-        } else if (Location == "right") { //actually left
-            vp.DESIRED_TAG_ID = 3;
+        } else if (Location == "right") {
+            vp.DESIRED_TAG_ID = 6;
             TelemetryStep("Turn to right");
-            ch.imuTurn(-33);
+            ch.imuTurn(-32);
             TelemetryStep("Move to right");
-            ch.armMove(800);
-            ch.EncoderMove(450);
+            ch.spinnerIntake.setPower(1);
+            ch.EncoderMove(390);
+            ch.spinnerIntake.setPower(0);
             BackFromSpike(550);
-            ch.armMove(0);
+
             TelemetryStep("Turn to backdrop");
-            ch.imuTurn(80);
+            ch.imuTurn(-95);
 
         } else {
-            vp.DESIRED_TAG_ID = 2;
+            vp.DESIRED_TAG_ID = 5;
             TelemetryStep("Move to Center");
-
+            ch.spinnerIntake.setPower(1);
             ch.EncoderMove(CS.E_SPIKE_LEFT_CENTER);
+            ch.spinnerIntake.setPower(0);
             BackFromSpike(600);
             TelemetryStep("Turn to backdrop");
-            ch.imuTurn(80);
+            ch.imuTurn(-90);
         }
     }
     private void BackFromSpike(int amount){
@@ -102,21 +107,26 @@ public class CompAutoBlueBack extends LinearOpMode {
         sleep(amount);
         ch.moveRobot(0, 0, 0);
     }
-    private void YellowPixel() {
+    private void YellowPixel(){
         stepTimer.reset();
         ch.wrist.setPosition(0.15);
         vp.setManualExposure(6);
-        ch.EncoderMove(200);
+
         TelemetryStep("Move april tag");
+
         ch.moveAprilTag(vp);
         ch.dropPixel1();
-        sleep(1000);
-        ch.spinnerIntake.setPower(0.3);
         ch.EncoderMove(400);
         sleep(500);
+
         ch.rightPincer.setPosition(CS.C_RIGHT_OPEN);
-        sleep(500);
-        ch.spinnerIntake.setPower(0);
+
+        if (stepTimer.milliseconds() < 750){
+            ch.spinnerIntake.setPower(0.3);
+        }
+
+        sleep(750);
+
     }
     public void Park() {
 
@@ -125,20 +135,20 @@ public class CompAutoBlueBack extends LinearOpMode {
         ch.moveRobot(0,0,0);
 
         ch.closeArmAuto();
-        ch.imuTurn(0);
+        ch.imuTurn(-5);
 
         ch.moveRobot(-0.5,0,0);
         sleep(1500);
         ch.moveRobot(0,0,0);
 
-        ch.moveRobot(0,0.5,0);
+        ch.moveRobot(0,-0.5,0);
         sleep(1400);
         ch.moveRobot(0,0,0);
         ch.armExtender.setTargetPosition(0);
         ch.armExtender.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         ch.armExtender.setPower(1);
-
-
     }
 
 } //linear op mode
+
+//"hehehe" - Ryan

@@ -249,6 +249,9 @@ public class CH {
         SparkFunOTOSConfig.Pose2D myPos = new SparkFunOTOSConfig.Pose2D(pos.y, pos.x, -pos.h);
         return(myPos);
     }
+    public void resetEncoders(){
+        myOtos.resetTracking();
+    }
 
 
 
@@ -369,12 +372,13 @@ public class CH {
 
     }
     public void WhitePixel(){
-        shoulder.setTargetPosition(200); // 185 or //240
-        shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        shoulder.setPower(1);
+
+        armMove(50);
 
         wrist.setPosition(0.075);
         leftPincer.setPosition(CS.C_LEFT_OPEN);
+
+
     }
 
     public void closeArmAuto(){
@@ -422,7 +426,7 @@ public class CH {
             if (targetFound) {
 
                 double rangeError = (desiredTag.ftcPose.range - CS.A_DESIRED_DISTANCE);
-                double headingError = desiredTag.ftcPose.bearing+10;
+                double headingError = desiredTag.ftcPose.bearing +10;
                 double yawError = desiredTag.ftcPose.yaw;
 
                 if ((rangeError < 4) && (Math.abs(headingError) < 6) && (Math.abs(yawError) < 6)) {
@@ -447,7 +451,7 @@ public class CH {
         }
     }
 
-    public void moveAprilTag2(VP vp){
+    public void moveAprilTagWhitePixel(VP vp){
 
         ElapsedTime stepTimer = new ElapsedTime();
         boolean targetNotReached = true;
@@ -479,7 +483,7 @@ public class CH {
             // Tell the driver what we see, and what to do.
             if (targetFound) {
 
-                double rangeError = (desiredTag.ftcPose.range - 10);
+                double rangeError = (desiredTag.ftcPose.range - 20);
                 double headingError = desiredTag.ftcPose.bearing;
                 double yawError = desiredTag.ftcPose.yaw;
 

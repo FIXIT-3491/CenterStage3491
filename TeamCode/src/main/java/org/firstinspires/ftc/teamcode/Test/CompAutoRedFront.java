@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -9,7 +10,7 @@ import org.firstinspires.ftc.teamcode.CaptainHook.Constants;
 import org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
 import org.firstinspires.ftc.teamcode.CaptainHook.CH;
 import org.firstinspires.ftc.teamcode.CaptainHook.VP;
-
+@Disabled
 @Autonomous(name="CompAutoRedFront", group="Linear OpMode")
 
 public class CompAutoRedFront extends LinearOpMode {
@@ -52,7 +53,7 @@ public class CompAutoRedFront extends LinearOpMode {
 
                 vp.setManualExposure(6);
 
-                ch.moveAprilTag2(vp);
+                ch.moveAprilTagWhitePixel(vp);
 
                 PickUpWhitePixel();
                 DriveThroughTruss();
