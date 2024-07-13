@@ -218,13 +218,10 @@ public class CH {
                 //left
                 otosDrive(20, -1, 0);
                 imuTurn(43);
-                wrist.setPosition(CS.WRIST_DOWN);
-                opMode_ref.sleep(500);
             } else if (Location == "right") {
                 //right
                 otosDrive(15.5, 11.5, 0);
-                wrist.setPosition(CS.WRIST_DOWN);
-                opMode_ref.sleep(500);
+
             } else {
                 //Center
                 otosDrive(25.75, 8, 0);
@@ -234,9 +231,26 @@ public class CH {
             }
         }
         if (pos == "frontRed"){
-
+            if (Location == "right") {
+                //Right
+                otosDrive(22, -4.5, 0);
+                imuTurn(-85);
+            } else if(Location == "left") {
+                //Left
+                otosDrive(15.5, -9.5, 0);
+            } else {
+                //Center
+                otosDrive(15, -10, 0);
+                otosDrive(27, -10, 0);
+                wrist.setPosition(CS.WRIST_DOWN);
+                opMode_ref.sleep(500);
+                otosDrive(27, -2, 0);
+            }
 
         }
+        leftPincer.setPosition(CS.C_LEFT_OPEN);
+//            sleep(500);
+        wrist.setPosition(CS.WRIST_UP);
 
 
     }

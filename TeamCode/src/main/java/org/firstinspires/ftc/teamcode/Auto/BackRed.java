@@ -39,19 +39,12 @@ public class BackRed extends LinearOpMode {
 
 
         waitForStart();
-
-        Location = vp.TensorDetect();
-
-
-
         ch.wrist.setPosition(CS.WRIST_DOWN);
+        Location = vp.TensorDetect();
         ch.wrist.setPosition(CS.WRIST_UP);
 
         ch.scorePurplePixel(Location, "backRed");
 
-        ch.leftPincer.setPosition(CS.C_LEFT_OPEN);
-//            sleep(500);
-        ch.wrist.setPosition(CS.WRIST_UP);
 
         sleep(4000);
 
