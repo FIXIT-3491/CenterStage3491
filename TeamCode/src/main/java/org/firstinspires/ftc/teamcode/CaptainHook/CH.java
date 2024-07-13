@@ -38,10 +38,10 @@ import java.util.List;
 
 
 public class CH {
-    public DcMotorEx backLDrive = null;
-    public DcMotorEx frontLDrive = null;
-    public DcMotorEx frontRDrive = null;
-    public DcMotorEx backRDrive = null;
+    public DcMotor backLDrive = null;
+    public DcMotor frontLDrive = null;
+    public DcMotor frontRDrive = null;
+    public DcMotor backRDrive = null;
 
     public DcMotor winchMotor = null;
     public DcMotor shoulder = null;

@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.CaptainHook.CH;
 import org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
 import org.firstinspires.ftc.teamcode.CaptainHook.SparkFunOTOSConfig;
-
+@Disabled
     @TeleOp(name = "TestOTOS", group = "Linear OpMode")
     public class TestOTOS extends LinearOpMode {
         // Create an instance of the sensor

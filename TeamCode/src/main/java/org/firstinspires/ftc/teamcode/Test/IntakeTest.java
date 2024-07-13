@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.CaptainHook.Constants;
-
+@Disabled
 @Autonomous(name = "IntakeTest", group = "Linear OpMode")
 public class IntakeTest extends LinearOpMode {
 

@@ -36,11 +36,7 @@ public class FrontRed extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-
         waitForStart();
-
-
-
 
         ch.wrist.setPosition(CS.WRIST_DOWN);
         Location = vp.TensorDetect();
@@ -48,6 +44,7 @@ public class FrontRed extends LinearOpMode {
 
 
         ch.scorePurplePixel(Location, "frontRed");
+
 
 
 

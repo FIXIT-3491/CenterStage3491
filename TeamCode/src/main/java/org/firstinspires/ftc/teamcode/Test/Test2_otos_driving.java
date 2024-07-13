@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.CaptainHook.CH;
 import org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
-
+@Disabled
 @Autonomous(name="Test2_otos_driving", group="test")
 public class Test2_otos_driving extends LinearOpMode {
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is

@@ -33,11 +33,7 @@ public class BackRed extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-
-
         waitForStart();
-
-
 
         ch.wrist.setPosition(CS.WRIST_DOWN);
         Location = vp.TensorDetect();

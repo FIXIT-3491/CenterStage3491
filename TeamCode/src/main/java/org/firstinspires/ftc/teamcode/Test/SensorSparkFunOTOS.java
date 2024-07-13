@@ -3,8 +3,9 @@
 
     Copyright (c) 2024 SparkFun Electronics
 */
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -20,6 +21,7 @@ import org.firstinspires.ftc.teamcode.CaptainHook.SparkFunOTOSConfig;
  *
  * See the sensor's product page: https://www.sparkfun.com/products/24904
  */
+@Disabled
 @TeleOp(name = "Sensor: SparkFun OTOS", group = "Sensor")
 //@Disabled
 public class SensorSparkFunOTOS extends LinearOpMode {
