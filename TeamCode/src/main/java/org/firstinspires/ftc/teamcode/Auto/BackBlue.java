@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.CaptainHook.Constants.CS;
 import org.firstinspires.ftc.teamcode.CaptainHook.VP;
 
 @Autonomous
-public class BackRed extends LinearOpMode {
+public class BackBlue extends LinearOpMode {
     private CH ch = null;
     private VP vp = null;
     private ElapsedTime time = new ElapsedTime();
@@ -43,7 +43,8 @@ public class BackRed extends LinearOpMode {
         Location = vp.TensorDetect();
         ch.wrist.setPosition(CS.WRIST_UP);
 
-        ch.scorePurplePixel(Location, "backRed");
+        ch.scorePurplePixel(Location, "backBlue");
+
 
         sleep(4000);
 
