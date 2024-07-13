@@ -212,25 +212,34 @@ public class CH {
         opMode_ref.sleep(10);
     }
     public void scorePurplePixel(String Location, String pos){
-
         if (pos == "backRed") {
             if (Location == "left") {
                 //left
-                otosDrive(20, -1, 0);
+                otosDrive(18, -1, 0);
                 imuTurn(43);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
+                imuTurn(0);
+                otosDrive(28,18,0);
+                imuTurn(-90);
+
             } else if (Location == "right") {
                 //right
                 otosDrive(15.5, 11.5, 0);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
             } else {
                 //Center
                 otosDrive(25.75, 8, 0);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
                 otosDrive(25.75, 1, 0);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
             }
         }
         if (pos == "frontRed"){
@@ -240,63 +249,79 @@ public class CH {
                 imuTurn(-85);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
             } else if(Location == "left") {
                 //Left
                 otosDrive(15.5, -9.5, 0);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
             } else {
                 //Center
                 otosDrive(27, -10, 0);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
                 otosDrive(27, -2, 0);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
             }
         }
         if (pos == "backBlue") {
             if (Location == "right") {
-                //left
+                //Right
                 otosDrive(23, -4.5, 0);
                 imuTurn(-85);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
             } else if (Location == "left") {
-                //right
+                //Left
                 otosDrive(16.5, -9.5, 0);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
             } else {
                 //Center
                 otosDrive(27, -10, 0);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
                 otosDrive(27, -2, 0);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
             }
         }
         if (pos == "frontBlue") {
             if (Location == "left") {
-                //left
+                //Left
                 otosDrive(20, -1, 0);
                 imuTurn(43);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
             } else if (Location == "right") {
-                //right
+                //Right
                 otosDrive(16, 11.75, 0);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
             } else {
                 //Center
                 otosDrive(25.75, 8, 0);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
                 otosDrive(25.75, 2, 0);
+                leftPincer.setPosition(CS.C_LEFT_OPEN);
+                wrist.setPosition(CS.WRIST_UP);
             }
         }
 
-        leftPincer.setPosition(CS.C_LEFT_OPEN);
-//            sleep(500);
-        wrist.setPosition(CS.WRIST_UP);
+
 
 
     }
