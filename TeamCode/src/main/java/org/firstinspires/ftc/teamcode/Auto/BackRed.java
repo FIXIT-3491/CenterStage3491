@@ -37,54 +37,23 @@ public class BackRed extends LinearOpMode {
         telemetry.update();
 
 
+
         waitForStart();
-        ch.wrist.setPosition(CS.WRIST_DOWN);
+
         Location = vp.TensorDetect();
+
+
+
+        ch.wrist.setPosition(CS.WRIST_DOWN);
         ch.wrist.setPosition(CS.WRIST_UP);
 
-        if (Location == "right") {
-            //Right
-            ch.otosDrive(22, -5, 0);
-            ch.imuTurn(-85);
-            ch.wrist.setPosition(CS.WRIST_DOWN);
-            sleep(500);
-            ch.leftPincer.setPosition(CS.C_LEFT_OPEN);
-            sleep(500);
-            ch.wrist.setPosition(CS.WRIST_UP);
-        } else if(Location == "left") {
-            //Left
-            ch.otosDrive(15.5, -9.5, 0);
-            ch.wrist.setPosition(CS.WRIST_DOWN);
-            sleep(500);
-            ch.leftPincer.setPosition(CS.C_LEFT_OPEN);
-            sleep(500);
-            ch.wrist.setPosition(CS.WRIST_UP);
-        } else {
-            //Center
-            ch.otosDrive(15, -10, 0);
-            ch.otosDrive(27, -10, 0);
-            ch.wrist.setPosition(CS.WRIST_DOWN);
-            sleep(500);
-            ch.otosDrive(27, -2, 0);
-            ch.leftPincer.setPosition(CS.C_LEFT_OPEN);
-            ch.wrist.setPosition(CS.WRIST_UP);
-        }
+        ch.scorePurplePixel(Location, "backRed");
 
-
-
-
-        //white pixel
-
-
-
+        ch.leftPincer.setPosition(CS.C_LEFT_OPEN);
+//            sleep(500);
+        ch.wrist.setPosition(CS.WRIST_UP);
 
         sleep(4000);
-
-
-
-
-
-
 
 
 

@@ -24,6 +24,19 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import java.util.List;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 public class CH {
     public DcMotorEx backLDrive = null;
     public DcMotorEx frontLDrive = null;
@@ -198,6 +211,35 @@ public class CH {
         backRDrive.setPower(rightBackPower);
         opMode_ref.sleep(10);
     }
+    public void scorePurplePixel(String Location, String pos){
+
+        if (pos == "backRed") {
+            if (Location == "left") {
+                //left
+                otosDrive(20, -1, 0);
+                imuTurn(43);
+                wrist.setPosition(CS.WRIST_DOWN);
+                opMode_ref.sleep(500);
+            } else if (Location == "right") {
+                //right
+                otosDrive(15.5, 11.5, 0);
+                wrist.setPosition(CS.WRIST_DOWN);
+                opMode_ref.sleep(500);
+            } else {
+                //Center
+                otosDrive(25.75, 8, 0);
+                wrist.setPosition(CS.WRIST_DOWN);
+                opMode_ref.sleep(500);
+                otosDrive(25.75, 1, 0);
+            }
+        }
+        if (pos == "frontRed"){
+
+
+        }
+
+
+    }
     public void otosDrive(double targetX, double targetY, double targetHeading) {
         double drive, strafe, turn;
         double currentRange, targetRange, initialBearing, targetBearing, xError, yError, yawError;
@@ -208,7 +250,7 @@ public class CH {
         yError = targetY-currentPos.y;
         yawError = targetHeading-currentPos.h;
 
-        while(opMode_ref.opModeIsActive() && ((Math.abs(xError) > 0.5) || (Math.abs(yError) > 0.5)
+        while(opMode_ref.opModeIsActive() && ((Math.abs(xError) > 0.5) || (Math.abs(yError) > 0.75)
                 || (Math.abs(yawError) > 4)) ) {
             // Use the speed and turn "gains" to calculate how we want the robot to move.
             drive  = Range.clip(xError * CS.SPARKFUN_SPEED_GAIN, -CS.SPARKFUN_MAX_AUTO_SPEED, CS.SPARKFUN_MAX_AUTO_SPEED);
