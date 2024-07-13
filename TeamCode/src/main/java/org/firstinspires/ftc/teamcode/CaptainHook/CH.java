@@ -256,8 +256,8 @@ public class CH {
         if (pos == "backBlue") {
             if (Location == "right") {
                 //left
-                otosDrive(20, -1, 0);
-                imuTurn(43);
+                otosDrive(23, -4.5, 0);
+                imuTurn(-85);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
             } else if (Location == "left") {
@@ -271,6 +271,26 @@ public class CH {
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
                 otosDrive(27, -2, 0);
+            }
+        }
+        if (pos == "frontBlue") {
+            if (Location == "left") {
+                //left
+                otosDrive(20, -1, 0);
+                imuTurn(43);
+                wrist.setPosition(CS.WRIST_DOWN);
+                opMode_ref.sleep(500);
+            } else if (Location == "right") {
+                //right
+                otosDrive(16, 11.75, 0);
+                wrist.setPosition(CS.WRIST_DOWN);
+                opMode_ref.sleep(500);
+            } else {
+                //Center
+                otosDrive(25.75, 8, 0);
+                wrist.setPosition(CS.WRIST_DOWN);
+                opMode_ref.sleep(500);
+                otosDrive(25.75, 2, 0);
             }
         }
 
@@ -290,7 +310,7 @@ public class CH {
         yError = targetY-currentPos.y;
         yawError = targetHeading-currentPos.h;
 
-        while(opMode_ref.opModeIsActive() && ((Math.abs(xError) > 0.5) || (Math.abs(yError) > 0.75)
+        while(opMode_ref.opModeIsActive() && ((Math.abs(xError) > 0.75) || (Math.abs(yError) > 0.75)
                 || (Math.abs(yawError) > 4)) ) {
             // Use the speed and turn "gains" to calculate how we want the robot to move.
             drive  = Range.clip(xError * CS.SPARKFUN_SPEED_GAIN, -CS.SPARKFUN_MAX_AUTO_SPEED, CS.SPARKFUN_MAX_AUTO_SPEED);
