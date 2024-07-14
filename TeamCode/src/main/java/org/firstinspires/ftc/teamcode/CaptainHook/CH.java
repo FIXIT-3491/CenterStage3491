@@ -334,19 +334,19 @@ public class CH {
         vp.setManualExposure(6);
         if (pos == "Red") {
             if (Location == "left")
-                vp.DESIRED_TAG_ID = 1;
-            else if (Location == "right")
-                vp.DESIRED_TAG_ID = 2;
-            else
-                vp.DESIRED_TAG_ID = 3;
-
-        } else {
-            if (Location == "left")
                 vp.DESIRED_TAG_ID = 4;
             else if (Location == "right")
                 vp.DESIRED_TAG_ID = 5;
             else
                 vp.DESIRED_TAG_ID = 6;
+
+        } else {
+            if (Location == "left")
+                vp.DESIRED_TAG_ID = 1;
+            else if (Location == "right")
+                vp.DESIRED_TAG_ID = 2;
+            else
+                vp.DESIRED_TAG_ID = 3;
         }
         moveAprilTag(vp);
 
