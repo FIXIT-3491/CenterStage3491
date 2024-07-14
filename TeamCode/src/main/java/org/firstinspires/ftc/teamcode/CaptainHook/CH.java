@@ -434,12 +434,18 @@ public class CH {
         imuTurn(0);
         if (pos == "backRed"|| pos == "backBlue") {
             moveRobot(-0.4, 0, 0);
-            opMode_ref.sleep(700);
+            opMode_ref.sleep(1500);
             moveRobot(0, 0, 0);
             wrist.setPosition(CS.WRIST_UP);
-            moveRobot(0, -0.5, 0);
-            opMode_ref.sleep(700);
-            moveRobot(0, 0, 0);
+            if (pos == "backRed") {
+                moveRobot(0, -0.5, 0);
+                opMode_ref.sleep(700);
+                moveRobot(0, 0, 0);
+            }else {
+                moveRobot(0, 0.5, 0);
+                opMode_ref.sleep(700);
+                moveRobot(0, 0, 0);
+            }
         }
 
 
