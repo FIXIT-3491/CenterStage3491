@@ -324,7 +324,11 @@ public class CH {
                 leftPincer.setPosition(CS.C_LEFT_OPEN);
                 wrist.setPosition(CS.WRIST_UP);
                 opMode_ref.sleep(500);
-                otosDrive(32,-22,0);
+
+                imuTurn(0);
+                otosDrive(52,-1,0);
+                otosDrive(52,-69,0);
+                otosDrive(32,-69,0);
                 imuTurn(87);
 
             } else if (Location == "right") {
