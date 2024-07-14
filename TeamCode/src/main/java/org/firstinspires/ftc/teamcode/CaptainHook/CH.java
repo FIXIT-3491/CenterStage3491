@@ -390,6 +390,19 @@ public class CH {
         spinnerIntake.setPower(0);
 
 
+        moveRobot(-0.5, 0,0);
+        opMode_ref.sleep(300);
+        moveRobot(0, 0,0);
+        imuTurn(0);
+        moveRobot(-0.4, 0,0);
+        opMode_ref.sleep(700);
+        moveRobot(0, 0,0);
+        moveRobot(-0.4, 0,0);
+        opMode_ref.sleep(700);
+        moveRobot(0, 0,0);
+
+
+
 
     }
     public void otosDrive(double targetX, double targetY, double targetHeading) {
