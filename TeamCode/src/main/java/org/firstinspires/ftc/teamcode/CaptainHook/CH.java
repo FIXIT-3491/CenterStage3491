@@ -383,6 +383,7 @@ public class CH {
         moveAprilTag(vp);
 
         armMove(420);
+        otosDrive(9,0,0);
         rightPincer.setPosition(CS.C_RIGHT_OPEN);
         spinnerIntake.setPower(0.5);
         opMode_ref.sleep(300);
