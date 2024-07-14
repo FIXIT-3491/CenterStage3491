@@ -41,7 +41,7 @@ public class BackBlue extends LinearOpMode {
 
         ch.scorePurplePixel(Location, "backBlue");
 
-        ch.scoreYellowPixel(Location, "blue", vp);
+        ch.scoreYellowPixel(Location, "backBlue", vp);
 
         sleep(4000);
 

@@ -44,7 +44,7 @@ public class FrontBlue extends LinearOpMode {
 
         ch.scorePurplePixel(Location, "frontBlue");
 
-        ch.scoreYellowPixel(Location, "blue", vp);
+        ch.scoreYellowPixel(Location, "frontBlue", vp);
 
         sleep(4000);
 

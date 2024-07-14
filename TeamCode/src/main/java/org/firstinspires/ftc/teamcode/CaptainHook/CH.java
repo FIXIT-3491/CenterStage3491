@@ -253,12 +253,20 @@ public class CH {
         if (pos == "frontRed"){
             if (Location == "right") {
                 //Right
-                otosDrive(22, -4.5, 0);
+                otosDrive(23, -4.5, 0);
                 imuTurn(-85);
                 wrist.setPosition(CS.WRIST_DOWN);
                 opMode_ref.sleep(500);
                 leftPincer.setPosition(CS.C_LEFT_OPEN);
                 wrist.setPosition(CS.WRIST_UP);
+                opMode_ref.sleep(500);
+
+                imuTurn(0);
+                otosDrive(52,-5,0);
+                otosDrive(52,64,0);
+                otosDrive(28,64,0);
+                imuTurn(-87);
+
             } else if(Location == "left") {
                 //Left
                 otosDrive(15.5, -9.5, 0);
@@ -266,6 +274,16 @@ public class CH {
                 opMode_ref.sleep(500);
                 leftPincer.setPosition(CS.C_LEFT_OPEN);
                 wrist.setPosition(CS.WRIST_UP);
+                opMode_ref.sleep(500);
+
+
+                imuTurn(0);
+                otosDrive(15.5,-5,0);
+                otosDrive(52,-5,0);
+                otosDrive(52,64,0);
+                otosDrive(28,64,0);
+                imuTurn(-87);
+
             } else {
                 //Center
                 otosDrive(27, -10, 0);
@@ -274,6 +292,15 @@ public class CH {
                 otosDrive(27, -2, 0);
                 leftPincer.setPosition(CS.C_LEFT_OPEN);
                 wrist.setPosition(CS.WRIST_UP);
+                opMode_ref.sleep(500);
+
+
+                otosDrive(27,-17,0);
+                otosDrive(52,-17,0);
+                otosDrive(52,64,0);
+                otosDrive(28,64,0);
+                imuTurn(-87);
+
             }
         }
         if (pos == "backBlue") {
@@ -356,7 +383,11 @@ public class CH {
                 leftPincer.setPosition(CS.C_LEFT_OPEN);
                 wrist.setPosition(CS.WRIST_UP);
                 opMode_ref.sleep(500);
-                otosDrive(32,-22,0);
+
+                otosDrive(25.75,17,0);
+                otosDrive(52,17,0);
+                otosDrive(52,-69,0);
+                otosDrive(32,-69,0);
                 imuTurn(87);
             }
         }
@@ -369,43 +400,47 @@ public class CH {
     public void scoreYellowPixel(String Location, String pos, VP vp){
         wrist.setPosition(0.15);
         vp.setManualExposure(6);
-        if (pos == "Red") {
+        if (pos == "backRed"|| pos == "frontRed") {
             if (Location == "left")
                 vp.DESIRED_TAG_ID = 4;
             else if (Location == "right")
-                vp.DESIRED_TAG_ID = 5;
-            else
                 vp.DESIRED_TAG_ID = 6;
+            else
+                vp.DESIRED_TAG_ID = 5;
 
         } else {
             if (Location == "left")
                 vp.DESIRED_TAG_ID = 1;
             else if (Location == "right")
-                vp.DESIRED_TAG_ID = 2;
-            else
                 vp.DESIRED_TAG_ID = 3;
+            else
+                vp.DESIRED_TAG_ID = 2;
         }
         moveAprilTag(vp);
+        armMove(500);
+        moveRobot(0.4, 0,0);
+        opMode_ref.sleep(500);
+        moveRobot(0,0,0);
 
-        armMove(420);
-        otosDrive(9,0,0);
         rightPincer.setPosition(CS.C_RIGHT_OPEN);
         spinnerIntake.setPower(0.5);
         opMode_ref.sleep(300);
         spinnerIntake.setPower(0);
-
+        opMode_ref.sleep(500);
 
         moveRobot(-0.5, 0,0);
-        opMode_ref.sleep(300);
+        opMode_ref.sleep(200);
         moveRobot(0, 0,0);
         imuTurn(0);
-        moveRobot(-0.4, 0,0);
-        opMode_ref.sleep(700);
-        moveRobot(0, 0,0);
-        moveRobot(-0.4, 0,0);
-        opMode_ref.sleep(700);
-        moveRobot(0, 0,0);
-
+        if (pos == "backRed"|| pos == "backBlue") {
+            moveRobot(-0.4, 0, 0);
+            opMode_ref.sleep(700);
+            moveRobot(0, 0, 0);
+            wrist.setPosition(CS.WRIST_UP);
+            moveRobot(0, -0.5, 0);
+            opMode_ref.sleep(700);
+            moveRobot(0, 0, 0);
+        }
 
 
 
@@ -420,7 +455,7 @@ public class CH {
         yError = targetY-currentPos.y;
         yawError = targetHeading-currentPos.h;
 
-        while(opMode_ref.opModeIsActive() && ((Math.abs(xError) > 0.85) || (Math.abs(yError) > 0.75)
+        while(opMode_ref.opModeIsActive() && ((Math.abs(xError) > 0.87) || (Math.abs(yError) > 0.75)
                 || (Math.abs(yawError) > 4)) ) {
             // Use the speed and turn "gains" to calculate how we want the robot to move.
             drive  = Range.clip(xError * CS.SPARKFUN_SPEED_GAIN, -CS.SPARKFUN_MAX_AUTO_SPEED, CS.SPARKFUN_MAX_AUTO_SPEED);
