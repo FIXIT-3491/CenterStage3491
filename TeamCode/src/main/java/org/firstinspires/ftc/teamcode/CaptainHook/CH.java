@@ -221,9 +221,11 @@ public class CH {
                 opMode_ref.sleep(500);
                 leftPincer.setPosition(CS.C_LEFT_OPEN);
                 wrist.setPosition(CS.WRIST_UP);
+
                 imuTurn(0);
                 otosDrive(28,18,0);
                 imuTurn(-90);
+
 
             } else if (Location == "right") {
                 //right
@@ -232,6 +234,7 @@ public class CH {
                 opMode_ref.sleep(500);
                 leftPincer.setPosition(CS.C_LEFT_OPEN);
                 wrist.setPosition(CS.WRIST_UP);
+
             } else {
                 //Center
                 otosDrive(25.75, 8, 0);
@@ -321,6 +324,37 @@ public class CH {
             }
         }
 
+
+
+
+    }
+
+    public void scoreYellowPixel(String Location, String pos, VP vp){
+        wrist.setPosition(0.15);
+        vp.setManualExposure(6);
+        if (pos == "Red") {
+            if (Location == "left")
+                vp.DESIRED_TAG_ID = 1;
+            else if (Location == "right")
+                vp.DESIRED_TAG_ID = 2;
+            else
+                vp.DESIRED_TAG_ID = 3;
+
+        } else {
+            if (Location == "left")
+                vp.DESIRED_TAG_ID = 4;
+            else if (Location == "right")
+                vp.DESIRED_TAG_ID = 5;
+            else
+                vp.DESIRED_TAG_ID = 6;
+        }
+        moveAprilTag(vp);
+
+        armMove(420);
+        rightPincer.setPosition(CS.C_RIGHT_OPEN);
+        spinnerIntake.setPower(0.5);
+        opMode_ref.sleep(300);
+        spinnerIntake.setPower(0);
 
 
 

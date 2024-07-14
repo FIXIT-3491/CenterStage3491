@@ -93,7 +93,7 @@ public class VP {
         TensorTimer.reset();
         String PropLocation = "not detected1";
 
-        while (TensorTimer.milliseconds() < 4000 && !cupFound && opMode_ref.opModeIsActive()) {
+        while (TensorTimer.milliseconds() < 3000 && !cupFound && opMode_ref.opModeIsActive()) {
             List<Recognition> currentRecognitions = tfod.getRecognitions();
             opMode_ref.telemetry.addData("Time", TensorTimer.milliseconds());
             opMode_ref.telemetry.update();
@@ -104,11 +104,11 @@ public class VP {
                 if (x < 200) {
                     PropLocation = "left";
                     break;
-                } else if (x > 430) {
-                    PropLocation = "right";
+                } else if (x < 430) {
+                    PropLocation = "middle";
                     break;
                 } else {
-                    PropLocation = "middle";
+                    PropLocation = "right";
                     break;
                 }
             }

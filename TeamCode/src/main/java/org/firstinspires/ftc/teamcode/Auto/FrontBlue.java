@@ -36,35 +36,17 @@ public class FrontBlue extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-
         waitForStart();
-
-
-
 
         ch.wrist.setPosition(CS.WRIST_DOWN);
         Location = vp.TensorDetect();
         ch.wrist.setPosition(CS.WRIST_UP);
 
-
         ch.scorePurplePixel(Location, "frontBlue");
 
-
-
-        //white pixel
-
-
-
+        ch.scoreYellowPixel(Location, "blue", vp);
 
         sleep(4000);
-
-
-
-
-
-
-
-
 
     }
 }

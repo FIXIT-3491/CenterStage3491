@@ -42,25 +42,11 @@ public class FrontRed extends LinearOpMode {
         Location = vp.TensorDetect();
         ch.wrist.setPosition(CS.WRIST_UP);
 
-
         ch.scorePurplePixel(Location, "frontRed");
 
-
-
-
-        //white pixel
-
-
-
+        ch.scoreYellowPixel(Location, "red", vp);
 
         sleep(4000);
-
-
-
-
-
-
-
 
 
     }
